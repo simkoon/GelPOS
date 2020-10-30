@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from './koa-router';
 import posts from './posts';
 import auth from './auth';
 

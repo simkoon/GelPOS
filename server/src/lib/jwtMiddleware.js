@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt from './jsonwebtoken';
 import User from '../models/user';
 
 const jwtMiddleware = async (ctx, next) => {
