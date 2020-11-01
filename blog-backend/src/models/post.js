@@ -10,7 +10,9 @@ const PostSchema = new Schema({
   },
   user: {
     _id: mongoose.Types.ObjectId,
+    userid: String,
     username: String,
+    email:String,
   },
 });
 
