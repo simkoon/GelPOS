@@ -1,0 +1,89 @@
+
+/* ********** 공통 ********** */
+
+/*크롬 버튼 클릭시 테두리 생기는거 제거*/
+*:focus { outline:none; }
+
+/*  *********** 공통 끝 ********* */
+
+
+
+
+/* ********** 로그인 ******** */
+/* html,body { height: 100%; overflow: hidden;} */
+
+.loginBox {
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 32px;
+    width: 400px;
+    height: 480px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 50px;
+    box-shadow : 10px 10px 20px rgba(0, 0, 0, 0.05);
+}
+/* 로그인 로고 */
+.login_logo {
+    box-sizing: border-box;
+    height: 50px;
+    width: 150px;
+    background-image : url('../../image/pos_logo.png');
+    background-repeat : no-repeat;
+    margin: 0 auto;
+}
+
+.log_hr {
+    width: 297px;
+    border: 2px solid  rgb(85, 84, 126);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.login_id, .login_pass {
+    box-sizing: border-box;
+    width: 296px;
+    height: 36px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #fff;
+    border-radius: 20px;
+    text-align: center;
+    color: rgb(85, 84, 126);
+    
+}
+/* 아이디, 패스워디 placeholder */
+.login_id::placeholder, .login_pass::placeholder {
+    text-align: center;
+    color: #fff;
+} 
+
+/* 로그인 버튼 */
+.login_btn {
+    box-sizing: border-box;
+    width: 297px;
+    height: 36px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(85, 84, 126);
+    color: #fff;
+    margin-bottom: 25px;
+}
+.login_btn:hover {
+    background-color: rgb(40, 40, 80);
+}
+
+.login_joinBtn  {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    margin-bottom: 25px;
+}
+.login_find {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+}
+
+/* 회원가입, 아이디 비밀번호 변경에 마우스를 대면 색 변경 */
+.login_joinBtn:hover, .login_find:hover {
+    color: rgb(40, 40, 80);
+}

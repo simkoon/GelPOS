@@ -1,0 +1,129 @@
+
+/* ********** 공통 ********** */
+
+/*크롬 버튼 클릭시 테두리 생기는거 제거*/
+*:focus { outline:none; }
+
+/*  *********** 공통 끝 ********* */
+
+
+
+
+/* ********** 회원가입 ******** */
+/* html,body { height: 100%; overflow: hidden;} */
+p{
+    margin: 10px 0; 
+}
+.registBox {
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 32px;
+    width: 600px;
+    height: 550px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 40px;
+    box-shadow : 10px 10px 20px rgba(0, 0, 0, 0.05);
+}
+/* 회원가입 로고 */
+.regist_logo {
+    font-size: 30px;
+    color: #fff;
+    box-sizing: border-box;
+    height: 50px;
+    width: 150px;
+    margin: 0 auto;
+}
+
+.regist_hr {
+    box-sizing: border-box;
+    width: 350px;
+    border: 1px solid  rgb(85, 84, 126);
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.regist_inputBox {
+    font-size: 20px;
+    box-sizing: border-box;
+    width: 350px;
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #fff;
+    border-radius: 20px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+.codeBtn {
+    margin-left: 10px;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    background-color: rgba(255,255,255,0.1);
+    width: 80px !important;
+    height: 38px;
+}
+
+.regist_email_codeSend {
+    margin-left: 10px;
+    position: absolute;
+}
+
+.regist_email_code {
+    font-size: 18px;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 190px;
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #fff;
+    border-radius: 20px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+.regist_email_codeOk{
+    margin-right: 80px;
+}
+
+
+/*placeholder */
+.regist_inputBox::placeholder, .regist_email_code::placeholder {
+    font-size: 15px;
+    padding-left: 15px;
+    text-align: left;
+    color: #fff;
+} 
+
+/* 회원가입 버튼 */
+.regist_btn {
+    font-size: 18px;
+    box-sizing: border-box;
+    width: 150px;
+    height: 36px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(85, 84, 126);
+    color: #fff;
+    margin-bottom: 25px;
+}
+.regist_back {
+    font-size: 18px;
+    box-sizing: border-box;
+    width: 100px;
+    height: 36px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    margin-bottom: 25px;
+    margin-left: 10px;
+}
+.regist_btn:hover {
+    background-color: rgb(40, 40, 80);
+}
+
+.regist_back:hover, .codeBtn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+

@@ -1,0 +1,20 @@
+/* 버튼 설정 */
+
+/* 보라 버튼 */
+.btn_color_purple {
+    box-shadow: 5px 5px 10px 1px rgb(190, 190, 190);
+    border-radius: 10px 10px;
+    border: none;
+    background-color: rgb(85, 84, 126)!important;
+}
+.btn_color_purple:hover {
+    background-color: rgb(125, 124, 166) !important;
+}
+.btn_color_purple:active {
+    background-color: rgb(45, 44, 86) !important;
+}
+.btn_color_purple:focus {
+    background-color: rgb(95, 94, 136);
+}
+
+/* 회색 버튼 */

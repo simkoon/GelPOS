@@ -1,0 +1,162 @@
+
+/* ********** 공통 ********** */
+
+/*크롬 버튼 클릭시 테두리 생기는거 제거*/
+*:focus { outline:none; }
+
+/*  *********** 공통 끝 ********* */
+
+
+
+/* ********** 회원가입 ******** */
+/* html,body { height: 100%; overflow: hidden;} */
+p{
+    margin: 10px 0;
+    
+
+}
+/* 아이디,비밀번호 찾기 로고 */
+.idpassfind_logo {
+    font-size: 30px;
+    color: #fff;
+    box-sizing: border-box;
+    height: 50px;
+    width: 300px;
+    margin: 0 auto; 
+}
+
+.idpassfind_hr {
+    box-sizing: border-box;
+    width: 350px;
+    border: 1px solid  rgb(85, 84, 126);
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.idpass_inputBox {
+    font-size: 20px;
+    box-sizing: border-box;
+    width: 350px;
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #fff;
+    border-radius: 20px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+/*placeholder */
+.idpass_inputBox::placeholder, .idpass_email_code::placeholder {
+    font-size: 15px;
+    padding-left: 15px;
+    text-align: left;
+    color: #fff;
+} 
+
+/*버튼 */
+.idpassfind_btn {
+    font-size: 18px;
+    box-sizing: border-box;
+    width: 130px;
+    height: 45px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(85, 84, 126);
+    color: #fff;
+    margin: 50px;
+    margin-top: 80px;
+    margin-bottom: 70px;
+}
+.idpassfind_back {
+    font-size: 18px;
+    box-sizing: border-box;
+    width: 100px;
+    height: 36px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    margin-bottom: 25px;
+    margin-left: 10px;
+}
+.idpassfind_btn:hover {
+    background-color: rgb(40, 40, 80);
+}
+
+.idpassfind_back:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+
+// 아이디 찾기
+
+.idpassfind_text{
+    color: #fff;
+    margin-bottom: 40px;
+}
+
+.codeBtn {
+    margin-left: 10px;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    background-color: rgba(255,255,255,0.1);
+    width: 70px;
+    height: 38px;
+}
+
+.idpass_email_codeSend {
+    margin-left: 10px;
+    position: absolute;
+}
+
+
+.idpass_email_code {
+    font-size: 18px;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 190px;
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #fff;
+    border-radius: 20px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+.idpass_email_codeOk{
+    margin-right: 80px;
+}
+
+.Ok_btn {
+    font-size: 18px;
+    box-sizing: border-box;
+    width: 130px;
+    height: 45px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(85, 84, 126);
+    color: #fff;
+    margin: 10px;
+    margin-top: 40px;
+    margin-bottom: 70px;
+}
+.back_btn {
+    font-size: 18px;
+    box-sizing: border-box;
+    width: 130px;
+    height: 45px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    margin-bottom: 25px;
+    margin-left: 10px;
+}
+.Ok_btn:hover {
+    background-color: rgb(40, 40, 80);
+}
+
+.back_btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
