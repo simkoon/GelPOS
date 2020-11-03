@@ -3,7 +3,6 @@ import * as storListCtrl from './storList.ctrl';
 
 const storeList = new Router();
 
-storeList.post('/register', storListCtrl);
-storeList.post('/getlist', storListCtrl);
+storeList.post('/register', storListCtrl.register);
 
-
+export default storeList;
