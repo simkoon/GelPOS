@@ -15,10 +15,8 @@ function Member() {
     <>
         <MemberContainer>
         
-        <Route path="/member" exact={true} component={Login}/>
-        
+        <Route path="/" exact={true} component={Login}/>
         <Route path="/member/register" component={Register}/>
-        
             <Route path="/member/idpassfind">
                 <IdPassFindBox>
                     <Route path="/member/idpassfind/idpassfindmain" component={IdPassFindMian}/>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import Member from './Member/Member';
-import SiteMap from './SiteMap';
 import { Link } from "react-router-dom"
 import styled from 'styled-components';
 import Store from './Store';
@@ -28,8 +27,7 @@ const BackBtn = styled.div`
 function App() {
   return (
     <>
-        <Link to="/"><BackBtn>돌아가기</BackBtn></Link>
-        <Route path="/" exact={true} component={SiteMap}/>
+        <Route path="/" exact={true} component={Member}/>
         <Route path="/member" component={Member}/>
         <Route path="/store" component={Store}/>
         <Route path="/adlogin" component={AdPage}/>

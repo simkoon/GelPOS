@@ -12,7 +12,7 @@ function IdPassFind(){
                 <Link to="/member/idpassfind/passcode"><button className="idpassfind_btn">비밀번호 변경</button></Link>
             </p>
             <p>
-                <Link to="/member"><button className="idpassfind_back">돌아가기</button></Link>
+                <Link to="/"><button className="idpassfind_back">돌아가기</button></Link>
             </p>
         </>
     )

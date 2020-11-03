@@ -19,7 +19,7 @@ p{
     background-color: rgba(255, 255, 255, 0.15);
     border-radius: 32px;
     width: 600px;
-    height: 550px;
+    height: 600px;
     margin: 0 auto;
     text-align: center;
     padding-top: 40px;
@@ -125,5 +125,9 @@ p{
 
 .regist_back:hover, .codeBtn:hover {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+.errortext{
+    color: red;
 }
 
