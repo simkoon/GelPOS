@@ -28,7 +28,7 @@ export const register = async (ctx) => {
   console.log(name, regNumber, address);
   // const userObjectId = ctx.state.user._id;
   //이거 수정해서 테스트해야함
-  const userObjectId = '5f9ad8ce0eda3c19f52bc635';
+  const userObjectId = ctx.state.user._id;
   const user = await User.findById(userObjectId);
   const newStore = user.store.create({
     name,
@@ -40,6 +40,11 @@ export const register = async (ctx) => {
   try {
     await user.save();
     ctx.body = user;
+    const token = user.generateToken();
+    ctx.cookies.set('access_token', token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
+      httpOnly: true,
+    });
   } catch (error) {
     ctx.throw(500, error);
   }

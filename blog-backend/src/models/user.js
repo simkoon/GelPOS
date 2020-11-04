@@ -92,6 +92,7 @@ UserSchema.methods.generateToken = function () {
       userid: this.userid,
       username: this.username,
       email: this.email,
+      store: this.store,
     },
     process.env.JWT_SECRET, // 두번째 파라미터에는 JWT 암호를 넣습니다
     {

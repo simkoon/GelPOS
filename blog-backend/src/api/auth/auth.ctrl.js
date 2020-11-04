@@ -10,25 +10,20 @@ import Transporter from './Email/registMail';
   }
 */
 export const code = async (ctx) => {
-  
   const { email } = ctx.request.body;
-  
-  try{
 
-
+  try {
     const existsEmail = await User.findByEmail(email);
-      if (existsEmail) {
-        ctx.body = {
-          emailoverlap : true 
-        }
-        return;
-      }
+    if (existsEmail) {
+      ctx.body = {
+        emailoverlap: true,
+      };
+      return;
+    }
 
-    const code = Math.random().toString(36).slice(3).substring(0,5);
-  
+    const code = Math.random().toString(36).slice(3).substring(0, 5);
+
     const info = await Transporter.sendMail({
-      
-  
       // 보내는 곳의 이름과, 메일 주소를 입력
       from: `"GelPos Team" <jos881@naver.com>`,
       // 받는 곳의 메일 주소를 입력
@@ -38,23 +33,18 @@ export const code = async (ctx) => {
       // 보내는 메일의 내용을 입력
       // text: 일반 text로 작성된 내용
       // html: html로 작성된 내용
-      text: "GELPOS 코드 번호는 "+code+"입니다.",
+      text: 'GELPOS 코드 번호는 ' + code + '입니다.',
       //html: `<b>${generatedAuthNumber}</b>`,
-      
     });
     ctx.body = {
-      code : code
-    }
-  }catch (e){
+      code: code,
+    };
+  } catch (e) {
     ctx.throw(500, e);
   }
-
-}
+};
 
 export const register = async (ctx) => {
-
-  
-
   // Request Body 검증하기
   const schema = Joi.object().keys({
     userid: Joi.string().alphanum().min(3).max(20).required(),
@@ -73,27 +63,25 @@ export const register = async (ctx) => {
   const { userid, password, email, username } = ctx.request.body;
 
   try {
-
-    
-  
-  
     // userid  이 이미 존재하는지 확인
     const existsId = await User.findByUserid(userid);
     if (existsId) {
-      ctx.status = 409; // Conflict                                                   
+      ctx.status = 409; // Conflict
       return;
     }
 
     const existsEmail = await User.findByEmail(email);
     if (existsEmail) {
       ctx.body = {
-        emailoverlap : true
-      }
+        emailoverlap: true,
+      };
       return;
     }
 
     const user = new User({
-      userid,username,email,
+      userid,
+      username,
+      email,
     });
     await user.setPassword(password); // 비밀번호 설정
     await user.save(); // 데이터베이스에 저장
@@ -109,7 +97,6 @@ export const register = async (ctx) => {
     ctx.throw(500, e);
   }
 };
-
 
 export const login = async (ctx) => {
   const { userid, password } = ctx.request.body;
