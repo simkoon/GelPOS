@@ -54,6 +54,7 @@ p{
     color: rgb(0, 0, 0);
 }
 
+
 .codeBtn {
     margin-left: 10px;
     color: #fff;
@@ -86,14 +87,19 @@ p{
     margin-right: 80px;
 }
 
+.readonlyInput {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: 1px solid #000;
+}
 
-/*placeholder */
-.regist_inputBox::placeholder, .regist_email_code::placeholder {
-    font-size: 15px;
-    padding-left: 15px;
-    text-align: left;
-    color: #fff;
-} 
+// /*placeholder */
+// .regist_inputBox::placeholder, .regist_email_code::placeholder {
+//     font-size: 15px;
+//     padding-left: 15px;
+//     text-align: left;
+//     color: #fff;
+// } 
 
 /* 회원가입 버튼 */
 .regist_btn {
@@ -126,5 +132,33 @@ p{
 .regist_back:hover, .codeBtn:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.inputTextBox{
+    position: relative;
+}
+
+.inputname{
+    flex: content;
+    position: absolute;
+    left: 142px;
+    top: 13px;
+    color: white;
+}
+
+.inputTextBox:focus{
+    color: wheat;
+    & > .inputname{
+    }
+}
+
+// .inputname:focus{
+//     color: black;
+//     font-size: 10px;
+// }
+input:focus{
+    border: 1px solid rgb(85, 84, 126);
+
+}
+
 
 

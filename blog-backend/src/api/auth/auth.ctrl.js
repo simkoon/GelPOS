@@ -21,7 +21,7 @@ export const code = async (ctx) => {
       return;
     }
 
-    const code = Math.random().toString(36).slice(3).substring(0, 5);
+    const code = Math.random().toString(36).slice(3).substring(0, 5).toUpperCase();
 
     const info = await Transporter.sendMail({
       // 보내는 곳의 이름과, 메일 주소를 입력
@@ -33,8 +33,13 @@ export const code = async (ctx) => {
       // 보내는 메일의 내용을 입력
       // text: 일반 text로 작성된 내용
       // html: html로 작성된 내용
-      text: 'GELPOS 코드 번호는 ' + code + '입니다.',
-      //html: `<b>${generatedAuthNumber}</b>`,
+      //text: 'GELPOS 코드 번호는 ' + code + '입니다.',
+      html: `<p>GELPOS 코드 번호는</p>
+              <div style="border: 1px solid black; text-align: center; ">
+                  <div style="font-size: 50px">${code}</div> 
+              </div>
+              <p>입니다.</p>
+              <p> 인증 코드란에 위 코드를 알맞게 입력해 주세요.</ㅔ>`,
     });
     ctx.body = {
       code: code,
