@@ -9,6 +9,48 @@ import Transporter from './Email/registMail';
     password: 'mypass123'
   }
 */
+export const code = async (ctx) => {
+  
+  const { email } = ctx.request.body;
+  
+  try{
+
+
+    const existsEmail = await User.findByEmail(email);
+      if (existsEmail) {
+        ctx.body = {
+          emailoverlap : true 
+        }
+        return;
+      }
+
+    const code = Math.random().toString(36).slice(3).substring(0,5);
+  
+    const info = await Transporter.sendMail({
+      
+  
+      // 보내는 곳의 이름과, 메일 주소를 입력
+      from: `"GelPos Team" <jos881@naver.com>`,
+      // 받는 곳의 메일 주소를 입력
+      to: email,
+      // 보내는 메일의 제목을 입력
+      subject: 'GelPos 인증코드',
+      // 보내는 메일의 내용을 입력
+      // text: 일반 text로 작성된 내용
+      // html: html로 작성된 내용
+      text: "GELPOS 코드 번호는 "+code+"입니다.",
+      //html: `<b>${generatedAuthNumber}</b>`,
+      
+    });
+    ctx.body = {
+      code : code
+    }
+  }catch (e){
+    ctx.throw(500, e);
+  }
+
+}
+
 export const register = async (ctx) => {
 
   
@@ -22,6 +64,7 @@ export const register = async (ctx) => {
   });
   const result = schema.validate(ctx.request.body);
   if (result.error) {
+    //console.log(result);
     ctx.status = 400;
     ctx.body = result.error;
     return;
@@ -31,36 +74,21 @@ export const register = async (ctx) => {
 
   try {
 
-    const code = Math.random().toString(36).slice(8);
-
-  const info = await Transporter.sendMail({
     
-
-    // 보내는 곳의 이름과, 메일 주소를 입력
-    from: `"GelPos Team" <jos881@naver.com>`,
-    // 받는 곳의 메일 주소를 입력
-    to: email,
-    // 보내는 메일의 제목을 입력
-    subject: 'GelPos 인증코드',
-    // 보내는 메일의 내용을 입력
-    // text: 일반 text로 작성된 내용
-    // html: html로 작성된 내용
-    text: "GELPOS 코드 번호는 "+code+"입니다.",
-    //html: `<b>${generatedAuthNumber}</b>`,
-    
-  });
   
   
     // userid  이 이미 존재하는지 확인
     const existsId = await User.findByUserid(userid);
     if (existsId) {
-      ctx.status = 409; // Conflict
+      ctx.status = 409; // Conflict                                                   
       return;
     }
 
     const existsEmail = await User.findByEmail(email);
     if (existsEmail) {
-      ctx.status = 409; // Conflict
+      ctx.body = {
+        emailoverlap : true
+      }
       return;
     }
 

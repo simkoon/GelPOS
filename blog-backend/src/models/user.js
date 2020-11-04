@@ -109,8 +109,8 @@ UserSchema.statics.findByUsername = function (username) {
   return this.findOne({ username });
 };
 
-UserSchema.statics.findByEmail = function (eamil) {
-  return this.findOne({ eamil });
+UserSchema.statics.findByEmail = function (email) {
+  return this.findOne({ email });
 };
 
 const User = mongoose.model('User', UserSchema);

@@ -3,11 +3,11 @@ import client from "./client";
 export const login = ({ username ,password }) =>
   client.post("/api/auth/login", { username, password });
 
-export const register = ({ userid, username, password, email}) =>
-  client.post("/api/auth/register", { userid, username, password, email });
+export const register = (formData) =>
+  client.post("/api/auth/register", formData);
 
-// export const code = ({ code}) =>
-//   client.post("/api/auth/code", { code });
+export const code = (formData) =>
+  client.post("/api/auth/code", formData);
 
 export const check = () => client.get("/api/auth/check");
 
