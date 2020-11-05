@@ -14,6 +14,7 @@ export const code = async (ctx) => {
 
   try {
     const existsEmail = await User.findByEmail(email);
+    //console.log(existsEmail);
     if (existsEmail) {
       ctx.body = {
         emailoverlap: true,
@@ -21,8 +22,13 @@ export const code = async (ctx) => {
       return;
     }
 
-    const code = Math.random().toString(36).slice(3).substring(0, 5).toUpperCase();
+    const code = Math.random()
+      .toString(36)
+      .slice(3)
+      .substring(0, 5)
+      .toUpperCase();
 
+    console.log(code);
     const info = await Transporter.sendMail({
       // 보내는 곳의 이름과, 메일 주소를 입력
       from: `"GelPos Team" <jos881@naver.com>`,
@@ -41,6 +47,7 @@ export const code = async (ctx) => {
               <p>입니다.</p>
               <p> 인증 코드란에 위 코드를 알맞게 입력해 주세요.</ㅔ>`,
     });
+
     ctx.body = {
       code: code,
     };
