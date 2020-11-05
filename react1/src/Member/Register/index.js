@@ -1,8 +1,8 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 
 import { Link, withRouter } from "react-router-dom";
 import "./CSS/Register.scss";
-import * as authAPI from "./auth";
+import * as authAPI from "../auth";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -242,6 +242,7 @@ function Register({ history }) {
     }
   };
 
+  // 입력한 코드값 비교
   const codeCheck = async (e) => {
     e.preventDefault();
 
@@ -378,8 +379,8 @@ function Register({ history }) {
               value={password}
               onChange={onChange}
               autoComplete="off"
-              minLength="4"
-              maxLength="12"
+              minLength="8"
+              maxLength="16"
               placeholder="비밀번호"
               required
             />
@@ -392,8 +393,8 @@ function Register({ history }) {
               value={passwordConfirm}
               onChange={onChange}
               autoComplete="off"
-              minLength="4"
-              maxLength="12"
+              minLength="8"
+              maxLength="16"
               placeholder="비밀번호 확인"
               required
             />

@@ -47,7 +47,7 @@
     border: 1px solid #fff;
     border-radius: 20px;
     text-align: center;
-    color: rgb(85, 84, 126);
+    color: #000;
     
 }
 /* 아이디, 패스워디 placeholder */
@@ -86,4 +86,8 @@
 /* 회원가입, 아이디 비밀번호 변경에 마우스를 대면 색 변경 */
 .login_joinBtn:hover, .login_find:hover {
     color: rgb(40, 40, 80);
+}
+
+input:focus{         
+    border: 2px solid rgb(85, 84, 126);  
 }
