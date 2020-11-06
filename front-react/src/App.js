@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Route />
+    </>
   );
 }
+/*
+라우트 순서
+  멤버 로그인
+  스토어리스트
+  스토어추가
+  ...
 
+comm 폴더에 
+  sidebar, header등등
+
+*/
 export default App;
