@@ -6,7 +6,7 @@ function StoreList() {
     return (
         <div
             style={{ height: '100%', maxWidth: '1024px' }}
-            className="row justify-content-center align-items-center mx-auto"
+            className="row w-100 justify-content-center align-items-center mx-auto"
         >
             <Row className="w-100">
                 <Col className="w-100">
