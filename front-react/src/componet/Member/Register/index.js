@@ -2,7 +2,7 @@ import React, { useReducer, useState } from "react";
 
 import { Link, withRouter } from "react-router-dom";
 import "./CSS/Register.scss";
-import * as authAPI from "../auth";
+import * as authAPI from "../../../lib/api/auth";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -81,7 +81,7 @@ function reducer(state, action) {
     case "PASSWORD_REG_ERROR":
       return {
         ...state,
-        error: "비밀번호 형식에 맞게 입력해 주세요.",
+        error: "비밀번호는 대문자와 특수문자를 포함한 8~16글자 이어야 합니다.",
         errortext: false,
       };
 

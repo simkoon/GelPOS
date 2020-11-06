@@ -1,9 +1,11 @@
-import { Route } from 'react-router-dom';
+import { Route } from "react-router-dom";
+import Member from "./componet/Member";
 
 function App() {
   return (
     <>
-      <Route />
+      <Route path="/" exact={true} component={Member} />
+      <Route path="/member" component={Member} />
     </>
   );
 }
