@@ -1,9 +1,9 @@
 import { Route } from 'react-router-dom';
-
+import StoreList from './component/StoreList/StoreListContainer'
 function App() {
   return (
     <>
-      <Route />
+      <Route path="/storeList" component={StoreList} />
     </>
   );
 }
