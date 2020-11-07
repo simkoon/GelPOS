@@ -1,6 +1,6 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import { Link, withRouter } from "react-router-dom";
-import * as authAPI from "../auth";
+import * as authAPI from "../../../lib/api/auth";
 
 import "./CSS/Login.scss";
 
@@ -60,28 +60,28 @@ function Login({ history }) {
         <div className="login_logo" />
         <hr className="log_hr" />
         <form onSubmit={onSubmit}>
-          <p>
+          <p className="inputBox">
+            <span className="inputName">아이디</span>
             <input
               className="login_id"
               type="text"
               minLength="5"
               maxLength="20"
               name="userid"
-              placeholder="아이디"
               autoComplete="off"
               value={userid}
               onChange={onChange}
               required
             ></input>
           </p>
-          <p>
+          <p className="inputBox">
+            <span className="inputName">비밀번호</span>
             <input
               className="login_pass"
               type="password"
               minLength="8"
               maxLength="16"
               name="password"
-              placeholder="비밀번호"
               autoComplete="off"
               value={password}
               onChange={onChange}
