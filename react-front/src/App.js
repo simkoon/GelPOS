@@ -28,9 +28,9 @@ function App() {
           backgroundColor: 'rgb(249,250,252)',
         }}
       >
-        <Header />
+     
         <StoreList />
-        {/* <StoreAdd /> */}
+    
       </Container>
 
       {/* </Container> */}

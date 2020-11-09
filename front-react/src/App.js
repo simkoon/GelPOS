@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 import Member from "./component/Member";
-//import StoreList from "./component/StoreList/StoreListContainer";
+import StoreList from "./component/StoreList/StoreListContainer";
 import Scheduler from "./component/Scheduler";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <>
       <Route path="/" exact={true} component={Member} />
       <Route path="/member" component={Member} />
-      {/* <Route path="/storeList" component={StoreList} /> */}
+      <Route path="/storeList" component={StoreList} />
       <Route path="/scheduler" component={Scheduler} />
     </>
   );
