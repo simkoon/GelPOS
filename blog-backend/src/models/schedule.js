@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-const PostSchema = new Schema({
+const ScheduleSchema = new Schema({
   title: String,
   body: String,
   tags: [String], // 문자열로 이루어진 배열
@@ -12,9 +12,9 @@ const PostSchema = new Schema({
     _id: mongoose.Types.ObjectId,
     userid: String,
     username: String,
-    email:String,
+    email: String,
   },
 });
 
-const Post = mongoose.model('Post', PostSchema);
-export default Post;
+const Schedule = mongoose.model('Schedule', ScheduleSchema);
+export default Schedule;
