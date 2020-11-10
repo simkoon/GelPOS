@@ -1,6 +1,7 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useReducer, useEffect } from "react";
 //import { render } from "react-dom";
 import { Button } from "react-bootstrap";
+
 import TUICalendar from "@toast-ui/react-calendar";
 
 import "tui-calendar/dist/tui-calendar.css";
@@ -11,6 +12,7 @@ import "./styles.css";
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
+
 const schedules = [
   {
     calendarId: "1",
@@ -53,7 +55,15 @@ const calendars = [
   },
 ];
 
+function reducer(state, action) {
+  return {
+    value: action.current.calendarInst.getDate().getMonth().toUTCString(),
+  };
+}
+
 function Scheduler() {
+  const [state, dispatch] = useReducer(reducer, { value: "" });
+
   const cal = useRef(null);
 
   const onClickSchedule = useCallback((e) => {
@@ -139,36 +149,62 @@ function Scheduler() {
 
   const templates = {
     time: function (schedule) {
-      console.log(schedule);
+      //console.log(schedule);
       return _getTimeTemplate(schedule, false);
     },
   };
 
+  // // 상태 초기값
+  // const initialState = {
+  //   currentRange: {
+  //     year: start.getFullYear(),
+  //     month: start.getMonth() + 1, //월은 0부터 시작한다...
+  //     isToday: true,
+  //   },
+  //   calendarDataFormPopup: {
+  //     type: '',
+  //     isOpen: false,
+  //   },
+  // };
+
   //뷰 클릭시 맞게 변경하기 위해 useState 주기
-  const [viewVal, setViewVal] = useState("month");
 
   const viewBtnClick = (e) => {
-    setViewVal(e.target.name);
+    const calendarInstance = cal.current.getInstance();
+    console.log("month", cal.current.calendarInst.getDate().getMonth());
+    //.toDate()
+    switch (e.target.name) {
+      case "prev":
+        dispatch(cal);
+        return calendarInstance.prev();
+
+      case "next":
+        dispatch(cal);
+        return calendarInstance.next();
+    }
   };
 
+  console.log("cal", cal.current);
   return (
     <div className="App">
-      <h1>예약 및 스케줄러</h1>
       <div className="mb-3 mt-3">
-        <Button className="ml-3" onClick={viewBtnClick} name="day">
-          일간
+        <h2>
+          {cal !== null && state.value}
+          {cal === null && start.getMonth()}
+        </h2>
+        {/* <h1>{cal.current.calendarInst.getDate().getYear()}</h1>
+        <h2>{cal.current.calendarInst.getDate().getMonth()}</h2> */}
+        <Button className="ml-3" onClick={viewBtnClick} name="prev">
+          이전
         </Button>
-        <Button className="ml-3" onClick={viewBtnClick} name="week">
-          주간
-        </Button>
-        <Button className="ml-3" onClick={viewBtnClick} name="month">
-          월간
+        <Button className="ml-3" onClick={viewBtnClick} name="next">
+          다음
         </Button>
       </div>
       <TUICalendar
         ref={cal}
         height="1000px"
-        view={viewVal}
+        view="month"
         useCreationPopup={true}
         useDetailPopup={true}
         template={templates}

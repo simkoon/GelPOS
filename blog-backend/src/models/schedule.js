@@ -1,19 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
 
 const ScheduleSchema = new Schema({
+  id: mongoose.Types.ObjectId,
+  storeId: String,
   title: String,
-  body: String,
-  tags: [String], // 문자열로 이루어진 배열
-  publishedDate: {
-    type: Date,
-    default: Date.now, // 현재 날짜를 기본 값으로 지정
-  },
-  user: {
-    _id: mongoose.Types.ObjectId,
-    userid: String,
-    username: String,
-    email: String,
-  },
+  isallday: String,
+  start: Date,
+  end: Date,
+  category: String,
+  duedateclass: String,
+  location: String,
+  raw: [String],
+  state: String,
 });
 
 const Schedule = mongoose.model('Schedule', ScheduleSchema);
