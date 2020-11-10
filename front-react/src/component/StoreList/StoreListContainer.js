@@ -16,31 +16,40 @@ export default withRouter(function StoreListContainer({ history }) {
   console.log(user === null);
   console.log(user);
   useEffect(() => {
-    (async () => {
-      const body = await reTokken();
-      console.log(body);
-    })();
+    if (user) {
+      (async () => {
+        const body = await reTokken();
+        console.log(body);
+      })();
+      return;
+    }
   });
-
-  if (user === null || user === 'null') {
-    history.push('/');
-  }
 
   console.log('컨테이너 아래 유저');
   console.log(user);
+  useEffect(() => {
+    if (user === null || user === 'null') {
+      history.push('/');
+    }
+  });
+
   return (
-    <Container
-      fluid
-      className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
-      style={{
-        height: '100%',
-        padding: 0,
-        margin: 0,
-        backgroundColor: 'rgb(249,250,252)',
-      }}
-    >
-      <Header />
-      {!(user.store === 'null') ? <StoreList user={user} /> : null}
-    </Container>
+    <>
+      {user ? (
+        <Container
+          fluid
+          className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
+          style={{
+            height: '100%',
+            padding: 0,
+            margin: 0,
+            backgroundColor: 'rgb(249,250,252)',
+          }}
+        >
+          <Header />
+          <StoreList user={user} />
+        </Container>
+      ) : null}
+    </>
   );
 });

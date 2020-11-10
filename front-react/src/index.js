@@ -22,10 +22,11 @@ function loadUser() {
     console.log(localStorage);
     store.dispatch(check());
     console.log('sa');
-    if (user === 'null') return; // 로그인 상태가 아니라면 아무것도 안함
+    if (user === 'null' || user === null) return; // 로그인 상태가 아니라면 아무것도 안함
     console.log('여기는 인덱스에 유저로컬스토리지에서 가져오기');
     console.log(JSON.parse(user));
     store.dispatch(tempSetUser(JSON.parse(user)));
+    localStorage.clear();
     store.dispatch(check());
   } catch (e) {
     console.log('localStorage is not working');
