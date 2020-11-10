@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import { Button, Row, Col } from 'react-bootstrap';
 
 function StoreList({ user }) {
-
+console.log(user)
   return (
     <div
       style={{ height: '100%', maxWidth: '1024px' }}
@@ -12,7 +12,7 @@ function StoreList({ user }) {
       <Row className="w-100">
         <Col className="w-100">
           <h4 className="text-center mb-5" style={{ color: 'rgb(62,78,93)' }}>
-            심호길님의 가게 목록
+            {user.username}님의 가게 목록
           </h4>
           <Row className="w-100 justify-content-center align-items-center m-0">
             {user.store.map((i) => {
@@ -37,7 +37,10 @@ function StoreList({ user }) {
                         lineHeight: '100%',
                       }}
                     >
-                      2020.05.26
+                   {new Date(i.publishedDate).getFullYear()+"."+
+                        (new Date(i.publishedDate).getMonth()+1)+"."+
+                        new Date(i.publishedDate).getDate()
+                      }
                     </p>
 
                     <p
@@ -50,7 +53,10 @@ function StoreList({ user }) {
                         lineHeight: '100%',
                       }}
                     >
-                      (2020.05.26)
+                      ({new Date(i.expiredDate).getFullYear()+"."+
+                        (new Date(i.expiredDate).getMonth()+1)+"."+
+                        new Date(i.expiredDate).getDate()
+                      })
                     </p>
                   </Button>
                 </Col>
