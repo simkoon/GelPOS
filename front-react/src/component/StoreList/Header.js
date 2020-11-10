@@ -32,12 +32,12 @@ function Header() {
               style={{
                 color: "rgb(62,78,93)",
               }}
-              className=" small font-weight-normal nav-link"
+              className="small font-weight-normal nav-link"
             >
               홈으로
             </Link>
             <Link
-              href="/"
+              to="/"
               className="small font-weight-normal nav-link"
               style={{
                 color: "rgb(62,78,93)",
@@ -45,15 +45,15 @@ function Header() {
             >
               고객센터
             </Link>
-            <Nav.Link
+            <Link
+              to="/"
               style={{
                 color: "rgb(62,78,93)",
               }}
-              href="/link"
-              className="small font-weight-normal"
+              className=" small font-weight-normal nav-link"
             >
               로그아웃
-            </Nav.Link>
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -154,6 +154,8 @@ export const check = async (ctx) => {
     ctx.status = 401; // Unauthorized
     return;
   }
+  console.log('여기 쳌ㄱ 유저');
+  console.log(user);
   ctx.body = user;
 };
 

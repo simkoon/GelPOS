@@ -1,33 +1,27 @@
-import './css/storeStyle.css';
-import StoreList from './StoreList';
+import '../StoreList/css/storeStyle.css';
+import StoreAdd from './StoreAdd';
 import { Container } from 'react-bootstrap';
-import Header from './Header';
+import Header from '../StoreList/Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { check } from '../../modules/user';
 import { useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { reTokken } from '../../lib/api/storeList';
 
-export default withRouter(function StoreListContainer({ history }) {
+export default withRouter(function StoreAddContainer({ history }) {
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
-  console.log('컨테이너 위쪽 유저');
-  console.log(user === null);
-  console.log(user);
+
+
+
   useEffect(() => {
-    (async () => {
-      const body = await reTokken();
-      console.log(body);
-    })();
-  });
+    if (!user) {
+      history.push('/');
+      return;
+    }
+  }, [user, history]);
 
-  if (user === null || user === 'null') {
-    history.push('/');
-  }
-
-  console.log('컨테이너 아래 유저');
-  console.log(user);
   return (
     <Container
       fluid
@@ -40,7 +34,7 @@ export default withRouter(function StoreListContainer({ history }) {
       }}
     >
       <Header />
-      {!(user.store === 'null') ? <StoreList user={user} /> : null}
+      <StoreAdd />
     </Container>
   );
 });
