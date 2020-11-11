@@ -1,5 +1,6 @@
-import React, { useCallback, useRef, useReducer, useEffect } from "react";
+import React, { useCallback, useRef, useState } from "react";
 //import { render } from "react-dom";
+import Tsidebar from "../../comm/Sidebar/Tsidebar";
 import { Button } from "react-bootstrap";
 
 import TUICalendar from "@toast-ui/react-calendar";
@@ -55,15 +56,7 @@ const calendars = [
   },
 ];
 
-function reducer(state, action) {
-  return {
-    value: action.current.calendarInst.getDate().getMonth().toUTCString(),
-  };
-}
-
 function Scheduler() {
-  const [state, dispatch] = useReducer(reducer, { value: "" });
-
   const cal = useRef(null);
 
   const onClickSchedule = useCallback((e) => {
@@ -169,53 +162,61 @@ function Scheduler() {
 
   //뷰 클릭시 맞게 변경하기 위해 useState 주기
 
+  const [value, setValue] = useState(20);
+  if (value !== 20) {
+    setValue(cal.current.calendarInst.getDate().getMonth());
+  }
   const viewBtnClick = (e) => {
     const calendarInstance = cal.current.getInstance();
     console.log("month", cal.current.calendarInst.getDate().getMonth());
     //.toDate()
     switch (e.target.name) {
       case "prev":
-        dispatch(cal);
         return calendarInstance.prev();
 
       case "next":
-        dispatch(cal);
         return calendarInstance.next();
     }
   };
 
   console.log("cal", cal.current);
+
   return (
-    <div className="App">
-      <div className="mb-3 mt-3">
-        <h2>
-          {cal !== null && state.value}
-          {cal === null && start.getMonth()}
-        </h2>
-        {/* <h1>{cal.current.calendarInst.getDate().getYear()}</h1>
-        <h2>{cal.current.calendarInst.getDate().getMonth()}</h2> */}
-        <Button className="ml-3" onClick={viewBtnClick} name="prev">
-          이전
-        </Button>
-        <Button className="ml-3" onClick={viewBtnClick} name="next">
-          다음
-        </Button>
-      </div>
-      <TUICalendar
-        ref={cal}
-        height="1000px"
-        view="month"
-        useCreationPopup={true}
-        useDetailPopup={true}
-        template={templates}
-        calendars={calendars}
-        schedules={schedules}
-        onClickSchedule={onClickSchedule}
-        onBeforeCreateSchedule={onBeforeCreateSchedule}
-        onBeforeDeleteSchedule={onBeforeDeleteSchedule}
-        onBeforeUpdateSchedule={onBeforeUpdateSchedule}
-      />
-    </div>
+    <>
+      <Tsidebar>
+        <div className="App">
+          <div className="mb-3 mt-3">
+            <h2>
+              {value}
+              {/* {cal !== null && state.value}
+              {cal === null && start.getMonth()} */}
+            </h2>
+            {/* <h1>{cal.current.calendarInst.getDate().getYear()}</h1>
+          <h2>{cal.current.calendarInst.getDate().getMonth()}</h2> */}
+            <Button className="ml-3" onClick={viewBtnClick} name="prev">
+              이전
+            </Button>
+            <Button className="ml-3" onClick={viewBtnClick} name="next">
+              다음
+            </Button>
+          </div>
+          <TUICalendar
+            ref={cal}
+            height="1000px"
+            view="month"
+            useCreationPopup={true}
+            useDetailPopup={true}
+            template={templates}
+            calendars={calendars}
+            schedules={schedules}
+            onClickSchedule={onClickSchedule}
+            onBeforeCreateSchedule={onBeforeCreateSchedule}
+            onBeforeDeleteSchedule={onBeforeDeleteSchedule}
+            onBeforeUpdateSchedule={onBeforeUpdateSchedule}
+          />
+        </div>
+      </Tsidebar>
+    </>
   );
 }
 

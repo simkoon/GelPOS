@@ -1,7 +1,6 @@
 import React, { useReducer, useState } from "react";
 
 import { Link, withRouter } from "react-router-dom";
-import "./CSS/Register.scss";
 import * as authAPI from "../../../lib/api/auth";
 
 function reducer(state, action) {

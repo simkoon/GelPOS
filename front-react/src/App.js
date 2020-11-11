@@ -2,7 +2,7 @@ import { Route } from "react-router-dom";
 import Member from "./component/Member";
 import StoreList from "./component/StoreList/StoreListContainer";
 import Scheduler from "./component/Scheduler";
-import StoreAdd from './component/StoreAdd/StoreAddContainer'
+import StoreAdd from "./component/StoreAdd/StoreAddContainer";
 function App() {
   return (
     <>
@@ -10,7 +10,7 @@ function App() {
       <Route path="/member" component={Member} />
       <Route path="/storeList" component={StoreList} />
       <Route path="/scheduler" component={Scheduler} />
-      <Route path="/storeAdd" component={StoreAdd}/>
+      <Route path="/storeAdd" component={StoreAdd} />
     </>
   );
 }
