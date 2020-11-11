@@ -38,7 +38,7 @@ export const reToken = async (ctx) => {
 };
 
 export const register = async (ctx) => {
-  console.log('레지스터 드렁옴옴');
+  console.log('레지스터 드렁옴');
   const schema = Joi.object().keys({
     name: Joi.string().required(),
     regNumber: Joi.string().required(),
