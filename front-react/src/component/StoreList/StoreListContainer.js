@@ -29,6 +29,7 @@ export default withRouter(function StoreListContainer({ history }) {
   console.log(user);
   useEffect(() => {
     if (user === null || user === 'null') {
+      console.log('여기들옴 컨테이너 히스토리 푸시시');
       history.push('/');
     }
   });

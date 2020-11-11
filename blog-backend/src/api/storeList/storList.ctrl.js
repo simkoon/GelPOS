@@ -17,11 +17,8 @@ export const reToken = async (ctx) => {
     return;
   } // 토큰이 없음
   try {
-    console.log('토큰잇음음');
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ _id: decoded._id });
-    console.log('재토큰 유저');
-    console.log(user);
     ctx.state.user = {
       _id: user._id,
       userid: user.userid,
@@ -41,7 +38,7 @@ export const reToken = async (ctx) => {
 };
 
 export const register = async (ctx) => {
-  console.log;
+  console.log('레지스터 드렁옴옴');
   const schema = Joi.object().keys({
     name: Joi.string().required(),
     regNumber: Joi.string().required(),

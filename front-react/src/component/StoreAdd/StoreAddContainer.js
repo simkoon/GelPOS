@@ -5,22 +5,52 @@ import Header from '../StoreList/Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { check } from '../../modules/user';
 import { useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { reTokken } from '../../lib/api/storeList';
+import { withRouter } from 'react-router-dom';
+import { add } from '../../lib/api/storeAdd';
+import { useState } from 'react';
 
 export default withRouter(function StoreAddContainer({ history }) {
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
 
+  const [inputs, setInputs] = useState({
+    storename: '',
+    regnumber: '',
+    address: '',
+  });
+  const { storename, regnumber, address } = inputs;
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    console.log(value, name);
+    setInputs(() => ({
+      ...inputs, // 기존의 input 객체를 복사한 뒤
+      [name]: value, // name 키를 가진 값을 value 로 설정
+    }));
+  };
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const formData = {
+      name: storename,
+      regNumber: regnumber,
+      address,
+    };
+    try {
+      const result = await add(formData);
+      console.log(result);
+      history.push('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    if (!user) {
+    if (user === null || user === 'null') {
+      console.log('여기들옴 컨테이너 히스토리 푸시시');
       history.push('/');
-      return;
     }
-  }, [user, history]);
+  }, [history, user]);
 
   return (
     <Container
@@ -34,7 +64,7 @@ export default withRouter(function StoreAddContainer({ history }) {
       }}
     >
       <Header />
-      <StoreAdd />
+      <StoreAdd onChange={onChange} onSubmit={onSubmit} inputs={inputs} />
     </Container>
   );
 });
