@@ -109,13 +109,13 @@ function Tsidebar({ children, location }) {
                   테이블
                 </div>
               </Link>
-              <Link to="/scheduler">
+              <Link to="/store/scheduler">
                 <div className="TsideMenus mt-5">
                   <MenuImage
                     selImg={scheduleImg}
                     hoverImg={scheduleWhiteImg}
                     pageMenu={(() => {
-                      if (location.pathname === "/scheduler") {
+                      if (location.pathname === "/store/scheduler") {
                         return true;
                       } else {
                         return false;
@@ -125,13 +125,13 @@ function Tsidebar({ children, location }) {
                   스케줄
                 </div>
               </Link>
-              <Link to="/storeinvoice">
+              <Link to="/store/invoice">
                 <div className="TsideMenus mt-5">
                   <MenuImage
                     selImg={salesImg}
                     hoverImg={salesWhiteImg}
                     pageMenu={(() => {
-                      if (location.pathname === "/storeinvoice") {
+                      if (location.pathname === "/store/invoice") {
                         return true;
                       } else {
                         return false;

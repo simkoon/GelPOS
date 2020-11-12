@@ -1,37 +1,37 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from 'react';
 //import { render } from "react-dom";
-import Tsidebar from "../../comm/Sidebar/Tsidebar";
-import { Button } from "react-bootstrap";
+import Tsidebar from '../../comm/Sidebar/Tsidebar';
+import { Button } from 'react-bootstrap';
 
-import TUICalendar from "@toast-ui/react-calendar";
+import TUICalendar from '@toast-ui/react-calendar';
 
-import "tui-calendar/dist/tui-calendar.css";
-import "tui-date-picker/dist/tui-date-picker.css";
-import "tui-time-picker/dist/tui-time-picker.css";
+import 'tui-calendar/dist/tui-calendar.css';
+import 'tui-date-picker/dist/tui-date-picker.css';
+import 'tui-time-picker/dist/tui-time-picker.css';
 
-import "./styles.css";
+import './styles.css';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
 
 const schedules = [
   {
-    calendarId: "1",
-    category: "time",
+    calendarId: '1',
+    category: 'time',
     isVisible: true,
-    title: "Study",
-    id: "1",
-    body: "Test",
+    title: 'Study',
+    id: '1',
+    body: 'Test',
     start,
     end,
   },
   {
-    calendarId: "2",
-    category: "time",
+    calendarId: '2',
+    category: 'time',
     isVisible: true,
-    title: "Meeting",
-    id: "2",
-    body: "Description",
+    title: 'Meeting',
+    id: '2',
+    body: 'Description',
     start: new Date(new Date().setHours(start.getHours() + 1)),
     end: new Date(new Date().setHours(start.getHours() + 2)),
   },
@@ -39,20 +39,20 @@ const schedules = [
 
 const calendars = [
   {
-    id: "1",
-    name: "My Calendar",
-    color: "#ffffff",
-    bgColor: "#9e5fff",
-    dragBgColor: "#9e5fff",
-    borderColor: "#9e5fff",
+    id: '1',
+    name: 'My Calendar',
+    color: '#ffffff',
+    bgColor: '#9e5fff',
+    dragBgColor: '#9e5fff',
+    borderColor: '#9e5fff',
   },
   {
-    id: "2",
-    name: "Company",
-    color: "#ffffff",
-    bgColor: "#00a9ff",
-    dragBgColor: "#00a9ff",
-    borderColor: "#00a9ff",
+    id: '2',
+    name: 'Company',
+    color: '#ffffff',
+    bgColor: '#00a9ff',
+    dragBgColor: '#00a9ff',
+    borderColor: '#00a9ff',
   },
 ];
 
@@ -75,11 +75,11 @@ function Scheduler() {
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start,
       end: scheduleData.end,
-      category: scheduleData.isAllDay ? "allday" : "time",
-      dueDateClass: "",
+      category: scheduleData.isAllDay ? 'allday' : 'time',
+      dueDateClass: '',
       location: scheduleData.location,
       raw: {
-        class: scheduleData.raw["class"],
+        class: scheduleData.raw['class'],
       },
       state: scheduleData.state,
     };
@@ -119,11 +119,11 @@ function Scheduler() {
     var html = [];
 
     if (!isAllDay) {
-      html.push("<strong>" + _getFormattedTime(schedule.start) + "</strong> ");
+      html.push('<strong>' + _getFormattedTime(schedule.start) + '</strong> ');
     }
     if (schedule.isPrivate) {
       html.push('<span class="calendar-font-icon ic-lock-b"></span>');
-      html.push(" Private");
+      html.push(' Private');
     } else {
       if (schedule.isReadOnly) {
         html.push('<span class="calendar-font-icon ic-readonly-b"></span>');
@@ -134,10 +134,10 @@ function Scheduler() {
       } else if (schedule.location) {
         html.push('<span class="calendar-font-icon ic-location-b"></span>');
       }
-      html.push(" " + schedule.title);
+      html.push(' ' + schedule.title);
     }
 
-    return html.join("");
+    return html.join('');
   }
 
   const templates = {
@@ -168,54 +168,54 @@ function Scheduler() {
   }
   const viewBtnClick = (e) => {
     const calendarInstance = cal.current.getInstance();
-    console.log("month", cal.current.calendarInst.getDate().getMonth());
+    console.log('month', cal.current.calendarInst.getDate().getMonth());
     //.toDate()
     switch (e.target.name) {
-      case "prev":
+      case 'prev':
         return calendarInstance.prev();
 
-      case "next":
+      case 'next':
         return calendarInstance.next();
     }
   };
 
-  console.log("cal", cal.current);
+  console.log('cal', cal.current);
 
   return (
     <>
-      <Tsidebar>
-        <div className="App">
-          <div className="mb-3 mt-3">
-            <h2>
-              {value}
-              {/* {cal !== null && state.value}
+      {/* <Tsidebar> */}
+      <div className="App">
+        <div className="mb-3 mt-3">
+          <h2>
+            {value}
+            {/* {cal !== null && state.value}
               {cal === null && start.getMonth()} */}
-            </h2>
-            {/* <h1>{cal.current.calendarInst.getDate().getYear()}</h1>
+          </h2>
+          {/* <h1>{cal.current.calendarInst.getDate().getYear()}</h1>
           <h2>{cal.current.calendarInst.getDate().getMonth()}</h2> */}
-            <Button className="ml-3" onClick={viewBtnClick} name="prev">
-              이전
-            </Button>
-            <Button className="ml-3" onClick={viewBtnClick} name="next">
-              다음
-            </Button>
-          </div>
-          <TUICalendar
-            ref={cal}
-            height="1000px"
-            view="month"
-            useCreationPopup={true}
-            useDetailPopup={true}
-            template={templates}
-            calendars={calendars}
-            schedules={schedules}
-            onClickSchedule={onClickSchedule}
-            onBeforeCreateSchedule={onBeforeCreateSchedule}
-            onBeforeDeleteSchedule={onBeforeDeleteSchedule}
-            onBeforeUpdateSchedule={onBeforeUpdateSchedule}
-          />
+          <Button className="ml-3" onClick={viewBtnClick} name="prev">
+            이전
+          </Button>
+          <Button className="ml-3" onClick={viewBtnClick} name="next">
+            다음
+          </Button>
         </div>
-      </Tsidebar>
+        <TUICalendar
+          ref={cal}
+          height="1000px"
+          view="month"
+          useCreationPopup={true}
+          useDetailPopup={true}
+          template={templates}
+          calendars={calendars}
+          schedules={schedules}
+          onClickSchedule={onClickSchedule}
+          onBeforeCreateSchedule={onBeforeCreateSchedule}
+          onBeforeDeleteSchedule={onBeforeDeleteSchedule}
+          onBeforeUpdateSchedule={onBeforeUpdateSchedule}
+        />
+      </div>
+      {/* </Tsidebar> */}
     </>
   );
 }
