@@ -1,10 +1,10 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 //import { render } from "react-dom";
 import Tsidebar from "../../comm/Sidebar/Tsidebar";
 import { Button } from "react-bootstrap";
 
 import TUICalendar from "@toast-ui/react-calendar";
-
+import * as authAPI from "../../lib/api/auth";
 import "tui-calendar/dist/tui-calendar.css";
 import "tui-date-picker/dist/tui-date-picker.css";
 import "tui-time-picker/dist/tui-time-picker.css";
@@ -66,7 +66,7 @@ function Scheduler() {
     console.log(e, el.getBoundingClientRect());
   }, []);
 
-  const onBeforeCreateSchedule = useCallback((scheduleData) => {
+  const onBeforeCreateSchedule = useCallback(async (scheduleData) => {
     console.log(scheduleData);
 
     const schedule = {
@@ -83,6 +83,10 @@ function Scheduler() {
       },
       state: scheduleData.state,
     };
+
+    const result = await authAPI.schedule(schedule);
+
+    console.log(result);
 
     cal.current.calendarInst.createSchedules([schedule]);
   }, []);
@@ -162,22 +166,38 @@ function Scheduler() {
 
   //뷰 클릭시 맞게 변경하기 위해 useState 주기
 
-  const [value, setValue] = useState(20);
-  if (value !== 20) {
-    setValue(cal.current.calendarInst.getDate().getMonth());
-  }
+  // if (value !== 20) {
+  //   setValue(cal.current.calendarInst.getDate().getMonth());
+  // }
+
+  const [month, setMonth] = useState(start.getMonth());
+  const [year, setYear] = useState(start.getFullYear());
+
   const viewBtnClick = (e) => {
     const calendarInstance = cal.current.getInstance();
-    console.log("month", cal.current.calendarInst.getDate().getMonth());
+    console.log("month", cal.current.calendarInst.getDate());
     //.toDate()
     switch (e.target.name) {
-      case "prev":
-        return calendarInstance.prev();
+      case "prev": {
+        calendarInstance.prev();
+        setMonth(cal.current.calendarInst.getDate().getMonth());
+        setYear(cal.current.calendarInst.getDate().getFullYear());
+        return;
+      }
 
-      case "next":
-        return calendarInstance.next();
+      case "next": {
+        calendarInstance.next();
+        setMonth(cal.current.calendarInst.getDate().getMonth());
+        setYear(cal.current.calendarInst.getDate().getFullYear());
+        return;
+      }
     }
   };
+
+  // useEffect(() => {
+  //   setValue(cal.current.calendarInst.getDate().getMonth());
+  //   console.log("cal!!!!", cal.current.calendarInst.getDate().getMonth());
+  // }, [cal.current]);
 
   console.log("cal", cal.current);
 
@@ -187,12 +207,8 @@ function Scheduler() {
         <div className="App">
           <div className="mb-3 mt-3">
             <h2>
-              {value}
-              {/* {cal !== null && state.value}
-              {cal === null && start.getMonth()} */}
+              {year}년 {month + 1}월
             </h2>
-            {/* <h1>{cal.current.calendarInst.getDate().getYear()}</h1>
-          <h2>{cal.current.calendarInst.getDate().getMonth()}</h2> */}
             <Button className="ml-3" onClick={viewBtnClick} name="prev">
               이전
             </Button>

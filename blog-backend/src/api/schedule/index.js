@@ -5,7 +5,8 @@ import checkLoggedIn from '../../lib/checkLoggedIn';
 const schedules = new Router();
 
 schedules.get('/', schedulesCtrl.list);
-schedules.post('/', checkLoggedIn, schedulesCtrl.write);
+schedules.post('/', schedulesCtrl.write);
+// checkLoggedIn,
 
 const schedule = new Router(); // /api/posts/:id
 schedule.get('/', schedulesCtrl.read);

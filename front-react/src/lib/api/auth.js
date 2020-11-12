@@ -10,3 +10,6 @@ export const code = (formData) => client.post("/api/auth/code", formData);
 export const check = () => client.get("/api/auth/check");
 
 export const logout = () => client.post("/api/auth/logout"); //logout api서버 호출
+
+//schedule
+export const schedule = () => client.post("/api/auth/schedule");
