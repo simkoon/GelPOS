@@ -3,6 +3,7 @@ import Member from "./component/Member";
 import StoreList from "./component/StoreList/StoreListContainer";
 import Scheduler from "./component/Scheduler";
 import StoreAdd from "./component/StoreAdd/StoreAddContainer";
+import AddMenu from "./component/AddMenu/Addmenu";
 function App() {
   return (
     <>
@@ -12,6 +13,7 @@ function App() {
         <Route path="/storeList" component={StoreList} />
         <Route path="/scheduler" component={Scheduler} />
         <Route path="/storeAdd" component={StoreAdd} />
+        <Route path="/addmenu" component={AddMenu}/>
       </Switch>
     </>
   );
