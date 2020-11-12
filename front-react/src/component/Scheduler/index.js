@@ -70,7 +70,7 @@ function Scheduler() {
     console.log(scheduleData);
 
     const schedule = {
-      id: String(Math.random()),
+      userid: "1",
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start,
