@@ -26,8 +26,6 @@ function Invoice() {
       window.addEventListener('resize', () =>
         this.gridPanel.sizeColumnsToFit()
       );
-      console.log(this.gridPanel.sizeColumnsToFit);
-      console.log('`````````````````````````');
     };
     params.api.sizeColumnsToFit();
   }

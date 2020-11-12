@@ -1,25 +1,13 @@
-<<<<<<< HEAD
-import React, { useCallback, useRef, useState } from 'react';
-=======
-import React, { useCallback, useEffect, useRef, useState } from "react";
->>>>>>> cf3454c126836f35992a84667beb84e6449154a7
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 //import { render } from "react-dom";
 import Tsidebar from '../../comm/Sidebar/Tsidebar';
 import { Button } from 'react-bootstrap';
 
-<<<<<<< HEAD
 import TUICalendar from '@toast-ui/react-calendar';
-
+import * as authAPI from '../../lib/api/auth';
 import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
-=======
-import TUICalendar from "@toast-ui/react-calendar";
-import * as authAPI from "../../lib/api/auth";
-import "tui-calendar/dist/tui-calendar.css";
-import "tui-date-picker/dist/tui-date-picker.css";
-import "tui-time-picker/dist/tui-time-picker.css";
->>>>>>> cf3454c126836f35992a84667beb84e6449154a7
 
 import './styles.css';
 
@@ -82,7 +70,7 @@ function Scheduler() {
     console.log(scheduleData);
 
     const schedule = {
-      userid: "1",
+      userid: '1',
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start,
@@ -187,50 +175,17 @@ function Scheduler() {
 
   const viewBtnClick = (e) => {
     const calendarInstance = cal.current.getInstance();
-<<<<<<< HEAD
-    console.log('month', cal.current.calendarInst.getDate().getMonth());
+    console.log('month', cal.current.calendarInst.getDate());
     //.toDate()
     switch (e.target.name) {
-      case 'prev':
-        return calendarInstance.prev();
-
-      case 'next':
-        return calendarInstance.next();
-    }
-  };
-
-  console.log('cal', cal.current);
-
-  return (
-    <>
-      {/* <Tsidebar> */}
-      <div className="App">
-        <div className="mb-3 mt-3">
-          <h2>
-            {value}
-            {/* {cal !== null && state.value}
-              {cal === null && start.getMonth()} */}
-          </h2>
-          {/* <h1>{cal.current.calendarInst.getDate().getYear()}</h1>
-          <h2>{cal.current.calendarInst.getDate().getMonth()}</h2> */}
-          <Button className="ml-3" onClick={viewBtnClick} name="prev">
-            이전
-          </Button>
-          <Button className="ml-3" onClick={viewBtnClick} name="next">
-            다음
-          </Button>
-=======
-    console.log("month", cal.current.calendarInst.getDate());
-    //.toDate()
-    switch (e.target.name) {
-      case "prev": {
+      case 'prev': {
         calendarInstance.prev();
         setMonth(cal.current.calendarInst.getDate().getMonth());
         setYear(cal.current.calendarInst.getDate().getFullYear());
         return;
       }
 
-      case "next": {
+      case 'next': {
         calendarInstance.next();
         setMonth(cal.current.calendarInst.getDate().getMonth());
         setYear(cal.current.calendarInst.getDate().getFullYear());
@@ -244,38 +199,21 @@ function Scheduler() {
   //   console.log("cal!!!!", cal.current.calendarInst.getDate().getMonth());
   // }, [cal.current]);
 
-  console.log("cal", cal.current);
+  console.log('cal', cal.current);
 
   return (
     <>
-      <Tsidebar>
-        <div className="App">
-          <div className="mb-3 mt-3">
-            <h2>
-              {year}년 {month + 1}월
-            </h2>
-            <Button className="ml-3" onClick={viewBtnClick} name="prev">
-              이전
-            </Button>
-            <Button className="ml-3" onClick={viewBtnClick} name="next">
-              다음
-            </Button>
-          </div>
-          <TUICalendar
-            ref={cal}
-            height="1000px"
-            view="month"
-            useCreationPopup={true}
-            useDetailPopup={true}
-            template={templates}
-            calendars={calendars}
-            schedules={schedules}
-            onClickSchedule={onClickSchedule}
-            onBeforeCreateSchedule={onBeforeCreateSchedule}
-            onBeforeDeleteSchedule={onBeforeDeleteSchedule}
-            onBeforeUpdateSchedule={onBeforeUpdateSchedule}
-          />
->>>>>>> cf3454c126836f35992a84667beb84e6449154a7
+      <div className="App">
+        <div className="mb-3 mt-3">
+          <h2>
+            {year}년 {month + 1}월
+          </h2>
+          <Button className="ml-3" onClick={viewBtnClick} name="prev">
+            이전
+          </Button>
+          <Button className="ml-3" onClick={viewBtnClick} name="next">
+            다음
+          </Button>
         </div>
         <TUICalendar
           ref={cal}
@@ -292,7 +230,20 @@ function Scheduler() {
           onBeforeUpdateSchedule={onBeforeUpdateSchedule}
         />
       </div>
-      {/* </Tsidebar> */}
+      <TUICalendar
+        ref={cal}
+        height="1000px"
+        view="month"
+        useCreationPopup={true}
+        useDetailPopup={true}
+        template={templates}
+        calendars={calendars}
+        schedules={schedules}
+        onClickSchedule={onClickSchedule}
+        onBeforeCreateSchedule={onBeforeCreateSchedule}
+        onBeforeDeleteSchedule={onBeforeDeleteSchedule}
+        onBeforeUpdateSchedule={onBeforeUpdateSchedule}
+      />
     </>
   );
 }
