@@ -13,7 +13,6 @@ function App() {
       <Route path="/member" component={Member} />
       <Route path="/storeList" exact={true} component={StoreList} />
       <Route path="/store" component={SidebarContainer} />
-   
     </>
   );
 }

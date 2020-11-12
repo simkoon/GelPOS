@@ -1,12 +1,14 @@
 import Router from 'koa-router';
 import posts from './posts';
+import schedule from './schedule';
 import auth from './auth';
 import storeList from './storeList';
 import menus from './menu';
 
 const api = new Router();
 
-api.use('/posts', posts.routes());
+//api.use('/posts', posts.routes());
+api.use('/schedule', schedule.routes());
 api.use('/auth', auth.routes());
 api.use('/storeList', storeList.routes());
 api.use('/addmenu', menus.routes());

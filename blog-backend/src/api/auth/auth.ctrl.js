@@ -58,6 +58,7 @@ export const code = async (ctx) => {
 
 export const register = async (ctx) => {
   // Request Body 검증하기
+  console.log("body",ctx.request.body);
   const schema = Joi.object().keys({
     userid: Joi.string().alphanum().min(3).max(20).required(),
     password: Joi.string().required(),
@@ -160,7 +161,7 @@ export const check = async (ctx) => {
     ctx.status = 401; // Unauthorized
     return;
   }
-  console.log('여기 쳌ㄱ 유저');
+  console.log('여기 체크 유저');
   console.log(user);
   ctx.body = user;
 };

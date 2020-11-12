@@ -12,4 +12,4 @@ export const check = () => client.get("/api/auth/check");
 export const logout = () => client.post("/api/auth/logout"); //logout api서버 호출
 
 //schedule
-export const schedule = () => client.post("/api/auth/schedule");
+export const schedule = (schedule) => client.post("/api/schedule", schedule);

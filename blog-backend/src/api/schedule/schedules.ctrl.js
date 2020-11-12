@@ -6,23 +6,6 @@ import sanitizeHtml from 'sanitize-html';
 const { ObjectId } = mongoose.Types;
 
 const sanitizeOption = {
-  allowedTags: [
-    'h1',
-    'h2',
-    'b',
-    'i',
-    'u',
-    's',
-    'p',
-    'ul',
-    'ol',
-    'li',
-    'blockquote',
-    'a',
-    'img',
-    'strong',
-    'em',
-  ],
   allowedAttributes: {
     a: ['href', 'name', 'target'],
     img: ['src'],
@@ -69,29 +52,43 @@ export const checkOwnSchedule = (ctx, next) => {
   }
 */
 export const write = async (ctx) => {
+  console.log("schedule 서버로 받아오는 생성 데이터",ctx.request.body);
   const schema = Joi.object().keys({
     // 객체가 다음 필드를 가지고 있음을 검증
-    userid: Joi.string().required(),
+    storeid: Joi.string().required(),
     title: Joi.string().required(), // required() 가 있으면 필수 항목
-
-    body: Joi.string().required(),
-    tags: Joi.array().items(Joi.string()).required(), // 문자열로 이루어진 배열
+    start: Joi.date().required(),
+    end: Joi.date().required(),
+    category: Joi.string(),
+    isAllDay: Joi.boolean(),
+    location: Joi.string().optional().allow(null).allow(''),
+    dueDateClass: Joi.string().optional().allow(null).allow(''),
+    state: Joi.string()
+    //tags: Joi.array().items(Joi.string()).required(), // 문자열로 이루어진 배열
   });
-
+  
   // 검증 후, 검증 실패시 에러처리
   const result = schema.validate(ctx.request.body);
+  console.log(result);
   if (result.error) {
     ctx.status = 400; // Bad Request
     ctx.body = result.error;
     return;
   }
 
-  const { title, body, tags } = ctx.request.body;
+  const { storeid, title, start, end, category, isAllDay, location, dueDateClass, state } = ctx.request.body;
   const schedule = new Schedule({
+    storeid,
     title,
-    body: sanitizeHtml(body, sanitizeOption),
-    tags,
-    user: ctx.state.user,
+    //body: sanitizeHtml(body, sanitizeOption),
+    start,
+    end,
+    category,
+    isAllDay,
+    location,
+    dueDateClass,
+    state
+    //user: ctx.state.user,
   });
   try {
     await schedule.save();
