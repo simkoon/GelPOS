@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 
 import { useSelector } from "react-redux";
 import TUICalendar from "@toast-ui/react-calendar";
-import * as authAPI from "../../lib/api/auth";
+import * as authAPI from "../../lib/api/scheduler";
 import "tui-calendar/dist/tui-calendar.css";
 import "tui-date-picker/dist/tui-date-picker.css";
 import "tui-time-picker/dist/tui-time-picker.css";
@@ -58,14 +58,23 @@ const calendars = [
 ];
 
 function Scheduler() {
+
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
 
-  const storeid = user.nowstore;
-  console.log(storeid);
-  const schedules = authAPI.schedulelist(storeid);
+  const [schedules, setSchedules] = useState(1);
 
+  //렌더링 될때 데이터에서 스케줄 리스트 뽑아오기
+  useEffect( async () =>  {
+
+      const storeid = user.nowstore;
+      console.log(storeid);
+      const result = await authAPI.schedulelist();
+      console.log("서버에서 넘어오는 scheduler데이터",result.data);
+      setSchedules(result.data);
+      console.log("schedules 값",schedules);
+  },[]);
   const cal = useRef(null);
 
   const onClickSchedule = useCallback((e) => {
@@ -87,6 +96,7 @@ function Scheduler() {
       start: scheduleData.start.toDate(),
       end: scheduleData.end.toDate(),
       category: scheduleData.isAllDay ? "allday" : "time",
+      categoryid: scheduleData.calendarId,
       dueDateClass: "",
       location: scheduleData.location,
       raw: {
@@ -99,7 +109,7 @@ function Scheduler() {
 
     const result = await authAPI.schedule(schedule);
 
-    console.log(result);
+    console.log("서버에서 리턴 받은 schedule 생성 데이터",result);
 
     cal.current.calendarInst.createSchedules([schedule]);
   }, []);
@@ -212,7 +222,7 @@ function Scheduler() {
   //   console.log("cal!!!!", cal.current.calendarInst.getDate().getMonth());
   // }, [cal.current]);
 
-  console.log("cal", cal.current);
+  //console.log("cal", cal.current);
 
   return (
     <>

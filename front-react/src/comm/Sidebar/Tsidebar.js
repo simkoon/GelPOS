@@ -103,7 +103,7 @@ function Tsidebar({ children, location }) {
               <img src={logoImg} />
             </div>
             <TsideMenu>
-              <Link>
+              <Link to="/">
                 <div className="TsideMenus mt-5">
                   <MenuImage selImg={tableImg} hoverImg={tableWhiteImg} />
                   테이블
@@ -157,7 +157,7 @@ function Tsidebar({ children, location }) {
                   가게정보
                 </div>
               </Link>
-              <Link className="TsideMenus Logout">로그아웃</Link>
+              <Link to="/" className="TsideMenus Logout">로그아웃</Link>
             </TsideMenu>
           </Tside>
         </TsideContainer>
