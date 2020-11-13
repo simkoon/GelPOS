@@ -14,15 +14,11 @@ export default withRouter(function StoreListContainer({ history }) {
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
-  console.log('컨테이너 위쪽 유저');
-  console.log(user === null);
-  console.log(user);
+
   useEffect(() => {
     if (user) {
       (async () => {
         const body = await reTokken();
-        console.log('jidsfisdjfisdsdsfsd');
-        console.log(body.data);
         try {
           localStorage.setItem('user', JSON.stringify(body.datas));
         } catch (error) {
@@ -33,11 +29,8 @@ export default withRouter(function StoreListContainer({ history }) {
     }
   }, [user]);
 
-  console.log('컨테이너 아래 유저');
-  console.log(user);
   useEffect(() => {
     if (user === null || user === 'null') {
-      console.log('여기들옴 컨테이너 히스토리 푸시시');
       history.push('/');
     }
   });

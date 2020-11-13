@@ -68,20 +68,26 @@ app.listen = (...args) => {
 
 // PORT 가 지정되어있지 않다면 4000 을 사용
 const port = PORT || 4000;
-// import User from './models/user'
+import Invoice from './models/invoice';
 app.listen(port, () => {
   console.log('Listening to port %d', port);
 
-  // (async () => {
-  //   const user = await User.findByUserid('root1');
-  //   console.log(user);
-  //   console.log(user.store);
-  //   let newstore = user.store.create({ name: '옥상wqe이네촌점' });
-  //   console.log("-------------------------");
-  //   console.log(newstore._id);
-  //   let id = user.store.push(newstore);
-  //   console.log(id);
-  //   console.log(user.store);
-  //   await user.save();
-  // })();
+  (async () => {
+    // const invoice = new Invoice({
+    //   storeId: '5fae06c4496fa717157afa44',
+    //   seq: 6,
+    //   menu: ['다금바리무침', '짜장'],
+    //   paymentOption: '카카오페이',
+    //   payment: '460000',
+    //   user: {
+    //     _id: '5fab4ce09a24713f1dd19ae9',
+    //     userid: 'root1',
+    //     email: '213',
+    //     username: '조옥상',
+    //   },
+    // });
+
+    // const result = await invoice.save();
+    // console.log(result);
+  })();
 });

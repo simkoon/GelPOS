@@ -58,7 +58,7 @@ const calendars = [
 ];
 
 function Scheduler() {
-  const {} = useSelector();
+
 
   const storeid = "2";
   const schedules = authAPI.schedulelist(storeid);

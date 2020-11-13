@@ -43,7 +43,8 @@ export const selectStore = async (ctx) => {
       return;
     }
     ctx.state.user.nowstore = nowstore;
-
+    console.log('유저저');
+    console.log(ctx.state.user);
     ctx.body = ctx.state.user;
     token = user.generateToken(nowstore);
     ctx.cookies.set('access_token', token, {

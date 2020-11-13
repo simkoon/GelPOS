@@ -6,9 +6,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import { getList } from '../../lib/api/invoice';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
+let listener = null;
 
 function Invoice({ history }) {
   const { user } = useSelector(({ user }) => ({
@@ -47,54 +50,38 @@ function Invoice({ history }) {
   function onGridReady(params) {
     setGridApi(params.api);
     setGridColumnApi(params.columnApi);
-
-    params.api.sizeColumnsToFit = function () {
-      this.gridPanel.sizeColumnsToFit();
-      window.addEventListener('resize', () =>
-        this.gridPanel.sizeColumnsToFit()
-      );
-    };
     params.api.sizeColumnsToFit();
   }
 
-  const [rowData, setRowData] = useState([
-    {
-      '거래 번호': '111111',
-      메뉴: 'Celica',
-      '거래 시간': '14:00',
-      '거래 방법': '카카오페이',
-      금액: 732000,
-    },
-    {
-      '거래 번호': '222222',
-      메뉴: 'Mondeo',
-      '거래 시간': '15:00',
-      '거래 방법': '현금',
-      금액: 722000,
-    },
-    {
-      '거래 번호': '333333',
-      메뉴: '짬뽕',
-      '거래 시간': '16:00',
-      '거래 방법': '환불',
-      금액: 72000,
-    },
-    {
-      '거래 번호': '333334',
-      메뉴: '짜장',
-      '거래 시간': '17:00',
-      '거래 방법': '현금',
-      금액: 12000,
-    },
-    {
-      '거래 번호': '333335',
-      메뉴: '짬뽕',
-      '거래 시간': '18:00',
-      '거래 방법': '현금',
-      금액: 2000,
-    },
-  ]);
-  const onButtonClick = (e) => {
+  useEffect(() => {
+    console.log('useEffect');
+
+    listener = window.addEventListener('resize', () => {
+      if (gridApi) {
+        gridApi.sizeColumnsToFit();
+      }
+    });
+
+    return () => {
+      console.log('called');
+      window.removeEventListener('resize', listener);
+    };
+  });
+
+  const [rowData, setRowData] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const result = await getList({ date: startDate});
+      console.log(result.data);
+      setRowData(result.data);
+    })();
+  }, [startDate]);
+
+  const onButtonClick = async (e) => {
+    const result = await getList({ date: startDate });
+    console.log(result.data);
+    setRowData(result.data);
     const selectedNodes = gridApi.getSelectedNodes();
     console.dir(selectedNodes);
     const selectedData = selectedNodes.map((node) => node.data);
@@ -103,6 +90,7 @@ function Invoice({ history }) {
       .join(', ');
     alert(`Selected nodes: ${selectedDataStringPresentation}`);
   };
+
   return (
     <Container
       fluid
@@ -146,32 +134,33 @@ function Invoice({ history }) {
                 <Button onClick={onButtonClick}>버튼클릭</Button>
                 <AgGridReact rowData={rowData} onGridReady={onGridReady}>
                   <AgGridColumn
-                    field="거래 번호"
+                    field="seq"
+                    headerName={'거래 번호'}
                     sortable={true}
                     filter={true}
                     checkboxSelection={true}
                     resizable={true}
                   ></AgGridColumn>
                   <AgGridColumn
-                    field="메뉴"
+                    field="menu"
                     sortable={true}
                     filter={true}
                     resizable={true}
                   ></AgGridColumn>
                   <AgGridColumn
-                    field="거래 시간"
+                    field="regDate"
                     sortable={true}
                     filter={true}
                     resizable={true}
                   ></AgGridColumn>
                   <AgGridColumn
-                    field="거래 방법"
+                    field="paymentOption"
                     sortable={true}
                     filter={true}
                     resizable={true}
                   ></AgGridColumn>
                   <AgGridColumn
-                    field="금액"
+                    field="payment"
                     sortable={true}
                     filter={true}
                     resizable={true}
