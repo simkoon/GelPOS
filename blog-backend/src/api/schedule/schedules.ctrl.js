@@ -52,7 +52,7 @@ export const checkOwnSchedule = (ctx, next) => {
   }
 */
 export const write = async (ctx) => {
-  console.log("schedule 서버로 받아오는 생성 데이터",ctx.request.body);
+  console.log('schedule 서버로 받아오는 생성 데이터', ctx.request.body);
   const schema = Joi.object().keys({
     // 객체가 다음 필드를 가지고 있음을 검증
     storeid: Joi.string().required(),
@@ -63,10 +63,10 @@ export const write = async (ctx) => {
     isAllDay: Joi.boolean(),
     location: Joi.string().optional().allow(null).allow(''),
     dueDateClass: Joi.string().optional().allow(null).allow(''),
-    state: Joi.string()
+    state: Joi.string(),
     //tags: Joi.array().items(Joi.string()).required(), // 문자열로 이루어진 배열
   });
-  
+
   // 검증 후, 검증 실패시 에러처리
   const result = schema.validate(ctx.request.body);
   console.log(result);
@@ -76,8 +76,20 @@ export const write = async (ctx) => {
     return;
   }
 
-  const { storeid, title, start, end, category, isAllDay, location, dueDateClass, state } = ctx.request.body;
+  const {
+    storeid,
+    title,
+    start,
+    end,
+    category,
+    isAllDay,
+    location,
+    dueDateClass,
+    state,
+    raw,
+  } = ctx.request.body;
   const schedule = new Schedule({
+    //state.user.nowstore
     storeid,
     title,
     //body: sanitizeHtml(body, sanitizeOption),
@@ -87,7 +99,8 @@ export const write = async (ctx) => {
     isAllDay,
     location,
     dueDateClass,
-    state
+    state,
+    raw,
     //user: ctx.state.user,
   });
   try {
@@ -112,35 +125,30 @@ const removeHtmlAndShorten = (body) => {
 export const list = async (ctx) => {
   // query 는 문자열이기 때문에 숫자로 변환해주어야합니다.
   // 값이 주어지지 않았다면 1 을 기본으로 사용합니다.
-  const page = parseInt(ctx.query.page || '1', 10);
+  // console.log('list서버에서 받아오는값', ctx.request.body);
+  console.log(ctx.params);
+  const { storeid } = ctx.params;
+  console.log('list서버에서 받아오는 아이디 값', storeid);
+  // const page = parseInt(ctx.query.page || '1', 10);
 
-  console.log(ctx);
+  // if (page < 1) {
+  //   console.log(ctx);
+  //   ctx.status = 400;
+  //   return;
+  // }
 
-  if (page < 1) {
-    ctx.status = 400;
-    return;
-  }
-
-  const { tag, userid } = ctx.query;
-  // tag, userid 값이 유효하면 객체 안에 넣고, 그렇지 않으면 넣지 않음
-  const query = {
-    ...(userid ? { 'user.userid': userid } : {}),
-    ...(tag ? { tags: tag } : {}),
-  };
+  // const { tag, userid } = ctx.query;
+  // // tag, userid 값이 유효하면 객체 안에 넣고, 그렇지 않으면 넣지 않음
+  // const query = {
+  //   ...(userid ? { 'user.userid': userid } : {}),
+  //   ...(tag ? { tags: tag } : {}),
+  // };
 
   try {
-    const schedules = await Schedule.find(query)
-      .sort({ _id: -1 })
-      .limit(10)
-      .skip((page - 1) * 10)
-      .lean()
-      .exec();
-    const scheduleCount = await Schedule.countDocuments(query).exec();
-    ctx.set('Last-Page', Math.ceil(scheduleCount / 10));
-    ctx.body = schedules.map((schedule) => ({
-      ...posschedulet,
-      body: removeHtmlAndShorten(schedule.body),
-    }));
+    const schedules = await Schedule.findByStoreid(storeid);
+    console.log('데이터에서 나오는 schedule 값', schedules);
+
+    ctx.body = schedules;
   } catch (e) {
     ctx.throw(500, e);
   }

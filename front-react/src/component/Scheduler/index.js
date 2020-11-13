@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Tsidebar from "../../comm/Sidebar/Tsidebar";
 import { Button } from "react-bootstrap";
 
+import { useSelector } from "react-redux";
 import TUICalendar from "@toast-ui/react-calendar";
 import * as authAPI from "../../lib/api/auth";
 import "tui-calendar/dist/tui-calendar.css";
@@ -14,33 +15,33 @@ import "./styles.css";
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
 
-const schedules = [
-  {
-    calendarId: "1",
-    category: "time",
-    isVisible: true,
-    title: "Study",
-    id: "1",
-    body: "Test",
-    start,
-    end,
-  },
-  {
-    calendarId: "2",
-    category: "time",
-    isVisible: true,
-    title: "Meeting",
-    id: "2",
-    body: "Description",
-    start: new Date(new Date().setHours(start.getHours() + 1)),
-    end: new Date(new Date().setHours(start.getHours() + 2)),
-  },
-];
+// const schedules = [
+//   {
+//     calendarId: "1",
+//     category: "time",
+//     isVisible: true,
+//     title: "Study",
+//     id: "1",
+//     body: "Test",
+//     start,
+//     end,
+//   },
+//   {
+//     calendarId: "2",
+//     category: "time",
+//     isVisible: true,
+//     title: "Meeting",
+//     id: "2",
+//     body: "Description",
+//     start: new Date(new Date().setHours(start.getHours() + 1)),
+//     end: new Date(new Date().setHours(start.getHours() + 2)),
+//   },
+// ];
 
 const calendars = [
   {
     id: "1",
-    name: "My Calendar",
+    name: "일정",
     color: "#ffffff",
     bgColor: "#9e5fff",
     dragBgColor: "#9e5fff",
@@ -48,7 +49,7 @@ const calendars = [
   },
   {
     id: "2",
-    name: "Company",
+    name: "예약",
     color: "#ffffff",
     bgColor: "#00a9ff",
     dragBgColor: "#00a9ff",
@@ -57,6 +58,11 @@ const calendars = [
 ];
 
 function Scheduler() {
+  const {} = useSelector();
+
+  const storeid = "2";
+  const schedules = authAPI.schedulelist(storeid);
+
   const cal = useRef(null);
 
   const onClickSchedule = useCallback((e) => {
@@ -67,7 +73,10 @@ function Scheduler() {
   }, []);
 
   const onBeforeCreateSchedule = useCallback(async (scheduleData) => {
-    console.log("프론트에서 schedule에서 onBeforeCreateSchedule로 넘어오는 데이터",scheduleData);
+    console.log(
+      "프론트에서 schedule에서 onBeforeCreateSchedule로 넘어오는 데이터",
+      scheduleData
+    );
 
     const schedule = {
       storeid: "2",
@@ -78,13 +87,13 @@ function Scheduler() {
       category: scheduleData.isAllDay ? "allday" : "time",
       dueDateClass: "",
       location: scheduleData.location,
-      // raw: {
-      //   class: scheduleData.raw["class"],
-      // },
+      raw: {
+        class: scheduleData.raw["class"],
+      },
       state: scheduleData.state,
     };
 
-    console.log("프론트에서 서버로 보내는 schedule 생성 데이터",schedule);
+    console.log("프론트에서 서버로 보내는 schedule 생성 데이터", schedule);
 
     const result = await authAPI.schedule(schedule);
 
@@ -205,33 +214,33 @@ function Scheduler() {
 
   return (
     <>
-        <div className="App">
-          <div className="mb-3 mt-3">
-            <h2>
-              {year}년 {month + 1}월
-            </h2>
-            <Button className="ml-3" onClick={viewBtnClick} name="prev">
-              이전
-            </Button>
-            <Button className="ml-3" onClick={viewBtnClick} name="next">
-              다음
-            </Button>
-          </div>
-          <TUICalendar
-            ref={cal}
-            height="1000px"
-            view="month"
-            useCreationPopup={true}
-            useDetailPopup={true}
-            template={templates}
-            calendars={calendars}
-            schedules={schedules}
-            onClickSchedule={onClickSchedule}
-            onBeforeCreateSchedule={onBeforeCreateSchedule}
-            onBeforeDeleteSchedule={onBeforeDeleteSchedule}
-            onBeforeUpdateSchedule={onBeforeUpdateSchedule}
-          />
+      <div className="App">
+        <div className="mb-3 mt-3">
+          <h2>
+            {year}년 {month + 1}월
+          </h2>
+          <Button className="ml-3" onClick={viewBtnClick} name="prev">
+            이전
+          </Button>
+          <Button className="ml-3" onClick={viewBtnClick} name="next">
+            다음
+          </Button>
         </div>
+        <TUICalendar
+          ref={cal}
+          height="1000px"
+          view="month"
+          useCreationPopup={true}
+          useDetailPopup={true}
+          template={templates}
+          calendars={calendars}
+          schedules={schedules}
+          onClickSchedule={onClickSchedule}
+          onBeforeCreateSchedule={onBeforeCreateSchedule}
+          onBeforeDeleteSchedule={onBeforeDeleteSchedule}
+          onBeforeUpdateSchedule={onBeforeUpdateSchedule}
+        />
+      </div>
     </>
   );
 }

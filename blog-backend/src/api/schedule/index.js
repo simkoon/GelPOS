@@ -2,14 +2,12 @@ import Router from 'koa-router';
 import * as schedulesCtrl from './schedules.ctrl';
 import checkLoggedIn from '../../lib/checkLoggedIn';
 
-
 const schedules = new Router();
 
-schedules.get('/', schedulesCtrl.list);
+schedules.get('/:storeid', schedulesCtrl.list);
 
 // checkLoggedIn,
 schedules.post('/', schedulesCtrl.write);
-
 
 // const schedule = new Router(); // /api/posts/:id
 // schedule.get('/', schedulesCtrl.read);

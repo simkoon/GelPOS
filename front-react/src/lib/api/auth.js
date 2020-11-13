@@ -13,3 +13,8 @@ export const logout = () => client.post("/api/auth/logout"); //logout api서버 
 
 //schedule
 export const schedule = (schedule) => client.post("/api/schedule", schedule);
+
+export const schedulelist = (storeid) => {
+  console.log("프론트에서 서버로 보내는storeid 값", storeid);
+  client.get(`/api/schedule/${storeid}`);
+};
