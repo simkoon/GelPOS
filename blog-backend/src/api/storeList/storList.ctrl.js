@@ -1,3 +1,4 @@
+import Schedule from '../../models/schedule';
 import Joi from 'joi';
 import User from '../../models/user';
 import jwt from 'jsonwebtoken';
@@ -117,8 +118,18 @@ export const register = async (ctx) => {
   });
   console.log(newStore._id); // store의 아이디
   user.store.push(newStore);
+
   try {
     await user.save();
+
+    const storeid = newStore._id;
+
+    const schedule = new Schedule({
+      storeid: storeid,
+      Schedulelist: [{}],
+    });
+
+    await schedule.save();
     ctx.body = user;
     const token = user.generateToken();
     ctx.cookies.set('access_token', token, {

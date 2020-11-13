@@ -58,9 +58,12 @@ const calendars = [
 ];
 
 function Scheduler() {
+  const { user } = useSelector(({ user }) => ({
+    user: user.user,
+  }));
 
-
-  const storeid = "2";
+  const storeid = user.nowstore;
+  console.log(storeid);
   const schedules = authAPI.schedulelist(storeid);
 
   const cal = useRef(null);
@@ -79,7 +82,6 @@ function Scheduler() {
     );
 
     const schedule = {
-      storeid: "2",
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start.toDate(),
