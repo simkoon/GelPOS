@@ -58,7 +58,7 @@ export const code = async (ctx) => {
 
 export const register = async (ctx) => {
   // Request Body 검증하기
-  console.log("body",ctx.request.body);
+  console.log('body', ctx.request.body);
   const schema = Joi.object().keys({
     userid: Joi.string().alphanum().min(3).max(20).required(),
     password: Joi.string().required(),
@@ -113,10 +113,9 @@ export const register = async (ctx) => {
 
 export const login = async (ctx) => {
   const { userid, password } = ctx.request.body;
-  console.log('여기로그인');
+
   // userid, password 가 없으면 에러 처리
   if (!userid || !password) {
-    console.log('여기로그인23');
     ctx.status = 401; // Unauthorized
     return;
   }
@@ -124,17 +123,13 @@ export const login = async (ctx) => {
   try {
     const user = await User.findByUserid(userid);
     // 계정이 존재하지 않으면 에러 처리
-    console.log('여기로그인24');
     if (!user) {
-      console.log('여기로그인2');
       ctx.status = 401;
       return;
     }
     const valid = await user.checkPassword(password);
     // 잘못된 비밀번호
     if (!valid) {
-      console.log('여기로그인3');
-      console.log(valid);
       ctx.status = 401;
       return;
     }
@@ -145,10 +140,8 @@ export const login = async (ctx) => {
       httpOnly: true,
     });
   } catch (e) {
-    console.log('여기로그인4');
     ctx.throw(500, e);
   }
-  console.log('여기로그인5');
 };
 
 /*
@@ -161,8 +154,6 @@ export const check = async (ctx) => {
     ctx.status = 401; // Unauthorized
     return;
   }
-  console.log('여기 체크 유저');
-  console.log(user);
   ctx.body = user;
 };
 

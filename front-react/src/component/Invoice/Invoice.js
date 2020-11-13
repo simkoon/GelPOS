@@ -3,7 +3,7 @@ import { Row, Col, Card, Button, Container } from 'react-bootstrap';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ko from 'date-fns/locale/ko';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
@@ -11,6 +11,18 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 function Invoice() {
+  const { user } = useSelector(({ user }) => ({
+    user: user.user,
+  }));
+  let storename;
+  (() => {
+    user.store.forEach((i) => {
+      if (i._id === user.nowstore) {
+        storename = i.name;
+      }
+    });
+  })();
+
   const [startDate, setStartDate] = useState(new Date());
   registerLocale('ko', ko);
 
@@ -18,8 +30,8 @@ function Invoice() {
   const [gridColumnApi, setGridColumnApi] = useState(null);
 
   function onGridReady(params) {
-    setGridApi(() => params.api);
-    setGridColumnApi(() => params.columnApi);
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
 
     params.api.sizeColumnsToFit = function () {
       this.gridPanel.sizeColumnsToFit();
@@ -67,7 +79,15 @@ function Invoice() {
       금액: 2000,
     },
   ]);
-
+  const onButtonClick = (e) => {
+    const selectedNodes = gridApi.getSelectedNodes();
+    console.dir(selectedNodes);
+    const selectedData = selectedNodes.map((node) => node.data);
+    const selectedDataStringPresentation = selectedData
+      .map((node) => '거래번호' + node['거래 번호'])
+      .join(', ');
+    alert(`Selected nodes: ${selectedDataStringPresentation}`);
+  };
   return (
     <Container
       fluid
@@ -84,6 +104,7 @@ function Invoice() {
           md={{ span: 4 }}
           className="justify-content-end flex-column d-flex"
         >
+          <h5>{storename}</h5>
           <h3>§ 거래 내역</h3>
         </Col>
       </Row>
@@ -106,6 +127,8 @@ function Invoice() {
                 className="ag-theme-alpine"
                 style={{ height: 400, width: '100%', textAlign: 'left' }}
               >
+                {' '}
+                <Button onClick={onButtonClick}>버튼클릭</Button>
                 <AgGridReact rowData={rowData} onGridReady={onGridReady}>
                   <AgGridColumn
                     field="거래 번호"

@@ -84,7 +84,10 @@ UserSchema.methods.serialize = function () {
   return data;
 };
 
-UserSchema.methods.generateToken = function () {
+UserSchema.methods.generateToken = function (nowstore) {
+  if (!nowstore) nowstore = '';
+  console.log(nowstore);
+  console.log('나우스토어어');
   const token = jwt.sign(
     // 첫번째 파라미터엔 토큰 안에 집어넣고 싶은 데이터를 넣습니다
     {
@@ -93,6 +96,7 @@ UserSchema.methods.generateToken = function () {
       username: this.username,
       email: this.email,
       store: this.store,
+      nowstore: nowstore,
     },
     process.env.JWT_SECRET, // 두번째 파라미터에는 JWT 암호를 넣습니다
     {
