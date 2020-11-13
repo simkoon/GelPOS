@@ -16,10 +16,8 @@ function StoreList({ user, onClick }) {
           </h4>
           <Row className="w-100 justify-content-center align-items-center m-0">
             {user.store.map((i) => {
-              console.log('아이디는~~~');
-              console.log(i);
               return (
-                <Col md={2} className="text-center mb-2">
+                <Col key={i._id} md={2} className="text-center mb-2">
                   <Button
                     onClick={() => onClick(i._id)}
                     className="btn_color_purple"

@@ -18,6 +18,8 @@ function Invoice({ history }) {
 
   useEffect(() => {
     if (user === null || !user || user === '' || user === 'null') {
+      console.log('히스토리부분');
+      console.log(user);
       history.push('/');
     }
   }, [history, user]);
@@ -27,10 +29,12 @@ function Invoice({ history }) {
       user.store.forEach((i) => {
         if (i._id === user.nowstore) {
           storename = i.name;
+          return;
         }
       });
     } else {
       history.push('/');
+      return;
     }
   })();
 
