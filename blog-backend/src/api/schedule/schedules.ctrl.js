@@ -55,7 +55,6 @@ export const write = async (ctx) => {
   console.log('schedule 서버로 받아오는 생성 데이터', ctx.request.body);
   const schema = Joi.object().keys({
     // 객체가 다음 필드를 가지고 있음을 검증
-    storeid: Joi.string().required(),
     title: Joi.string().required(), // required() 가 있으면 필수 항목
     start: Joi.date().required(),
     end: Joi.date().required(),
@@ -64,6 +63,8 @@ export const write = async (ctx) => {
     location: Joi.string().optional().allow(null).allow(''),
     dueDateClass: Joi.string().optional().allow(null).allow(''),
     state: Joi.string(),
+    raw: Joi.allow(),
+
     //tags: Joi.array().items(Joi.string()).required(), // 문자열로 이루어진 배열
   });
 
@@ -77,7 +78,6 @@ export const write = async (ctx) => {
   }
 
   const {
-    storeid,
     title,
     start,
     end,
@@ -88,11 +88,13 @@ export const write = async (ctx) => {
     state,
     raw,
   } = ctx.request.body;
-  const schedule = new Schedule({
-    //state.user.nowstore
-    storeid,
+
+  const storeObjectId = ctx.state.user.nowstore;
+
+  const schedule = await Schedule.findByStoreid(storeObjectId);
+
+  const newSchedule = schedule.Schedulelist.create({
     title,
-    //body: sanitizeHtml(body, sanitizeOption),
     start,
     end,
     category,
@@ -101,8 +103,8 @@ export const write = async (ctx) => {
     dueDateClass,
     state,
     raw,
-    //user: ctx.state.user,
   });
+  schedule.Schedulelist.push(newSchedule);
   try {
     await schedule.save();
     ctx.body = schedule;

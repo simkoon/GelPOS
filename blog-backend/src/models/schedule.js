@@ -12,7 +12,7 @@ const ScheduleSchema = new Schema({
       category: String,
       duedateclass: String,
       location: String,
-      raw: [String],
+      raw: [Object],
       state: String,
     },
   ],

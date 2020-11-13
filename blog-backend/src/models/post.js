@@ -12,7 +12,7 @@ const PostSchema = new Schema({
     _id: mongoose.Types.ObjectId,
     userid: String,
     username: String,
-    email:String,
+    email: String,
   },
 });
 
