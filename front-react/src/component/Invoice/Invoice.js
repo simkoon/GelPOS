@@ -10,17 +10,28 @@ import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-function Invoice() {
+function Invoice({ history }) {
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
   let storename;
+
+  useEffect(() => {
+    if (user === null || !user || user === '' || user === 'null') {
+      history.push('/');
+    }
+  }, [history, user]);
+
   (() => {
-    user.store.forEach((i) => {
-      if (i._id === user.nowstore) {
-        storename = i.name;
-      }
-    });
+    if (user) {
+      user.store.forEach((i) => {
+        if (i._id === user.nowstore) {
+          storename = i.name;
+        }
+      });
+    } else {
+      history.push('/');
+    }
   })();
 
   const [startDate, setStartDate] = useState(new Date());
