@@ -1,9 +1,9 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { Button, Row, Col } from 'react-bootstrap';
 
-function StoreList({ user }) {
-console.log(user)
+function StoreList({ user, onClick }) {
+  console.log(user);
   return (
     <div
       style={{ height: '100%', maxWidth: '1024px' }}
@@ -16,9 +16,12 @@ console.log(user)
           </h4>
           <Row className="w-100 justify-content-center align-items-center m-0">
             {user.store.map((i) => {
+              console.log('아이디는~~~');
+              console.log(i);
               return (
                 <Col md={2} className="text-center mb-2">
                   <Button
+                    onClick={() => onClick(i._id)}
                     className="btn_color_purple"
                     style={{
                       height: '15vh',
@@ -37,10 +40,11 @@ console.log(user)
                         lineHeight: '100%',
                       }}
                     >
-                   {new Date(i.publishedDate).getFullYear()+"."+
-                        (new Date(i.publishedDate).getMonth()+1)+"."+
-                        new Date(i.publishedDate).getDate()
-                      }
+                      {new Date(i.publishedDate).getFullYear() +
+                        '.' +
+                        (new Date(i.publishedDate).getMonth() + 1) +
+                        '.' +
+                        new Date(i.publishedDate).getDate()}
                     </p>
 
                     <p
@@ -53,10 +57,13 @@ console.log(user)
                         lineHeight: '100%',
                       }}
                     >
-                      ({new Date(i.expiredDate).getFullYear()+"."+
-                        (new Date(i.expiredDate).getMonth()+1)+"."+
-                        new Date(i.expiredDate).getDate()
-                      })
+                      (
+                      {new Date(i.expiredDate).getFullYear() +
+                        '.' +
+                        (new Date(i.expiredDate).getMonth() + 1) +
+                        '.' +
+                        new Date(i.expiredDate).getDate()}
+                      )
                     </p>
                   </Button>
                 </Col>

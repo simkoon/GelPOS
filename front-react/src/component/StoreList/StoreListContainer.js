@@ -7,8 +7,10 @@ import { check } from '../../modules/user';
 import { useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { reTokken } from '../../lib/api/storeList';
+import { selectStore } from '../../lib/api/storeList';
 
 export default withRouter(function StoreListContainer({ history }) {
+  const dispatch = useDispatch();
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
@@ -19,11 +21,17 @@ export default withRouter(function StoreListContainer({ history }) {
     if (user) {
       (async () => {
         const body = await reTokken();
-        console.log(body);
+        console.log('jidsfisdjfisdsdsfsd');
+        console.log(body.data);
+        try {
+          localStorage.setItem('user', JSON.stringify(body.datas));
+        } catch (error) {
+          console.log('localStorage is not working');
+        }
       })();
       return;
     }
-  });
+  }, [user]);
 
   console.log('컨테이너 아래 유저');
   console.log(user);
@@ -34,6 +42,19 @@ export default withRouter(function StoreListContainer({ history }) {
     }
   });
 
+  const onSelect = async (nowstore) => {
+    console.log(nowstore);
+    const result = await selectStore(nowstore);
+    console.log(result);
+    dispatch(check());
+    try {
+      localStorage.setItem('user', JSON.stringify(result.data));
+    } catch (error) {
+      console.log('localStorage is not working');
+    }
+
+    history.push('/store/invoice');
+  };
   return (
     <>
       {user ? (
@@ -48,7 +69,7 @@ export default withRouter(function StoreListContainer({ history }) {
           }}
         >
           <Header />
-          <StoreList user={user} />
+          <StoreList user={user} onClick={onSelect} />
         </Container>
       ) : null}
     </>
