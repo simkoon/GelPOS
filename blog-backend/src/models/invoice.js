@@ -19,15 +19,10 @@ const InvoiceSchema = new Schema({
 });
 
 //바로전 해당 가게의 매출을 찾아 지금 시퀀스를 리턴하는 스태틱 매서드
-InvoiceSchema.statics.findSeq = function () {};
-
-function name(regDate) {
-  regDate.getFullYear() + regDate.getMonth() + regDate.getDate();
-}
+InvoiceSchema.statics.findSeq = function (storeId) {
+  return this.findOne({ storeId }, {}, { sort: { regDate: -1 } });
+};
 InvoiceSchema.statics.findAllByStoreId = function (storeId, regDate) {
-  console.log(
-    regDate.getUTCFullYear() + regDate.getUTCMonth() + regDate.getUTCDate(),
-  );
   const myDate = new Date(
     regDate.getUTCFullYear(),
     regDate.getUTCMonth(),
@@ -36,7 +31,7 @@ InvoiceSchema.statics.findAllByStoreId = function (storeId, regDate) {
   const myDate2 = new Date(
     regDate.getUTCFullYear(),
     regDate.getUTCMonth(),
-    regDate.getUTCDate()+1,
+    regDate.getUTCDate() + 1,
   );
   return this.find({
     regDate: {

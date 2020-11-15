@@ -72,21 +72,17 @@ function Invoice({ history }) {
 
   useEffect(() => {
     (async () => {
-      const result = await getList({ date: startDate});
-      console.log(result.data);
+      const result = await getList({ date: startDate });
       setRowData(result.data);
     })();
   }, [startDate]);
 
   const onButtonClick = async (e) => {
-    const result = await getList({ date: startDate });
-    console.log(result.data);
-    setRowData(result.data);
     const selectedNodes = gridApi.getSelectedNodes();
     console.dir(selectedNodes);
     const selectedData = selectedNodes.map((node) => node.data);
     const selectedDataStringPresentation = selectedData
-      .map((node) => '거래번호' + node['거래 번호'])
+      .map((node) => '거래번호' + node['seq'])
       .join(', ');
     alert(`Selected nodes: ${selectedDataStringPresentation}`);
   };
@@ -130,9 +126,13 @@ function Invoice({ history }) {
                 className="ag-theme-alpine"
                 style={{ height: 400, width: '100%', textAlign: 'left' }}
               >
-                {' '}
                 <Button onClick={onButtonClick}>버튼클릭</Button>
-                <AgGridReact rowData={rowData} onGridReady={onGridReady}>
+                <AgGridReact
+                  rowSelection="single"
+                  rowData={rowData}
+                  onGridReady={onGridReady}
+                  onSelectionChanged={onButtonClick}
+                >
                   <AgGridColumn
                     field="seq"
                     headerName={'거래 번호'}
