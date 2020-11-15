@@ -73,10 +73,24 @@ function Invoice({ history }) {
     const selectedNodes = gridApi.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
     selectedData.forEach((node) => {
+      const thisDate = new Date(node['regDate']);
+      const getDate =
+        thisDate.getFullYear() +
+        '/' +
+        thisDate.getMonth() +
+        '/' +
+        thisDate.getDate() +
+        ' ' +
+        thisDate.getHours() +
+        ':' +
+        thisDate.getMinutes() +
+        ':' +
+        thisDate.getSeconds();
+
       setReceipt(() => ({
         _seq: node['seq'],
         _menu: node['menu'],
-        _regDate: node['regDate'],
+        _regDate: getDate,
         _paymentOption: node['paymentOption'],
         _payment: node['payment'],
       }));
@@ -151,6 +165,7 @@ function Invoice({ history }) {
                     style={{ height: 400, width: '100%', textAlign: 'left' }}
                   >
                     <AgGridReact
+                      overlayNoRowsTemplate="<p>불러올 거래내역이 없습니다.</p>"
                       rowSelection="single"
                       rowData={rowData}
                       onGridReady={onGridReady}
@@ -177,6 +192,11 @@ function Invoice({ history }) {
                         sortable={true}
                         filter={true}
                         resizable={true}
+                        valueFormatter={function (params) {
+                          console.log(params.value);
+                          console.log('여기파람스');
+                          return new Date(params.value).toLocaleTimeString();
+                        }}
                       ></AgGridColumn>
                       <AgGridColumn
                         field="paymentOption"
