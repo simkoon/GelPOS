@@ -19,6 +19,7 @@ export default withRouter(function StoreListContainer({ history }) {
     if (user) {
       (async () => {
         const body = await reTokken();
+        user.nowstore = null;
         try {
           localStorage.setItem('user', JSON.stringify(body.datas));
         } catch (error) {
