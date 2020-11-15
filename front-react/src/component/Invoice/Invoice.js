@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Card, Button, Container } from 'react-bootstrap';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ko from 'date-fns/locale/ko';
@@ -17,29 +17,21 @@ function Invoice({ history }) {
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
-  let storename;
 
+  const storename = useRef('');
   useEffect(() => {
     if (user === null || !user || user === '' || user === 'null') {
-      console.log('히스토리부분');
-      console.log(user);
+      storename.current = '';
       history.push('/');
     }
-  }, [history, user]);
+  }, [history, user, storename]);
 
-  (() => {
-    if (user) {
-      user.store.forEach((i) => {
-        if (i._id === user.nowstore) {
-          storename = i.name;
-          return;
-        }
-      });
-    } else {
-      history.push('/');
-      return;
-    }
-  })();
+  useEffect(() => {
+    return () => {
+      storename.current = '';
+      console.log(storename.current);
+    };
+  }, []);
 
   const [startDate, setStartDate] = useState(new Date());
   registerLocale('ko', ko);
@@ -55,19 +47,26 @@ function Invoice({ history }) {
 
   useEffect(() => {
     console.log('useEffect');
-
+    storename.current = '';
     listener = window.addEventListener('resize', () => {
       if (gridApi) {
         gridApi.sizeColumnsToFit();
       }
     });
+    if (user) {
+      user.store.forEach((i) => {
+        if (i._id === user.nowstore) {
+          storename.current = i.name;
+          return;
+        }
+      });
+    }
 
     return () => {
-      console.log('called');
+      storename.current = '';
       window.removeEventListener('resize', listener);
     };
   });
-
   const [rowData, setRowData] = useState();
 
   useEffect(() => {
@@ -77,14 +76,26 @@ function Invoice({ history }) {
     })();
   }, [startDate]);
 
+  const [receipt, setReceipt] = useState({
+    _seq: '',
+    _menu: '',
+    _regDate: '',
+    _paymentOption: '',
+    _payment: '',
+  });
+
   const onButtonClick = async (e) => {
     const selectedNodes = gridApi.getSelectedNodes();
-    console.dir(selectedNodes);
     const selectedData = selectedNodes.map((node) => node.data);
-    const selectedDataStringPresentation = selectedData
-      .map((node) => '거래번호' + node['seq'])
-      .join(', ');
-    alert(`Selected nodes: ${selectedDataStringPresentation}`);
+    selectedData.forEach((node) => {
+      setReceipt(() => ({
+        _seq: node['seq'],
+        _menu: node['menu'],
+        _regDate: node['regDate'],
+        _paymentOption: node['paymentOption'],
+        _payment: node['payment'],
+      }));
+    });
   };
 
   return (
@@ -103,7 +114,7 @@ function Invoice({ history }) {
           md={{ span: 4 }}
           className="justify-content-end flex-column d-flex"
         >
-          <h5>{storename}</h5>
+          <h5>{storename.current}</h5>
           <h3>§ 거래 내역</h3>
         </Col>
       </Row>
@@ -142,24 +153,28 @@ function Invoice({ history }) {
                   ></AgGridColumn>
                   <AgGridColumn
                     field="menu"
+                    headerName={'메뉴'}
                     sortable={true}
                     filter={true}
                     resizable={true}
                   ></AgGridColumn>
                   <AgGridColumn
                     field="regDate"
+                    headerName={'거래 시간'}
                     sortable={true}
                     filter={true}
                     resizable={true}
                   ></AgGridColumn>
                   <AgGridColumn
                     field="paymentOption"
+                    headerName={'거래 방식'}
                     sortable={true}
                     filter={true}
                     resizable={true}
                   ></AgGridColumn>
                   <AgGridColumn
                     field="payment"
+                    headerName={'금액'}
                     sortable={true}
                     filter={true}
                     resizable={true}
@@ -174,10 +189,19 @@ function Invoice({ history }) {
             <Col className="h-100">
               <Card style={{ width: '100%', height: '100%' }}>
                 <Card.Body>
-                  <Card.Title>영수증 부분</Card.Title>
+                  <Card.Title>영수증</Card.Title>
                   <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
+                    {receipt._seq === '' ? (
+                      <p>거래를 선택해주세요.</p>
+                    ) : (
+                      <>
+                        <p>거래번호: {receipt._seq}</p>
+                        <p>거래시간: {receipt._regDate}</p>
+                        <p>거래방식: {receipt._paymentOption}</p>
+                        <p>메뉴 : {receipt._menu}</p>
+                        <p>금액 : {receipt._payment}</p>
+                      </>
+                    )}
                   </Card.Text>
                 </Card.Body>
               </Card>
