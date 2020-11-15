@@ -4,7 +4,7 @@ const ScheduleSchema = new Schema({
   storeid: String,
   Schedulelist: [
     {
-      id: mongoose.Types.ObjectId,
+      id: String,
       title: String,
       isallday: String,
       start: Date,
@@ -14,6 +14,7 @@ const ScheduleSchema = new Schema({
       location: String,
       raw: [Object],
       state: String,
+      calendarId: String,
     },
   ],
   filter: [{}, {}],

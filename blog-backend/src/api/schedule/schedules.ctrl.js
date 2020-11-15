@@ -34,14 +34,14 @@ export const getScheduleById = async (ctx, next) => {
   }
 };
 
-export const checkOwnSchedule = (ctx, next) => {
-  const { user, schedule } = ctx.state;
-  if (schedule.user._id.toString() !== user._id) {
-    ctx.status = 403;
-    return;
-  }
-  return next();
-};
+// export const checkOwnSchedule = (ctx, next) => {
+//   const { user, schedule } = ctx.state;
+//   if (schedule.user._id.toString() !== user._id) {
+//     ctx.status = 403;
+//     return;
+//   }
+//   return next();
+// };
 
 /*
   POST /api/posts
@@ -64,6 +64,7 @@ export const write = async (ctx) => {
     dueDateClass: Joi.string().optional().allow(null).allow(''),
     state: Joi.string(),
     raw: Joi.allow(),
+    calendarId: Joi.string(),
 
     //tags: Joi.array().items(Joi.string()).required(), // 문자열로 이루어진 배열
   });
@@ -87,6 +88,7 @@ export const write = async (ctx) => {
     dueDateClass,
     state,
     raw,
+    calendarId,
   } = ctx.request.body;
 
   const storeObjectId = ctx.state.user.nowstore;
@@ -103,7 +105,10 @@ export const write = async (ctx) => {
     dueDateClass,
     state,
     raw,
+    calendarId,
   });
+  newSchedule.id = newSchedule._id;
+
   schedule.Schedulelist.push(newSchedule);
   try {
     await schedule.save();
@@ -125,26 +130,9 @@ const removeHtmlAndShorten = (body) => {
   GET /api/posts?userid=&tag=&page=
 */
 export const list = async (ctx) => {
-  // query 는 문자열이기 때문에 숫자로 변환해주어야합니다.
-  // 값이 주어지지 않았다면 1 을 기본으로 사용합니다.
-  // console.log('list서버에서 받아오는값', ctx.request.body);
   console.log(ctx.params);
   const { storeid } = ctx.params;
   console.log('list서버에서 받아오는 아이디 값', storeid);
-  // const page = parseInt(ctx.query.page || '1', 10);
-
-  // if (page < 1) {
-  //   console.log(ctx);
-  //   ctx.status = 400;
-  //   return;
-  // }
-
-  // const { tag, userid } = ctx.query;
-  // // tag, userid 값이 유효하면 객체 안에 넣고, 그렇지 않으면 넣지 않음
-  // const query = {
-  //   ...(userid ? { 'user.userid': userid } : {}),
-  //   ...(tag ? { tags: tag } : {}),
-  // };
 
   try {
     const schedules = await Schedule.findByStoreid(storeid);
@@ -165,12 +153,21 @@ export const read = async (ctx) => {
 
 /*
   DELETE /api/posts/:id
+  캘린더 삭제
 */
 export const remove = async (ctx) => {
   const { id } = ctx.params;
+  console.log('del id', id);
+
+  const storeObjectId = ctx.state.user.nowstore;
+
   try {
-    await Schedule.findByIdAndRemove(id).exec();
+    const returnSchedule = await Schedule.findByStoreid(storeObjectId);
+    console.log('삭제할값!!!!!!', returnSchedule.Schedulelist.id(id));
+    returnSchedule.Schedulelist.id(id).remove();
+
     ctx.status = 204; // No Content (성공은 했지만 응답할 데이터는 없음)
+    await returnSchedule.save();
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -184,38 +181,51 @@ export const remove = async (ctx) => {
     tags: ['수정', '태그']
   }
 */
+
 export const update = async (ctx) => {
-  const { id } = ctx.params;
-  // write 에서 사용한 schema 와 비슷한데, required() 가 없습니다.
-  const schema = Joi.object().keys({
-    title: Joi.string(),
-    body: Joi.string(),
-    tags: Joi.array().items(Joi.string()),
+  const { id } = ctx.request.body;
+
+  console.log('del id', id);
+
+  const storeObjectId = ctx.state.user.nowstore;
+
+  const returnSchedule = await Schedule.findByStoreid(storeObjectId);
+  console.log('삭제할값!!!!!!', returnSchedule.Schedulelist.id(id));
+  returnSchedule.Schedulelist.id(id).remove();
+
+  const {
+    title,
+    start,
+    end,
+    category,
+    isAllDay,
+    location,
+    dueDateClass,
+    state,
+    raw,
+    calendarId,
+  } = ctx.request.body;
+
+  const schedule = await Schedule.findByStoreid(storeObjectId);
+
+  const newSchedule = schedule.Schedulelist.create({
+    title,
+    start,
+    end,
+    category,
+    isAllDay,
+    location,
+    dueDateClass,
+    state,
+    raw,
+    calendarId,
   });
+  newSchedule.id = newSchedule._id;
 
-  // 검증 후, 검증 실패시 에러처리
-  const result = schema.validate(ctx.request.body);
-  if (result.error) {
-    ctx.status = 400; // Bad Request
-    ctx.body = result.error;
-    return;
-  }
+  schedule.Schedulelist.push(newSchedule);
 
-  const nextData = { ...ctx.request.body }; // 객체를 복사하고
-  // body 값이 주어졌으면 HTML 필터링
-  if (nextData.body) {
-    nextData.body = sanitizeHtml(nextData.body);
-  }
   try {
-    const schedule = await Schedule.findByIdAndUpdate(id, nextData, {
-      new: true, // 이 값을 설정하면 업데이트된 데이터를 반환합니다.
-      // false 일 때에는 업데이트 되기 전의 데이터를 반환합니다.
-    }).exec();
-    if (!schedule) {
-      ctx.status = 404;
-      return;
-    }
-    ctx.body = schedule;
+    await schedule.save();
   } catch (e) {
     ctx.throw(500, e);
   }

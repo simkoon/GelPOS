@@ -11,18 +11,13 @@ schedules.post('/', schedulesCtrl.write);
 
 // const schedule = new Router(); // /api/posts/:id
 // schedule.get('/', schedulesCtrl.read);
-// schedule.delete(
-//   '/',
-//   checkLoggedIn,
-//   schedulesCtrl.checkOwnschedule,
-//   schedulesCtrl.remove,
-// );
-// schedule.patch(
-//   '/',
-//   checkLoggedIn,
-//   schedulesCtrl.checkOwnschedule,
-//   schedulesCtrl.update,
-// );
+schedules.delete('/:id', schedulesCtrl.remove);
+//  checkLoggedIn,
+
+schedules.post('/update', schedulesCtrl.update);
+
+//  checkLoggedIn,
+//  schedulesCtrl.checkOwnschedule,
 
 // schedules.use('/:id', schedulesCtrl.getscheduleById, schedule.routes());
 

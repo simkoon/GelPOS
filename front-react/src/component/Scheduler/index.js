@@ -58,7 +58,6 @@ const calendars = [
 ];
 
 function Scheduler() {
-
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
@@ -66,15 +65,14 @@ function Scheduler() {
   const [schedules, setSchedules] = useState(1);
 
   //렌더링 될때 데이터에서 스케줄 리스트 뽑아오기
-  useEffect( async () =>  {
-
-      const storeid = user.nowstore;
-      console.log(storeid);
-      const result = await authAPI.schedulelist();
-      console.log("서버에서 넘어오는 scheduler데이터",result.data);
-      setSchedules(result.data);
-      console.log("schedules 값",schedules);
-  },[]);
+  useEffect(async () => {
+    const storeid = user.nowstore;
+    console.log(storeid);
+    const result = await authAPI.schedulelist(storeid);
+    console.log("서버에서 넘어오는 scheduler데이터", result.data);
+    await setSchedules(result.data.Schedulelist);
+    console.log("schedules 값", schedules);
+  }, []);
   const cal = useRef(null);
 
   const onClickSchedule = useCallback((e) => {
@@ -86,7 +84,7 @@ function Scheduler() {
 
   const onBeforeCreateSchedule = useCallback(async (scheduleData) => {
     console.log(
-      "프론트에서 schedule에서 onBeforeCreateSchedule로 넘어오는 데이터",
+      "프론트에서 schedule에서 onBeforeCreateSchedule로 넘어오는 생성 데이터",
       scheduleData
     );
 
@@ -96,7 +94,7 @@ function Scheduler() {
       start: scheduleData.start.toDate(),
       end: scheduleData.end.toDate(),
       category: scheduleData.isAllDay ? "allday" : "time",
-      categoryid: scheduleData.calendarId,
+      calendarId: scheduleData.calendarId,
       dueDateClass: "",
       location: scheduleData.location,
       raw: {
@@ -107,25 +105,43 @@ function Scheduler() {
 
     console.log("프론트에서 서버로 보내는 schedule 생성 데이터", schedule);
 
-    const result = await authAPI.schedule(schedule);
+    const result = await authAPI.scheduleAdd(schedule);
 
-    console.log("서버에서 리턴 받은 schedule 생성 데이터",result);
+    console.log("서버에서 리턴 받은 schedule 생성 데이터", result);
 
     cal.current.calendarInst.createSchedules([schedule]);
   }, []);
 
-  const onBeforeDeleteSchedule = useCallback((res) => {
-    console.log(res);
+  // 데이터 삭제시
+  const onBeforeDeleteSchedule = useCallback(async (res) => {
+    console.log(
+      "schedule에서 onBeforeDeleteSchedule 넘어오는 삭제 데이터",
+      res
+    );
 
     const { id, calendarId } = res.schedule;
+
+    console.log(id, "-----", calendarId);
+
+    // const delData = {
+    //   id: id,
+    //   calendarId: calendarId,
+    // };
+
+    const result = await authAPI.scheduleDel(id, calendarId);
 
     cal.current.calendarInst.deleteSchedule(id, calendarId);
   }, []);
 
-  const onBeforeUpdateSchedule = useCallback((e) => {
-    console.log(e);
+  // 데이터 수정시
+  const onBeforeUpdateSchedule = useCallback(async (e) => {
+    console.log("schedule에서 onBeforeUpdateSchedule 넘어오는 수정 데이터 ", e);
 
     const { schedule, changes } = e;
+
+    console.log("스케줄러 내용", changes);
+
+    const result = await authAPI.scheduleUpdate(changes);
 
     cal.current.calendarInst.updateSchedule(
       schedule.id,
