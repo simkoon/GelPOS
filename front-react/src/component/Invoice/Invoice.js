@@ -126,7 +126,6 @@ function Invoice({ history }) {
                 className="ag-theme-alpine"
                 style={{ height: 400, width: '100%', textAlign: 'left' }}
               >
-                <Button onClick={onButtonClick}>버튼클릭</Button>
                 <AgGridReact
                   rowSelection="single"
                   rowData={rowData}
