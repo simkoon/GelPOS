@@ -7,5 +7,5 @@ export const schedulelist = (storeid) => client.get(`/api/schedule/${storeid}`);
 
 export const scheduleDel = (id) => client.delete(`/api/schedule/${id}`);
 
-export const scheduleUpdate = (changes) =>
-  client.post(`/api/schedule/update`, changes);
+export const scheduleUpdate = (updateSchedule) =>
+  client.post("/api/schedule/update", updateSchedule );

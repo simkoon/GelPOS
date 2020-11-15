@@ -183,15 +183,17 @@ export const remove = async (ctx) => {
 */
 
 export const update = async (ctx) => {
+  console.log("넘어오는 값",ctx.request.body);
   const { id } = ctx.request.body;
 
-  console.log('del id', id);
+  console.log('update id', id);
 
   const storeObjectId = ctx.state.user.nowstore;
 
   const returnSchedule = await Schedule.findByStoreid(storeObjectId);
   console.log('삭제할값!!!!!!', returnSchedule.Schedulelist.id(id));
   returnSchedule.Schedulelist.id(id).remove();
+  
 
   const {
     title,
@@ -209,6 +211,7 @@ export const update = async (ctx) => {
   const schedule = await Schedule.findByStoreid(storeObjectId);
 
   const newSchedule = schedule.Schedulelist.create({
+    id: id,
     title,
     start,
     end,
@@ -220,7 +223,7 @@ export const update = async (ctx) => {
     raw,
     calendarId,
   });
-  newSchedule.id = newSchedule._id;
+  //newSchedule.id = newSchedule._id;
 
   schedule.Schedulelist.push(newSchedule);
 

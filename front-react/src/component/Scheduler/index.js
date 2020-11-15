@@ -15,29 +15,6 @@ import "./styles.css";
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
 
-// const schedules = [
-//   {
-//     calendarId: "1",
-//     category: "time",
-//     isVisible: true,
-//     title: "Study",
-//     id: "1",
-//     body: "Test",
-//     start,
-//     end,
-//   },
-//   {
-//     calendarId: "2",
-//     category: "time",
-//     isVisible: true,
-//     title: "Meeting",
-//     id: "2",
-//     body: "Description",
-//     start: new Date(new Date().setHours(start.getHours() + 1)),
-//     end: new Date(new Date().setHours(start.getHours() + 2)),
-//   },
-// ];
-
 const calendars = [
   {
     id: "1",
@@ -139,15 +116,42 @@ function Scheduler() {
 
     const { schedule, changes } = e;
 
-    console.log("스케줄러 내용", changes);
+    // title: scheduleData.title,
+    //   isAllDay: scheduleData.isAllDay,
+    //   start: scheduleData.start.toDate(),
+    //   end: scheduleData.end.toDate(),
+    //   category: scheduleData.isAllDay ? "allday" : "time",
+    //   calendarId: scheduleData.calendarId,
+    //   dueDateClass: "",
+    //   location: scheduleData.location,
+    //   raw: {
+    //     class: scheduleData.raw["class"],
+    //   },
+    //   state: scheduleData.state,
 
-    const result = await authAPI.scheduleUpdate(changes);
+    const updateSchedule = {
+      id: schedule.id ,
+      title:  e.changes.title ?e.changes.title : schedule.title,
+      location: e.changes.location ?e.changes.location : schedule.location,
+      calendarId: schedule.calendarId,
+      dueDateClass: schedule.dueDateClass,
+      raw: schedule.raw ,
+      isAllDay:  e.changes.isAllDay ? e.changes.isAllDay : schedule.isAllDay,
+      category:  e.changes.category ? e.changes.category : schedule.category,
+      start: e.changes.start ? e.changes.start.toDate() : schedule.start.toDate(),
+      end: e.changes.end ? e.changes.end.toDate() : schedule.end.toDate(),
+      state: schedule.state
+    };
+    console.log("수정 후 값 : ", updateSchedule);
+
+    await authAPI.scheduleUpdate(updateSchedule);
 
     cal.current.calendarInst.updateSchedule(
       schedule.id,
       schedule.calendarId,
       changes
     );
+
   }, []);
 
   function _getFormattedTime(time) {
