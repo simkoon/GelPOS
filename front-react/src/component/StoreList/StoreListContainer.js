@@ -1,20 +1,23 @@
-import "./css/storeStyle.css";
-import StoreList from "./StoreList";
-import { Container } from "react-bootstrap";
-import Header from "./Header";
-import { useSelector, useDispatch } from "react-redux";
-import { check } from "../../modules/user";
-import { useEffect } from "react";
-import { withRouter } from "react-router-dom";
-import { reToken } from "../../lib/api/storeList";
-import { selectStore } from "../../lib/api/storeList";
-import { logout } from "../../modules/user";
+import './css/storeStyle.css';
+import { useState } from 'react';
+import StoreList from './StoreList';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import Header from './Header';
+import { useSelector, useDispatch } from 'react-redux';
+import { check } from '../../modules/user';
+import { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
+import { reToken } from '../../lib/api/storeList';
+import { selectStore } from '../../lib/api/storeList';
+
+import { logout } from '../../modules/user';
 
 export default withRouter(function StoreListContainer({ history }) {
   const dispatch = useDispatch();
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
+  const [loading, setLoading] = useState(false);
 
   const onLogout = () => {
     dispatch(logout());
@@ -26,10 +29,11 @@ export default withRouter(function StoreListContainer({ history }) {
       (async () => {
         const body = await reToken();
         user.nowstore = null;
+        setLoading(true);
         try {
-          localStorage.setItem("user", JSON.stringify(body.datas));
+          localStorage.setItem('user', JSON.stringify(body.datas));
         } catch (error) {
-          console.log("localStorage is not working");
+          console.log('localStorage is not working');
         }
       })();
       return;
@@ -37,8 +41,8 @@ export default withRouter(function StoreListContainer({ history }) {
   }, [user]);
 
   useEffect(() => {
-    if (user === null || user === "null") {
-      history.push("/");
+    if (user === null || user === 'null') {
+      history.push('/');
     }
   });
 
@@ -48,30 +52,61 @@ export default withRouter(function StoreListContainer({ history }) {
     console.log(result);
     dispatch(check());
     try {
-      localStorage.setItem("user", JSON.stringify(result.data));
+      localStorage.setItem('user', JSON.stringify(result.data));
     } catch (error) {
-      console.log("localStorage is not working");
+      console.log('localStorage is not working');
     }
 
-    history.push("/store/invoice");
+    history.push('/store/invoice');
   };
   return (
     <>
-      {user ? (
+      {loading ? (
+        user ? (
+          <Container
+            fluid
+            className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
+            style={{
+              height: '100%',
+              padding: 0,
+              margin: 0,
+              backgroundColor: 'rgb(249,250,252)',
+            }}
+          >
+            <Header onLogout={onLogout} />
+            <StoreList user={user} onClick={onSelect} />
+          </Container>
+        ) : null
+      ) : (
         <Container
           fluid
           className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
           style={{
-            height: "100%",
+            height: '100%',
             padding: 0,
             margin: 0,
-            backgroundColor: "rgb(249,250,252)",
+            backgroundColor: 'rgb(249,250,252)',
           }}
         >
-          <Header onLogout={onLogout} />
-          <StoreList user={user} onClick={onSelect} />
+          <Row className="text-center">
+            <Col lg={{ span: 12 }}>
+              <Spinner
+                animation="border"
+                role="status"
+                style={{
+                  verticalAlign: 'center',
+                }}
+              >
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+              <h1 className={'d-inline-block text-center m-0 ml-2'}>
+                {' '}
+                로딩중입니다...
+              </h1>
+            </Col>
+          </Row>
         </Container>
-      ) : null}
+      )}
     </>
   );
 });
