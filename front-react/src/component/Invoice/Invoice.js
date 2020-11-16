@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { getList } from '../../lib/api/invoice';
-
+import InvoiceItem from './InvoiceItem';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
@@ -86,7 +86,7 @@ function Invoice({ history }) {
         thisDate.getMinutes() +
         ':' +
         thisDate.getSeconds();
-
+      console.log(node['menu']);
       setReceipt(() => ({
         _seq: node['seq'],
         _menu: node['menu'],
@@ -106,8 +106,6 @@ function Invoice({ history }) {
       }
     });
     if (user) {
-      console.log('유저나우스토어');
-      console.log(user.nowstore);
       user.store.forEach((i) => {
         if (i._id === user.nowstore) {
           storename.current = i.name;
@@ -148,7 +146,7 @@ function Invoice({ history }) {
           <Row className="p-1 m-0 h-100" style={{ flex: 3 }}>
             <Col lg={{ span: 8 }} className="text-center">
               <Row>
-                <Col className="justify-content-end d-flex">
+                <Col className="justify-content-start d-flex">
                   <DatePicker
                     className="text-right mb-1 pr-1"
                     dateFormat="yyyy.MM.dd(eee)"
@@ -185,6 +183,11 @@ function Invoice({ history }) {
                         sortable={true}
                         filter={true}
                         resizable={true}
+                        valueFormatter={function (params) {
+                          console.log('여기벨류');
+                          console.log(params.value);
+                          return params.value[0].name;
+                        }}
                       ></AgGridColumn>
                       <AgGridColumn
                         field="regDate"
@@ -193,8 +196,6 @@ function Invoice({ history }) {
                         filter={true}
                         resizable={true}
                         valueFormatter={function (params) {
-                          console.log(params.value);
-                          console.log('여기파람스');
                           return new Date(params.value).toLocaleTimeString();
                         }}
                       ></AgGridColumn>
@@ -221,7 +222,13 @@ function Invoice({ history }) {
               <Row className="h-100 w-100 m-0">
                 <Col className="h-100">
                   <Card style={{ width: '100%', height: '100%' }}>
-                    <Card.Body style={{ width: '100%', height: '100%' }}>
+                    <Card.Body
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        overflowY: 'scroll',
+                      }}
+                    >
                       <Card.Title>영수증</Card.Title>
                       <Card.Text>
                         {receipt._seq === '' ? (
@@ -231,8 +238,7 @@ function Invoice({ history }) {
                             <p>거래번호: {receipt._seq}</p>
                             <p>거래시간: {receipt._regDate}</p>
                             <p>거래방식: {receipt._paymentOption}</p>
-                            <p>메뉴 : {receipt._menu}</p>
-                            <p>금액 : {receipt._payment}</p>
+                            <InvoiceItem menu={receipt._menu} />
                           </>
                         )}
                       </Card.Text>

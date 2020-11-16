@@ -3,7 +3,14 @@ import mongoose, { Schema } from 'mongoose';
 const InvoiceSchema = new Schema({
   storeId: mongoose.Types.ObjectId,
   seq: Number,
-  menu: [String],
+  menu: [
+    {
+      name: String,
+      EA: Number,
+      unitPrice: String,
+      sum: String,
+    },
+  ],
   paymentOption: String,
   payment: String,
   regDate: {

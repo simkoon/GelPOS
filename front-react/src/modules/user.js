@@ -49,8 +49,6 @@ const initialState = {
 export default handleActions(
   {
     [TEMP_SET_USER]: (state, { payload: user }) => {
-      console.log('템프셑유져');
-      console.log(user);
       return {
         ...state,
         user,

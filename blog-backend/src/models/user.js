@@ -86,8 +86,6 @@ UserSchema.methods.serialize = function () {
 
 UserSchema.methods.generateToken = function (nowstore) {
   if (!nowstore) nowstore = '';
-  console.log(nowstore);
-  console.log('나우스토어어');
   const token = jwt.sign(
     // 첫번째 파라미터엔 토큰 안에 집어넣고 싶은 데이터를 넣습니다
     {

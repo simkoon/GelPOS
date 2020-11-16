@@ -62,13 +62,17 @@ const TsideMenu = styled.div`
 // `;
 
 const OpenBtn = styled.p`
-  position: absolute;
-  top: 0;
+  position: fixed;
+  top: 1px;
+  left: 1px;
   color: white;
   cursor: pointer;
   z-index: 1;
-  border-radius: 10px 10px;
+  border-radius: 7px 7px;
   padding: 5px;
+  opacity: 0.7;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  background-color: rgba(61, 74, 89, 0.3);
 `;
 
 const mql = window.matchMedia(`(min-width: 995px)`);
@@ -174,10 +178,10 @@ function Tsidebar({ children, location }) {
       }}
     >
       <OpenBtn
-        className="btn_color_purple position-absolute d-lg-none d-sm-block d-md-block"
+        className="navbar-light navbar-toggler collapsed d-lg-none d-sm-block d-md-block"
         onClick={() => onSetSidebarOpen(true)}
       >
-        Open sidebar
+        <span className="navbar-toggler-icon"></span>
       </OpenBtn>
       {children}
     </Sidebar>

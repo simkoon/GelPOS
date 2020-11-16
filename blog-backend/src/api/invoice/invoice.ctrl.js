@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import Result from '../../../node_modules/postcss/lib/result';
 import Invoice from '../../models/invoice';
 
 export const read = async (ctx) => {
@@ -10,6 +9,6 @@ export const read = async (ctx) => {
 
   const regDate = new Date(ctx.request.body.date);
   const invoiceList = await Invoice.findAllByStoreId(storeId, regDate);
-
+  console.log(invoiceList);
   ctx.body = invoiceList;
 };

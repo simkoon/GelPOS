@@ -5,8 +5,8 @@ import Header from './Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { check } from '../../modules/user';
 import { useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { reTokken } from '../../lib/api/storeList';
+import { withRouter } from 'react-router-dom';
+import { reToken } from '../../lib/api/storeList';
 import { selectStore } from '../../lib/api/storeList';
 
 export default withRouter(function StoreListContainer({ history }) {
@@ -18,7 +18,7 @@ export default withRouter(function StoreListContainer({ history }) {
   useEffect(() => {
     if (user) {
       (async () => {
-        const body = await reTokken();
+        const body = await reToken();
         user.nowstore = null;
         try {
           localStorage.setItem('user', JSON.stringify(body.datas));
