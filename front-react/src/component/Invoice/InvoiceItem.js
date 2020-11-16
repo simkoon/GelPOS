@@ -1,5 +1,5 @@
 import { Table } from 'react-bootstrap';
-
+import addComma from '../../utility/addComma';
 export default function InvoiceItem({ menu }) {
   let getSum = 0;
   return (
@@ -23,9 +23,9 @@ export default function InvoiceItem({ menu }) {
                 <tr>
                   <td>{index}</td>
                   <td>{item.name}</td>
-                  <td>{item.unitPrice}</td>
+                  <td>{addComma(item.unitPrice)}</td>
                   <td>{item.EA}</td>
-                  <td>{item.EA * item.unitPrice}</td>
+                  <td>{addComma(item.EA * item.unitPrice)}</td>
                 </tr>
               </>
             );
@@ -39,7 +39,7 @@ export default function InvoiceItem({ menu }) {
         }}
       >
         <span>총액 :</span>
-        <span className="ml-1">{getSum} 원</span>
+        <span className="ml-1">{addComma(getSum)} 원</span>
       </div>
     </div>
   );

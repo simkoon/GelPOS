@@ -8,6 +8,8 @@ import { withRouter } from 'react-router-dom';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { getList } from '../../lib/api/invoice';
 import InvoiceItem from './InvoiceItem';
+import addComma from '../../utility/addComma';
+
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
@@ -234,6 +236,9 @@ function Invoice({ history }) {
                           sortable={true}
                           filter={true}
                           resizable={true}
+                          valueFormatter={function (params) {
+                            return addComma(params.value);
+                          }}
                         ></AgGridColumn>
                       </AgGridReact>
                     </div>

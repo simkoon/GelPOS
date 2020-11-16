@@ -81,7 +81,7 @@ const OpenBtn = styled.p`
   background-color: rgba(61, 74, 89, 0.3);
 `;
 
-const mql = window.matchMedia(`(min-width: 995px)`);
+const mql = window.matchMedia(`(min-width: 1295px)`);
 
 function Tsidebar({ children, location, history }) {
   const [sidebarDocked, setSidebarDocked] = useState(mql.matches);
@@ -203,7 +203,7 @@ function Tsidebar({ children, location, history }) {
       }}
     >
       <OpenBtn
-        className="navbar-light navbar-toggler collapsed d-lg-none d-sm-block d-md-block"
+        className="navbar-light navbar-toggler collapsed d-sm-block d-md-block"
         onClick={() => onSetSidebarOpen(true)}
       >
         <span className="navbar-toggler-icon"></span>
