@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 
-function Header() {
+function Header({ onLogout }) {
   return (
     <>
       <Navbar
@@ -45,15 +45,16 @@ function Header() {
             >
               고객센터
             </Link>
-            <Link
-              to="/"
+            <div
               style={{
                 color: "rgb(62,78,93)",
+                cursor: "pointer",
               }}
               className=" small font-weight-normal nav-link"
+              onClick={onLogout}
             >
               로그아웃
-            </Link>
+            </div>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
