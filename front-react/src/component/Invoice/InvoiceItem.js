@@ -16,6 +16,7 @@ export default function InvoiceItem({ menu }) {
         </thead>
         <tbody>
           {menu.map((item, index) => {
+            index += 1;
             getSum += Number(item.sum);
             return (
               <>
@@ -24,7 +25,7 @@ export default function InvoiceItem({ menu }) {
                   <td>{item.name}</td>
                   <td>{item.unitPrice}</td>
                   <td>{item.EA}</td>
-                  <td>{item.sum}</td>
+                  <td>{item.EA * item.unitPrice}</td>
                 </tr>
               </>
             );

@@ -1,6 +1,7 @@
 import './css/storeStyle.css';
+import { useState } from 'react';
 import StoreList from './StoreList';
-import { Container } from 'react-bootstrap';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import Header from './Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { check } from '../../modules/user';
@@ -14,12 +15,13 @@ export default withRouter(function StoreListContainer({ history }) {
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (user) {
       (async () => {
         const body = await reToken();
         user.nowstore = null;
+        setLoading(true);
         try {
           localStorage.setItem('user', JSON.stringify(body.datas));
         } catch (error) {
@@ -51,7 +53,23 @@ export default withRouter(function StoreListContainer({ history }) {
   };
   return (
     <>
-      {user ? (
+      {loading ? (
+        user ? (
+          <Container
+            fluid
+            className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
+            style={{
+              height: '100%',
+              padding: 0,
+              margin: 0,
+              backgroundColor: 'rgb(249,250,252)',
+            }}
+          >
+            <Header />
+            <StoreList user={user} onClick={onSelect} />
+          </Container>
+        ) : null
+      ) : (
         <Container
           fluid
           className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
@@ -62,10 +80,25 @@ export default withRouter(function StoreListContainer({ history }) {
             backgroundColor: 'rgb(249,250,252)',
           }}
         >
-          <Header />
-          <StoreList user={user} onClick={onSelect} />
+          <Row className="text-center">
+            <Col lg={{ span: 12 }}>
+              <Spinner
+                animation="border"
+                role="status"
+                style={{
+                  verticalAlign: 'center',
+                }}
+              >
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+              <h1 className={'d-inline-block text-center m-0 ml-2'}>
+                {' '}
+                로딩중입니다...
+              </h1>
+            </Col>
+          </Row>
         </Container>
-      ) : null}
+      )}
     </>
   );
 });
