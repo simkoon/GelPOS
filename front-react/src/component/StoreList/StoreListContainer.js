@@ -10,12 +10,20 @@ import { withRouter } from 'react-router-dom';
 import { reToken } from '../../lib/api/storeList';
 import { selectStore } from '../../lib/api/storeList';
 
+import { logout } from '../../modules/user';
+
 export default withRouter(function StoreListContainer({ history }) {
   const dispatch = useDispatch();
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
   const [loading, setLoading] = useState(false);
+
+  const onLogout = () => {
+    dispatch(logout());
+    //history.push("/");
+  };
+
   useEffect(() => {
     if (user) {
       (async () => {
@@ -65,7 +73,7 @@ export default withRouter(function StoreListContainer({ history }) {
               backgroundColor: 'rgb(249,250,252)',
             }}
           >
-            <Header />
+            <Header onLogout={onLogout} />
             <StoreList user={user} onClick={onSelect} />
           </Container>
         ) : null

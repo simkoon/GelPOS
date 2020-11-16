@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
-import { Link, withRouter } from 'react-router-dom';
-import logoImg from './sideImg/logo.png';
-import tableImg from './sideImg/tables.png';
-import storeImg from './sideImg/storeInfo.png';
-import salesImg from './sideImg/sales.png';
-import scheduleImg from './sideImg/schedule.png';
-import tableWhiteImg from './sideImg/tablesWhite.png';
-import storeWhiteImg from './sideImg/storeInfoWhite.png';
-import salesWhiteImg from './sideImg/salesWhite.png';
-import scheduleWhiteImg from './sideImg/scheduleWhite.png';
+import React, { useState, useEffect } from "react";
+import styled, { css } from "styled-components";
+import { Link, withRouter } from "react-router-dom";
+import logoImg from "./sideImg/logo.png";
+import tableImg from "./sideImg/tables.png";
+import storeImg from "./sideImg/storeInfo.png";
+import salesImg from "./sideImg/sales.png";
+import scheduleImg from "./sideImg/schedule.png";
+import tableWhiteImg from "./sideImg/tablesWhite.png";
+import storeWhiteImg from "./sideImg/storeInfoWhite.png";
+import salesWhiteImg from "./sideImg/salesWhite.png";
+import scheduleWhiteImg from "./sideImg/scheduleWhite.png";
+import { useDispatch } from "react-redux";
 
-import MenuImage from './MenuImage';
+import MenuImage from "./MenuImage";
 
-import Sidebar from 'react-sidebar';
-import { Button, Row, Col } from 'react-bootstrap';
+import Sidebar from "react-sidebar";
+import { Button, Row, Col } from "react-bootstrap";
+import { logout } from "../../modules/user";
+
+const LogoutButton = styled.div`
+  cursor: pointer;
+`;
 
 const TsideContainer = styled.div`
   height: 100vh;
@@ -77,7 +83,7 @@ const OpenBtn = styled.p`
 
 const mql = window.matchMedia(`(min-width: 995px)`);
 
-function Tsidebar({ children, location }) {
+function Tsidebar({ children, location, history }) {
   const [sidebarDocked, setSidebarDocked] = useState(mql.matches);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -98,6 +104,13 @@ function Tsidebar({ children, location }) {
     };
   }, []);
 
+  // 로그아웃
+  const dispatch = useDispatch();
+  const onLogout = () => {
+    dispatch(logout());
+    history.push("/");
+  };
+
   return (
     <Sidebar
       sidebar={
@@ -107,9 +120,19 @@ function Tsidebar({ children, location }) {
               <img src={logoImg} />
             </div>
             <TsideMenu>
-              <Link to="/">
+              <Link to="/store/table">
                 <div className="TsideMenus mt-5">
-                  <MenuImage selImg={tableImg} hoverImg={tableWhiteImg} />
+                  <MenuImage
+                    selImg={tableImg}
+                    hoverImg={tableWhiteImg}
+                    pageMenu={(() => {
+                      if (location.pathname === "/store/table") {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    })()}
+                  />
                   테이블
                 </div>
               </Link>
@@ -119,7 +142,7 @@ function Tsidebar({ children, location }) {
                     selImg={scheduleImg}
                     hoverImg={scheduleWhiteImg}
                     pageMenu={(() => {
-                      if (location.pathname === '/store/scheduler') {
+                      if (location.pathname === "/store/scheduler") {
                         return true;
                       } else {
                         return false;
@@ -135,7 +158,7 @@ function Tsidebar({ children, location }) {
                     selImg={salesImg}
                     hoverImg={salesWhiteImg}
                     pageMenu={(() => {
-                      if (location.pathname === '/store/invoice') {
+                      if (location.pathname === "/store/invoice") {
                         return true;
                       } else {
                         return false;
@@ -151,7 +174,7 @@ function Tsidebar({ children, location }) {
                     selImg={storeImg}
                     hoverImg={storeWhiteImg}
                     pageMenu={(() => {
-                      if (location.pathname === '/store/storeinfo') {
+                      if (location.pathname === "/store/storeinfo") {
                         return true;
                       } else {
                         return false;
@@ -161,9 +184,9 @@ function Tsidebar({ children, location }) {
                   가게정보
                 </div>
               </Link>
-              <Link to="/" className="TsideMenus Logout">
+              <LogoutButton className="TsideMenus Logout" onClick={onLogout}>
                 로그아웃
-              </Link>
+              </LogoutButton>
             </TsideMenu>
           </Tside>
         </TsideContainer>
@@ -173,7 +196,7 @@ function Tsidebar({ children, location }) {
       onSetOpen={onSetSidebarOpen}
       styles={{
         sidebar: {
-          background: 'rgb(61,74,89)',
+          background: "rgb(61,74,89)",
         },
       }}
     >
