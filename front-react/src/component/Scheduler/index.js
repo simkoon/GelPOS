@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 //import { render } from "react-dom";
 import Tsidebar from "../../comm/Sidebar/Tsidebar";
 import { Button } from "react-bootstrap";
@@ -42,14 +48,21 @@ function Scheduler() {
   const [schedules, setSchedules] = useState(1);
 
   //렌더링 될때 데이터에서 스케줄 리스트 뽑아오기
-  useEffect(async () => {
+  const listAdd = async () => {
+    // 리스트 뽑아오기
     const storeid = user.nowstore;
     console.log(storeid);
     const result = await authAPI.schedulelist(storeid);
     console.log("서버에서 넘어오는 scheduler데이터", result.data);
-    await setSchedules(result.data.Schedulelist);
+    setSchedules(result.data.Schedulelist);
     console.log("schedules 값", schedules);
+  };
+
+  // 첫 렌더링떄 실행
+  useEffect(() => {
+    listAdd();
   }, []);
+
   const cal = useRef(null);
 
   const onClickSchedule = useCallback((e) => {
@@ -59,6 +72,7 @@ function Scheduler() {
     console.log(e, el.getBoundingClientRect());
   }, []);
 
+  // 데이터 생성
   const onBeforeCreateSchedule = useCallback(async (scheduleData) => {
     console.log(
       "프론트에서 schedule에서 onBeforeCreateSchedule로 넘어오는 생성 데이터",
@@ -86,7 +100,8 @@ function Scheduler() {
 
     console.log("서버에서 리턴 받은 schedule 생성 데이터", result);
 
-    cal.current.calendarInst.createSchedules([schedule]);
+    //cal.current.calendarInst.createSchedules([schedule]);
+    listAdd();
   }, []);
 
   // 데이터 삭제시
@@ -107,7 +122,9 @@ function Scheduler() {
 
     const result = await authAPI.scheduleDel(id, calendarId);
 
-    cal.current.calendarInst.deleteSchedule(id, calendarId);
+    //cal.current.calendarInst.deleteSchedule(id, calendarId);
+
+    listAdd();
   }, []);
 
   // 데이터 수정시
@@ -130,28 +147,31 @@ function Scheduler() {
     //   state: scheduleData.state,
 
     const updateSchedule = {
-      id: schedule.id ,
-      title:  e.changes.title ?e.changes.title : schedule.title,
-      location: e.changes.location ?e.changes.location : schedule.location,
+      id: schedule.id,
+      title: changes.title ? changes.title : schedule.title,
+      location: changes.location ? changes.location : schedule.location,
       calendarId: schedule.calendarId,
       dueDateClass: schedule.dueDateClass,
-      raw: schedule.raw ,
-      isAllDay:  e.changes.isAllDay ? e.changes.isAllDay : schedule.isAllDay,
-      category:  e.changes.category ? e.changes.category : schedule.category,
-      start: e.changes.start ? e.changes.start.toDate() : schedule.start.toDate(),
-      end: e.changes.end ? e.changes.end.toDate() : schedule.end.toDate(),
-      state: schedule.state
+      raw: schedule.raw,
+      category: changes.category ? changes.category : schedule.category,
+      start: changes.start ? changes.start.toDate() : schedule.start.toDate(),
+      end: changes.end ? changes.end.toDate() : schedule.end.toDate(),
+      state: schedule.state,
+      isAllDay: !(changes.isAllDay === null || changes.isAllDay === undefined)
+        ? changes.isAllDay
+        : schedule.isAllDay,
     };
+
     console.log("수정 후 값 : ", updateSchedule);
 
     await authAPI.scheduleUpdate(updateSchedule);
 
-    cal.current.calendarInst.updateSchedule(
-      schedule.id,
-      schedule.calendarId,
-      changes
-    );
-
+    // cal.current.calendarInst.updateSchedule(
+    //   schedule.id,
+    //   schedule.calendarId,
+    //   changes
+    // );
+    listAdd();
   }, []);
 
   function _getFormattedTime(time) {

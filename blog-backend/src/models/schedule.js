@@ -6,7 +6,7 @@ const ScheduleSchema = new Schema({
     {
       id: String,
       title: String,
-      isallday: String,
+      isAllDay: Boolean,
       start: Date,
       end: Date,
       category: String,

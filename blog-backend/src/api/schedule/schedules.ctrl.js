@@ -183,7 +183,7 @@ export const remove = async (ctx) => {
 */
 
 export const update = async (ctx) => {
-  console.log("넘어오는 값",ctx.request.body);
+  console.log('넘어오는 값', ctx.request.body);
   const { id } = ctx.request.body;
 
   console.log('update id', id);
@@ -193,7 +193,6 @@ export const update = async (ctx) => {
   const returnSchedule = await Schedule.findByStoreid(storeObjectId);
   console.log('삭제할값!!!!!!', returnSchedule.Schedulelist.id(id));
   returnSchedule.Schedulelist.id(id).remove();
-  
 
   const {
     title,
@@ -208,27 +207,34 @@ export const update = async (ctx) => {
     calendarId,
   } = ctx.request.body;
 
+  console.log('삭제 완료!!!!!!!!!!!!!!!');
+
   const schedule = await Schedule.findByStoreid(storeObjectId);
 
-  const newSchedule = schedule.Schedulelist.create({
-    id: id,
-    title,
-    start,
-    end,
-    category,
-    isAllDay,
-    location,
-    dueDateClass,
-    state,
-    raw,
-    calendarId,
-  });
-  //newSchedule.id = newSchedule._id;
-
-  schedule.Schedulelist.push(newSchedule);
-
   try {
+    await returnSchedule.save();
+
+    const newSchedule = schedule.Schedulelist.create({
+      title,
+      start,
+      end,
+      category,
+      isAllDay,
+      location,
+      dueDateClass,
+      state,
+      raw,
+      calendarId,
+    });
+    newSchedule.id = newSchedule._id;
+
+    console.log('저장 완료!!!!!!!!!!!!!!!');
+
+    schedule.Schedulelist.push(newSchedule);
+
+    ctx.status = 204;
     await schedule.save();
+    console.log('완전 완료!!!!!!!!!!!!!!!');
   } catch (e) {
     ctx.throw(500, e);
   }
