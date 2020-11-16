@@ -280,7 +280,7 @@ function Scheduler() {
         </div>
         <TUICalendar
           ref={cal}
-          height="1000px"
+          height="70vh"
           view="month"
           useCreationPopup={true}
           useDetailPopup={true}
