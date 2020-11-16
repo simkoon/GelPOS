@@ -2,6 +2,11 @@ import React, { useReducer, useState } from "react";
 
 import { Link, withRouter } from "react-router-dom";
 import * as authAPI from "../../../lib/api/auth";
+import EmailCodeInput from "../EmailCodeCheck/EmailCodeInput";
+import CodeSendButton from "../EmailCodeCheck/CodeSendButton";
+import CodeInput from "../EmailCodeCheck/CodeInput";
+
+
 
 function reducer(state, action) {
   switch (action.type) {
@@ -111,7 +116,11 @@ function Register({ history }) {
     codeconfirm: false,
   });
 
-  const [value, setValue] = useState("");
+  // 이메일 코드 값
+  const [emailCode, setEmailCode] = useState("");
+
+  // 회원가입 성공 여부
+  const [RegiSuccess, setRegiSuccess] = useState(false);
 
   const {
     userid,
@@ -181,7 +190,9 @@ function Register({ history }) {
 
       const result = await authAPI.register(formData);
 
-      history.push("/");
+      setRegiSuccess(true);
+
+      //history.push("/");
     } catch (e) {
       const resulterror = e.response.status;
       console.log(resulterror);
@@ -228,7 +239,7 @@ function Register({ history }) {
 
       console.log(servercode);
 
-      setValue(servercode);
+      setEmailCode(servercode);
 
       dispatch({ type: "CODESEND" });
 
@@ -245,9 +256,9 @@ function Register({ history }) {
   const codeCheck = async (e) => {
     e.preventDefault();
 
-    console.log("value", value);
+    console.log("emailCode", emailCode);
     if (code !== "") {
-      if (code === value) {
+      if (code === emailCode) {
         console.log("성공");
         dispatch({ type: "CODE_OK" });
         return;
@@ -259,11 +270,21 @@ function Register({ history }) {
     }
   };
 
+  const onOkCleck = () => {
+    history.push("/");
+  }
+
   return (
     <>
       <div className="registBox">
         <div className="regist_logo">회원가입</div>
         <hr className="regist_hr" />
+    {RegiSuccess ? 
+      <div>
+        <h2 className="mt-5 mb-5">회원가입에 성공하셨습니다.</h2>
+        <button className="regist_btn mt-5" onClick={onOkCleck}> 돌아가기 </button>
+      </div>
+    : 
         <form onSubmit={onSubmit}>
           <p className="inputTextBox">
             <input
@@ -293,7 +314,7 @@ function Register({ history }) {
           </p>
           <p className="inputTextBox">
             {codesend ? (
-              <input
+              <EmailCodeInput
                 className="regist_inputBox regist_email readonlyInput"
                 name="email"
                 type="email"
@@ -302,61 +323,48 @@ function Register({ history }) {
                 autoComplete="off"
                 maxLength="24"
                 placeholder="이메일"
-                readOnly
+                readOnly="readOnly"
               />
             ) : (
-              <input
+              <EmailCodeInput
                 className="regist_inputBox regist_email"
-                name="email"
-                type="email"
-                value={email}
+                email={email}
                 onChange={onChange}
-                autoComplete="off"
-                maxLength="24"
-                placeholder="이메일"
-                required
+                required="required"
               />
             )}
             {/* 코드 인증 확인 되면 버튼 없애기 */}
             {codeconfirm ? null : codesend ? (
-              <button
+              <CodeSendButton
                 className="codeBtn regist_email_codeSend mt-1"
-                onClick={codeSend}
+                codeSend={codeSend}
+                BtnName="다시전송"
               >
-                다시전송
-              </button>
+                
+              </CodeSendButton>
             ) : (
-              <button
+              <CodeSendButton
                 className="codeBtn regist_email_codeSend mt-1"
-                onClick={codeSend}
+                codeSend={codeSend}
+                BtnName="코드전송"
               >
-                코드전송
-              </button>
+                
+              </CodeSendButton>
             )}
           </p>
           <p className="inputTextBox">
             {codeconfirm ? (
-              <input
+              <CodeInput
                 className="regist_email_code ml-2 readonlyInput"
-                name="code"
-                type="text"
-                value={code}
+                code={code}
                 onChange={onChange}
-                autoComplete="off"
-                maxLength="5"
-                placeholder="인증코드"
-                required
+                readOnly
               />
             ) : (
-              <input
+              <CodeInput
                 className="regist_email_code ml-2"
-                name="code"
-                type="text"
-                value={code}
+                code={code}
                 onChange={onChange}
-                autoComplete="off"
-                maxLength="5"
-                placeholder="인증코드"
                 required
               />
             )}
@@ -411,6 +419,7 @@ function Register({ history }) {
             </Link>
           </p>
         </form>
+      }
       </div>
     </>
   );

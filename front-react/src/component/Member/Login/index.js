@@ -139,7 +139,7 @@ function Login({ history }) {
             </Link>
           </p>
           <p>
-            <Link to="/member/idpassfind/idpassfindmain">
+            <Link to="/member/idpassfind">
               <span className="login_find">아이디 비밀번호 찾기</span>
             </Link>
           </p>

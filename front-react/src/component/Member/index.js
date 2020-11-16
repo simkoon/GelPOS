@@ -17,16 +17,7 @@ function Member() {
         <Route path="/member/register" component={Register} />
         <Route path="/member/idpassfind">
           <IdPassFindBox>
-            <Route
-              path="/member/idpassfind/idpassfindmain"
-              component={IdPassFindMian}
-            />
-            <Route path="/member/idpassfind/idfind" component={IdFind} />
-            <Route path="/member/idpassfind/passcode" component={PassCode} />
-            <Route
-              path="/member/idpassfind/passchange"
-              component={PassChange}
-            />
+            <IdPassFindMian/>
           </IdPassFindBox>
         </Route>
       </MemberContainer>

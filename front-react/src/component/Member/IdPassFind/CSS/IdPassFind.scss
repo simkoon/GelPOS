@@ -160,3 +160,14 @@ p{
 .back_btn:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+//.readonly 이메일 input 인증코드 input 막아주는 스타일 주기
+.readonlyInput {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: 1px solid white;
+}
+
+.errorText{
+    color: #fff;
+}
