@@ -31,7 +31,7 @@ function Login({ history }) {
   const [state, dispatch] = useReducer(reducer, {
     userid: "",
     password: "",
-    errortext: "",
+    errortext: "0",
   });
 
   const { userid, password, errortext } = state;
@@ -132,7 +132,11 @@ function Login({ history }) {
           <p>
             <button className="login_btn">Login</button>
           </p>
-          <p className="text-warning">{errortext}</p>
+          {errortext !== "0" ? (
+            <p className="errortext on">{errortext}</p>
+          ) : (
+            <p className="errortext">{errortext}</p>
+          )}
           <p>
             <Link to="/member/register">
               <span className="login_joinBtn">회원 가입</span>
