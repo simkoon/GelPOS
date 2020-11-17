@@ -8,7 +8,8 @@ const childMenu = new Schema({
 
 const childTable = new Schema({
   tableNum: Number,
-  nowMenu: [childMenu],
+  startAt: Date,
+  nowMenu: [{ name: String, price: String, EA: Number, priceSum: String }],
 });
 
 const TablesSchema = new Schema({

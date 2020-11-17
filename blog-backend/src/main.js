@@ -3,6 +3,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
 import serve from 'koa-static';
 import path from 'path';
 import send from 'koa-send';
@@ -27,30 +28,56 @@ mongoose
 
 const app = new Koa();
 const router = new Router();
+const socketTable = new Router();
+
+// Socket.io app 인스턴스 생성
+app.server = http.createServer(app.callback());
+app.io = socketIO(app.server, {});
+
+app.io
+  .use((socket, next) => {
+    let error = null;
+    try {
+      let ctx = app.createContext(socket.request, new http.OutgoingMessage());
+      socket.cookies = ctx.cookies;
+      if (!ctx.state.user) {
+        ctx.status = 401; // Unauthorized
+        return;
+      }
+    } catch (err) {
+      error = err;
+      console.log(error);
+    }
+    return next(error);
+  })
+  .on('connection', function (socket) {
+    console.log('connected');
+    const token = socket.cookies.get('access_token');
+    if (!token) return; // 토큰이 없음
+    console.log('connected2');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
+    socket.on('joinRoom', function (join) {
+      console.log(join);
+    });
+    socket.on('chat', function (msg) {
+      console.log(msg);
+      app.io.emit('chat', msg + '222222');
+    });
+  });
 
 // 라우터 설정
 router.use('/api', api.routes()); // api 라우트 적용
-
+router.use('/', socketTable.routes());
 // 라우터 적용 전에 bodyParser 적용
 app.use(bodyParser());
 app.use(jwtMiddleware);
-
-// Socket.io app 인스턴스 생성
-app.io = socketIO(app.server, {});
-
-app.io.on('connection', function (socket) {
-  console.log('connected');
-  socket.on('chat', function (msg) {
-    console.log(msg);
-    app.io.emit('chat', msg + '222222');
-  });
-});
 
 // app 인스턴스에 라우터 적용
 app.use(router.routes()).use(router.allowedMethods());
 
 // 소켓 적용, app.listen 오버라이드
-app.server = http.createServer(app.callback());
+
 app.listen = (...args) => {
   app.server.listen.call(app.server, ...args);
   return app.server;
@@ -68,7 +95,7 @@ app.listen = (...args) => {
 
 // PORT 가 지정되어있지 않다면 4000 을 사용
 const port = PORT || 4000;
-import Invoice from './models/invoice';
+
 app.listen(port, () => {
   console.log('Listening to port %d', port);
 
@@ -86,7 +113,6 @@ app.listen(port, () => {
     //     username: '조옥상',
     //   },
     // });
-
     // const result = await invoice.save();
     // console.log(result);
   })();

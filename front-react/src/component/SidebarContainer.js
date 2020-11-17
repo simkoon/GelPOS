@@ -3,7 +3,7 @@ import Sidebar from "../comm/Sidebar/Tsidebar";
 import Scheduler from "./Scheduler";
 import StoreAdd from "./StoreAdd/StoreAddContainer";
 import Invoice from "./Invoice/Invoice";
-import Table from "./Table";
+import Table from "./Table/TableContainer";
 
 export default function SidebarContainer(params) {
   return (
