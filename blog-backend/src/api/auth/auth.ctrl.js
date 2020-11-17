@@ -45,7 +45,7 @@ export const code = async (ctx) => {
                   <div style="font-size: 50px">${code}</div> 
               </div>
               <p>입니다.</p>
-              <p> 인증 코드란에 위 코드를 알맞게 입력해 주세요.</ㅔ>`,
+              <p> 인증 코드란에 위 코드를 알맞게 입력해 주세요.</p>`,
     });
 
     ctx.body = {
@@ -93,11 +93,14 @@ export const findCode = async (ctx) => {
                   <div style="font-size: 50px">${code}</div> 
               </div>
               <p>입니다.</p>
-              <p> 인증 코드란에 위 코드를 알맞게 입력해 주세요.</ㅔ>`,
+              <p> 인증 코드란에 위 코드를 알맞게 입력해 주세요.</p>`,
     });
+
+    const userid = existsEmail.userid.substring(0, 3);
 
     ctx.body = {
       code: code,
+      id: userid,
     };
   } catch (e) {
     ctx.throw(500, e);
@@ -211,4 +214,58 @@ export const check = async (ctx) => {
 export const logout = async (ctx) => {
   ctx.cookies.set('access_token');
   ctx.status = 204; // No Content
+};
+
+export const pwChange = async (ctx) => {
+  // Request Body 검증하기
+  console.log('body', ctx.request.body);
+  const schema = Joi.object().keys({
+    password: Joi.string().required(),
+    email: Joi.string().email().required(),
+  });
+  const result = schema.validate(ctx.request.body);
+
+  if (result.error) {
+    console.log(result);
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  const { password, email } = ctx.request.body;
+
+  try {
+    const existsEmail = await User.findByEmail(email);
+
+    // existsEmail.hashedPassword.remove();
+
+    // await existsEmail.save();
+
+    if (!existsEmail) {
+      ctx.body = {
+        emailoverlap: false,
+      };
+      return;
+    }
+
+    // const user = new User({
+    //   email,
+    // });
+
+    await existsEmail.setPassword(password); // 비밀번호 설정
+    await existsEmail.save(); // 데이터베이스에 저장
+    ctx.body = {
+      emailoverlap: true,
+    };
+
+    // ctx.body = user.serialize();
+
+    // const token = user.generateToken();
+    // ctx.cookies.set('access_token', token, {
+    //   maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
+    //   httpOnly: true,
+    // });
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };

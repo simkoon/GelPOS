@@ -1,10 +1,10 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import Login from './Login';
-import Register from './Register';
-import IdPassFindMian from './IdPassFind/IdPassFindMain';
-import MemberContainer from './container/MemberContainer';
-import IdPassFindBox from './IdPassFind/IdPassFindBox';
+import React from "react";
+import { Route } from "react-router-dom";
+import Login from "./Login";
+import Register from "./Register";
+import IdPassFindMain from "./IdPassFind/IdPassFindMain";
+import MemberContainer from "./container/MemberContainer";
+import IdPassFindBox from "./IdPassFind/IdPassFindBox";
 
 function Member() {
   return (
@@ -14,7 +14,7 @@ function Member() {
         <Route path="/member/register" component={Register} />
         <Route path="/member/idpassfind">
           <IdPassFindBox>
-            <IdPassFindMian />
+            <IdPassFindMain />
           </IdPassFindBox>
         </Route>
       </MemberContainer>

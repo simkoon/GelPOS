@@ -1,18 +1,22 @@
-import React, { useReducer, useState} from "react";
+import React, { useReducer, useState } from "react";
 import { Link } from "react-router-dom";
 import "./CSS/IdPassFind.scss";
 import * as authAPI from "../../../lib/api/auth";
-import EmailCodeInput from "../EmailCodeCheck/EmailCodeInput";
-import CodeSendButton from "../EmailCodeCheck/CodeSendButton";
-import CodeInput from "../EmailCodeCheck/CodeInput";
+import {
+  IdFindPageTitle,
+  PassChangePageTitle,
+  CodeCheckPageInput,
+  PwChangePage,
+  PwChangePageTitle,
+} from "./Page";
 
 function reducer(state, action) {
   switch (action.type) {
     case "IDFINDPAGE":
       return {
         ...state,
-        mainPage : false,
-        passChangePage : false,
+        mainPage: false,
+        passChangePage: false,
         codeCheckPage: true,
         idFindPage: true,
       };
@@ -20,34 +24,35 @@ function reducer(state, action) {
     case "PASSCHANGEPAGE":
       return {
         ...state,
-        mainPage : false,
-        passChangePage : true,
+        mainPage: false,
+        passChangePage: true,
         codeCheckPage: true,
         idFindPage: false,
+        idReport: false,
       };
-      
+
     case "EMAILERROR":
       return {
         ...state,
-        errorText: "이메일을 입력해 주세요."
+        errorText: "이메일을 입력해 주세요.",
       };
-      
+
     case "EMAILERROR_NOOVERRLAP":
       return {
         ...state,
         email: "",
-        errorText: "존재하지 않는 이메일 입니다."
+        errorText: "존재하지 않는 이메일 입니다.",
       };
     case "CODE_NO":
       return {
         ...state,
-        errorText: "코드가 일치하지 않습니다."
+        errorText: "코드가 일치하지 않습니다.",
       };
     case "CODESEND":
       return {
         ...state,
-        codesend: true,
-        errorText: "코드인증을 성공 하였습니다."
+        codesendOk: true,
+        errorText: "코드전송을 성공 하였습니다.",
       };
     case "BACK":
       return {
@@ -55,40 +60,68 @@ function reducer(state, action) {
         idFindPage: false,
         passChangePage: false,
         codeCheckPage: false,
-        codesend: false,
+        codesendOk: false,
         email: "",
         errorText: "",
         code: "",
-        codeconfirm: false
+        codeconfirm: false,
       };
     case "ID_OK_CODE":
       return {
         ...state,
         idReport: true,
         idFindPage: false,
+        codeCheckPage: false,
+        errorText: "",
+      };
+    case "PW_OK_CODE":
+      return {
+        ...state,
+        pwChange: true,
+        passChangePage: false,
+        codeCheckPage: false,
+        errorText: "",
+      };
+    case "PWCONFIRM_ERROR":
+      return {
+        ...state,
+        errorText: "비밀번호가 일치하지 않습니다.",
+      };
+    case "PASSWORD_REG_ERROR":
+      return {
+        ...state,
+        errorText:
+          "비밀번호는 대문자와 특수문자를 포함한 8~16글자 이어야 합니다.",
+      };
+    case "PWCHANGE_OK":
+      return {
+        ...state,
+        pwChangeOk: true,
+        pwChange: false,
+        errorText: "비밀번호 변경이 완료 되었습니다.",
       };
   }
-  return{
+  return {
     ...state,
     [action.name]: action.value,
   };
-
 }
 
-
 function IdPassFind() {
-
   const [state, dispatch] = useReducer(reducer, {
     mainPage: true,
     idFindPage: false,
     passChangePage: false,
     codeCheckPage: false,
-    codesend: false,
+    codesendOk: false,
     email: "",
     errorText: "",
     code: "",
     idReport: false,
-    id:"",
+    pwChange: false,
+    password: "",
+    passwordConfirm: "",
+    pwChangeOk: false,
   });
 
   const {
@@ -96,16 +129,20 @@ function IdPassFind() {
     idFindPage,
     passChangePage,
     codeCheckPage,
-    codesend,
+    codesendOk,
     email,
     errorText,
     code,
     idReport,
-    id
+    pwChange,
+    password,
+    passwordConfirm,
+    pwChangeOk,
   } = state;
 
-  const [emailCode, setEmailCode] = useState("");
+  const [userid, setUserid] = useState("");
 
+  const [emailCode, setEmailCode] = useState("");
 
   //input값 체인지
   const onChange = (e) => {
@@ -122,12 +159,12 @@ function IdPassFind() {
 
     //이메일 유효성 검증
 
-    const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    // const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
-    if (!emailRegExp.test(email)) {
-      dispatch({ type: "EMAIL_REG_ERROR" });
-      return;
-    }
+    // if (!emailRegExp.test(email)) {
+    //   dispatch({ type: "EMAIL_REG_ERROR" });
+    //   return;
+    // }
     const formData = {
       email,
     };
@@ -137,11 +174,13 @@ function IdPassFind() {
       console.log(result);
 
       // 있는 아이디인지 체크
-      if (!result.data.emailoverlap) {
+      if (result.data.emailoverlap) {
         return dispatch({ type: "EMAILERROR_NOOVERRLAP" });
       }
 
       const servercode = result.data.code;
+
+      setUserid(result.data.id + "****");
 
       console.log(servercode);
 
@@ -149,7 +188,7 @@ function IdPassFind() {
 
       dispatch({ type: "CODESEND" });
 
-      console.log("codesend",codesend);
+      console.log("codesendOk", codesendOk);
 
       console.log(result);
       return;
@@ -162,15 +201,15 @@ function IdPassFind() {
     e.preventDefault();
 
     console.log("emailCode", emailCode);
-    
+
     if (code !== "") {
       if (code === emailCode) {
-        if(idFindPage){
+        if (idFindPage) {
           dispatch({ type: "ID_OK_CODE" });
         }
-        // if(){
-        //  dispatch({ type: "PW_OK_CODE" });
-        // }
+        if (passChangePage) {
+          dispatch({ type: "PW_OK_CODE" });
+        }
       } else {
         console.log("실패");
         dispatch({ type: "CODE_NO" });
@@ -179,117 +218,174 @@ function IdPassFind() {
     }
   };
 
+  // 돌아가기 누를떄 실행
   const onBack = () => {
     dispatch({ type: "BACK" });
-  }
+  };
+
+  // 비밀번호 변경에서 확인을 누를때 실행
+  const onPwCheck = async () => {
+    if (!(password === passwordConfirm)) {
+      dispatch({ type: "PWCONFIRM_ERROR" });
+    }
+
+    console.log("email", email);
+    // 비밀번호 유효성 검사
+    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*()\-_=+\\\|\[\]{};:\'",.<>\/?]).{8,16}$/;
+
+    if (
+      !passwordRegExp.test(password) ||
+      !passwordRegExp.test(passwordConfirm)
+    ) {
+      dispatch({ type: "PASSWORD_REG_ERROR" });
+      return;
+    }
+
+    try {
+      const passEmail = {
+        password: password,
+        email: email,
+      };
+
+      const result = await authAPI.pwChange(passEmail);
+
+      if (result) {
+        dispatch({ type: "PWCHANGE_OK" });
+        return;
+      }
+
+      if (!result) {
+        dispatch({ type: "PWCHANGE_ERROR" });
+        return;
+      }
+      // if (result.data.emailoverlap) {
+      //   return dispatch({ type: "EMAILERROR_NOOVERRLAP" });
+      // }
+
+      return;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
-      { mainPage && 
-      <>
-      <div className="idpassfind_logo"> 아이디 비밀번호 찾기 </div> 
-      <hr className="idpassfind_hr" />
-      </>
-      }
-      
-      {/* 아이디 찾기 인증 */}
-      { idFindPage && 
-      <>
-      <div className="idpassfind_logo">아이디 찾기</div>
-      <hr className="idpassfind_hr"/>
-      <div className="idpassfind_text">회원가입에 입력한 이메일로 인증을 진행해 주세요.</div> 
-      </>
-      }
-
-      {idReport &&
-      <>
-      <div className="idpassfind_logo">아이디 찾기</div>
-      <hr className="idpassfind_hr"/>
-
-      </>
-      }
-
-      {/* 비밀번호 변경 인증 */}
-      { passChangePage && 
-      <>
-      <div className="idpassfind_logo"> 비밀번호 변경 </div> 
-      <hr className="idpassfind_hr"/>
-      <div className="idpassfind_text">회원가입에 입력한 이메일로 인증을 진행해 주세요.</div>
-      </>
-      }
-    { mainPage &&
-      <p>
-          <button className="idpassfind_btn" onClick={()=>dispatch({type: "IDFINDPAGE"})}>아이디찾기</button>
-          <button className="idpassfind_btn" onClick={()=>dispatch({type: "PASSCHANGEPAGE"})} >비밀번호 변경</button>
-      </p>
-    }
-    {codeCheckPage &&
-      <>
-      <p>
-      {codesend ? (
-              <EmailCodeInput
-                className="idpass_inputBox idpass_email readonlyInput"
-                value={email}
-                onChange={onChange}
-                readOnly="readOnly"
-              />
-            ) : (
-              <EmailCodeInput
-                className="regist_inputBox regist_email"
-                email={email}
-                onChange={onChange}
-                required="required"
-              />
-            )}
-            {/* 코드 인증 확인 되면 버튼 없애기 */}
-            {codesend ? (
-              <CodeSendButton
-                className="codeBtn idpass_email_codeSend"
-                codeSend={codeSend}
-                BtnName="다시전송"
-              >
-                
-              </CodeSendButton>
-            ) : (
-              <CodeSendButton
-                className="codeBtn idpass_email_codeSend"
-                codeSend={codeSend}
-                BtnName="코드전송"
-              >
-                
-              </CodeSendButton>
-            )}
+      {pwChangeOk ? (
+        <>
+          <div>
+            <div className="idpassfind_logo">비밀번호 변경 완료</div>
+            <hr className="idpassfind_hr" />
+            <div className="idpassfind_text">
+              비밀번호 변경이 완료 되었습니다.
+            </div>
+          </div>
+          <p>
+            <Link to="/">
+              <button className="idpassfind_back mt-5">돌아가기</button>
+            </Link>
           </p>
-          <p className="inputTextBox">
-              <CodeInput
-                className="regist_email_code ml-2"
-                code={code}
-                onChange={onChange}
-                required
-              />
+        </>
+      ) : (
+        <>
+          {mainPage && (
+            <>
+              <div className="idpassfind_logo"> 아이디 비밀번호 찾기 </div>
+              <hr className="idpassfind_hr" />
+            </>
+          )}
+          {/* 아이디 찾기 인증 타이틀*/}
+          {idFindPage && (
+            <>
+              <IdFindPageTitle />
+            </>
+          )}
+          {idReport && (
+            <>
+              <div className="idpassfind_logo">아이디 찾기</div>
+              <hr className="idpassfind_hr" />
+            </>
+          )}
+
+          {/* 비밀번호 변경 인증 타이틀*/}
+          {passChangePage && (
+            <>
+              <PassChangePageTitle />
+            </>
+          )}
+
+          {/* 비밀번호 변경 타이틀*/}
+          {pwChange && (
+            <>
+              <PwChangePageTitle />
+            </>
+          )}
+
+          {mainPage && (
+            <p>
               <button
-                className="codeBtn regist_email_codeOk"
-                onClick={codeCheck}
+                className="idpassfind_btn"
+                onClick={() => dispatch({ type: "IDFINDPAGE" })}
               >
-                확인
+                아이디찾기
               </button>
-      </p>
-      </>
-      }
-      <span className="errorText">
-      {errorText}
-      </span>
-      { mainPage || idReport ?
-      <p>
-      <Link to= "/" > 
-          <button className="idpassfind_back mt-5">돌아가기</button>
-        </Link>
-      </p>
-      :
-      <p>
-          <button onClick={onBack} className="idpassfind_back mt-5">돌아가기</button>
-      </p>
-      }
+              <button
+                className="idpassfind_btn"
+                onClick={() => dispatch({ type: "PASSCHANGEPAGE" })}
+              >
+                비밀번호 변경
+              </button>
+            </p>
+          )}
+          {/* 코드 인증 부분 */}
+          {codeCheckPage && (
+            <CodeCheckPageInput
+              codeCheckPage={codeCheckPage}
+              codeSend={codeSend}
+              codesendOk={codesendOk}
+              email={email}
+              onChange={onChange}
+              code={code}
+              codeCheck={codeCheck}
+            />
+          )}
+
+          {/* 비밀번호 변경 페이지 */}
+          {pwChange && (
+            <>
+              <PwChangePage
+                onChange={onChange}
+                password={password}
+                passwordConfirm={passwordConfirm}
+                errorText={errorText}
+                onPwCheck={onPwCheck}
+              />
+            </>
+          )}
+
+          {/* 아이디 보여주기 페이지 */}
+          {idReport && (
+            <span className="errorText">
+              회원님의 아이디는 [ {userid} ] 입니다.
+            </span>
+          )}
+          {/* 에러 텍스트 (비밀번호 변경 페이지가 아닐때만 보여준다)*/}
+          {!pwChange && <span className="errorText">{errorText}</span>}
+          {/* 페이지에 다르게 돌아가기 바꿔주기 */}
+          {mainPage || idReport ? (
+            <p>
+              <Link to="/">
+                <button className="idpassfind_back mt-5">돌아가기</button>
+              </Link>
+            </p>
+          ) : pwChange ? null : (
+            <p>
+              <button onClick={onBack} className="idpassfind_back mt-5">
+                돌아가기
+              </button>
+            </p>
+          )}
+        </>
+      )}
     </>
   );
 }

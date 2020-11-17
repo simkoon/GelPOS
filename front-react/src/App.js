@@ -5,6 +5,7 @@ import Scheduler from "./component/Scheduler";
 import StoreAdd from "./component/StoreAdd/StoreAddContainer";
 import Invoice from "./component/Invoice/Invoice";
 import SidebarContainer from "./component/SidebarContainer";
+import Addmenu from "./component/AddMenu/Addmenu";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="/storeList" exact={true} component={StoreList} />
       <Route path="/storeAdd" component={StoreAdd} />
       <Route path="/store" component={SidebarContainer} />
+      <Route path="/addmenu" component={Addmenu}/>
     </>
   );
 }
