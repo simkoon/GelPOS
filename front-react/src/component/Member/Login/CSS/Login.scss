@@ -243,3 +243,17 @@ p{
 input:focus{         
     border: 2px solid rgb(85, 84, 126);  
 }
+
+.errortext{
+    color: rgba(0, 0, 0, 0);
+    transition-property: color;
+    transition-duration: 1.5s;
+    
+    
+}
+
+.errortext.on{
+    font-weight: bold;
+    color: rgb(197, 55, 55);
+    
+}
