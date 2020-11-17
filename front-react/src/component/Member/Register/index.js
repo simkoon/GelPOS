@@ -6,8 +6,6 @@ import EmailCodeInput from "../EmailCodeCheck/EmailCodeInput";
 import CodeSendButton from "../EmailCodeCheck/CodeSendButton";
 import CodeInput from "../EmailCodeCheck/CodeInput";
 
-
-
 function reducer(state, action) {
   switch (action.type) {
     case "USERNAME_REG_ERROR":
@@ -272,154 +270,153 @@ function Register({ history }) {
 
   const onOkCleck = () => {
     history.push("/");
-  }
+  };
 
   return (
     <>
       <div className="registBox">
         <div className="regist_logo">회원가입</div>
         <hr className="regist_hr" />
-    {RegiSuccess ? 
-      <div>
-        <h2 className="mt-5 mb-5">회원가입에 성공하셨습니다.</h2>
-        <button className="regist_btn mt-5" onClick={onOkCleck}> 돌아가기 </button>
-      </div>
-    : 
-        <form onSubmit={onSubmit}>
-          <p className="inputTextBox">
-            <input
-              className="regist_inputBox regist_name"
-              name="username"
-              type="text"
-              value={username}
-              onChange={onChange}
-              autoComplete="off"
-              placeholder="이름"
-              required
-            />
-          </p>
-          <p className="inputTextBox">
-            <input
-              className="regist_inputBox regist_id"
-              name="userid"
-              type="text"
-              value={userid}
-              onChange={onChange}
-              autoComplete="off"
-              minLength="5"
-              maxLength="20"
-              placeholder="아이디"
-              required
-            />
-          </p>
-          <p className="inputTextBox">
-            {codesend ? (
-              <EmailCodeInput
-                className="regist_inputBox regist_email readonlyInput"
-                name="email"
-                type="email"
-                value={email}
+        {RegiSuccess ? (
+          <div>
+            <h2 className="mt-5 mb-5">회원가입에 성공하셨습니다.</h2>
+            <button className="regist_btn mt-5" onClick={onOkCleck}>
+              {" "}
+              돌아가기{" "}
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={onSubmit}>
+            <p className="inputTextBox">
+              <input
+                className="regist_inputBox regist_name"
+                name="username"
+                type="text"
+                value={username}
                 onChange={onChange}
                 autoComplete="off"
-                maxLength="24"
-                placeholder="이메일"
-                readOnly="readOnly"
-              />
-            ) : (
-              <EmailCodeInput
-                className="regist_inputBox regist_email"
-                email={email}
-                onChange={onChange}
-                required="required"
-              />
-            )}
-            {/* 코드 인증 확인 되면 버튼 없애기 */}
-            {codeconfirm ? null : codesend ? (
-              <CodeSendButton
-                className="codeBtn regist_email_codeSend mt-1"
-                codeSend={codeSend}
-                BtnName="다시전송"
-              >
-                
-              </CodeSendButton>
-            ) : (
-              <CodeSendButton
-                className="codeBtn regist_email_codeSend mt-1"
-                codeSend={codeSend}
-                BtnName="코드전송"
-              >
-                
-              </CodeSendButton>
-            )}
-          </p>
-          <p className="inputTextBox">
-            {codeconfirm ? (
-              <CodeInput
-                className="regist_email_code ml-2 readonlyInput"
-                code={code}
-                onChange={onChange}
-                readOnly
-              />
-            ) : (
-              <CodeInput
-                className="regist_email_code ml-2"
-                code={code}
-                onChange={onChange}
+                placeholder="이름"
                 required
               />
-            )}
-            {/* 코드 인증 확인 되면 버튼 없애기 */}
-            {codeconfirm ? null : (
-              <button
-                className="codeBtn regist_email_codeOk"
-                onClick={codeCheck}
-              >
-                확인
-              </button>
-            )}
-          </p>
-          <p className="inputTextBox">
-            <input
-              className="regist_inputBox regist_pass"
-              name="password"
-              type="password"
-              value={password}
-              onChange={onChange}
-              autoComplete="off"
-              minLength="8"
-              maxLength="16"
-              placeholder="비밀번호"
-              required
-            />
-          </p>
-          <p className="inputTextBox">
-            <input
-              className="regist_inputBox regist_pass"
-              name="passwordConfirm"
-              type="password"
-              value={passwordConfirm}
-              onChange={onChange}
-              autoComplete="off"
-              minLength="8"
-              maxLength="16"
-              placeholder="비밀번호 확인"
-              required
-            />
-          </p>
+            </p>
+            <p className="inputTextBox">
+              <input
+                className="regist_inputBox regist_id"
+                name="userid"
+                type="text"
+                value={userid}
+                onChange={onChange}
+                autoComplete="off"
+                minLength="5"
+                maxLength="20"
+                placeholder="아이디"
+                required
+              />
+            </p>
+            <p className="inputTextBox">
+              {codesend ? (
+                <EmailCodeInput
+                  className="regist_inputBox regist_email readonlyInput"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={onChange}
+                  autoComplete="off"
+                  maxLength="24"
+                  placeholder="이메일"
+                  readOnly="readOnly"
+                />
+              ) : (
+                <EmailCodeInput
+                  className="regist_inputBox regist_email"
+                  email={email}
+                  onChange={onChange}
+                  required="required"
+                />
+              )}
+              {/* 코드 인증 확인 되면 버튼 없애기 */}
+              {codeconfirm ? null : codesend ? (
+                <CodeSendButton
+                  className="codeBtn regist_email_codeSend mt-1"
+                  codeSend={codeSend}
+                  BtnName="다시전송"
+                ></CodeSendButton>
+              ) : (
+                <CodeSendButton
+                  className="codeBtn regist_email_codeSend mt-1"
+                  codeSend={codeSend}
+                  BtnName="코드전송"
+                ></CodeSendButton>
+              )}
+            </p>
+            <p className="inputTextBox">
+              {codeconfirm ? (
+                <CodeInput
+                  className="regist_email_code ml-2 readonlyInput"
+                  code={code}
+                  onChange={onChange}
+                  readOnly
+                />
+              ) : (
+                <CodeInput
+                  className="regist_email_code ml-2"
+                  code={code}
+                  onChange={onChange}
+                  required
+                />
+              )}
+              {/* 코드 인증 확인 되면 버튼 없애기 */}
+              {codeconfirm ? null : (
+                <button
+                  className="codeBtn regist_email_codeOk"
+                  onClick={codeCheck}
+                >
+                  확인
+                </button>
+              )}
+            </p>
+            <p className="inputTextBox">
+              <input
+                className="regist_inputBox regist_pass"
+                name="password"
+                type="password"
+                value={password}
+                onChange={onChange}
+                autoComplete="off"
+                minLength="8"
+                maxLength="16"
+                placeholder="비밀번호"
+                required
+              />
+            </p>
+            <p className="inputTextBox">
+              <input
+                className="regist_inputBox regist_pass"
+                name="passwordConfirm"
+                type="password"
+                value={passwordConfirm}
+                onChange={onChange}
+                autoComplete="off"
+                minLength="8"
+                maxLength="16"
+                placeholder="비밀번호 확인"
+                required
+              />
+            </p>
 
-          {errortext ? (
-            <p className="text-white">{error}</p>
-          ) : (
-            <p className="text-warning">{error}</p>
-          )}
-          <p>
-            <button className="regist_btn">회원가입</button>
-            <Link to="/">
-              <button className="regist_back">돌아가기</button>
-            </Link>
-          </p>
-        </form>
-      }
+            {errortext ? (
+              <p className="text-white">{error}</p>
+            ) : (
+              <p className="text-warning">{error}</p>
+            )}
+            <p>
+              <button className="regist_btn">회원가입</button>
+              <Link to="/">
+                <button className="regist_back">돌아가기</button>
+              </Link>
+            </p>
+          </form>
+        )}
       </div>
     </>
   );

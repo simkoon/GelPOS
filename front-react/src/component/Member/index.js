@@ -5,9 +5,6 @@ import Register from "./Register";
 import IdPassFindMian from "./IdPassFind/IdPassFindMain";
 import MemberContainer from "./container/MemberContainer";
 import IdPassFindBox from "./IdPassFind/IdPassFindBox";
-import IdFind from "./IdPassFind/IdFind";
-import PassCode from "./IdPassFind/PassCode";
-import PassChange from "./IdPassFind/PassChange";
 
 function Member() {
   return (
@@ -17,7 +14,7 @@ function Member() {
         <Route path="/member/register" component={Register} />
         <Route path="/member/idpassfind">
           <IdPassFindBox>
-            <IdPassFindMian/>
+            <IdPassFindMian />
           </IdPassFindBox>
         </Route>
       </MemberContainer>
