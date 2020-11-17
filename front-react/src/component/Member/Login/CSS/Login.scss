@@ -247,13 +247,12 @@ input:focus{
 .errortext{
     color: rgba(0, 0, 0, 0);
     transition-property: color;
-    transition-duration: 1.5s;
+    transition-duration: 1.1s;
     
     
 }
 
 .errortext.on{
     font-weight: bold;
-    color: rgb(197, 55, 55);
-    
+    color:  rgb(206, 30, 30);
 }

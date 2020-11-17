@@ -135,7 +135,11 @@ export const PwChangePage = ({
           placeholder="비밀번호 확인"
         />
       </p>
-      <span className="errorText">{errorText}</span>
+      { errorText !== "" ?
+        <span className="errorText on">{errorText}</span>
+      :
+        <span className="errorText">{errorText}</span>
+      }
       <p>
         <button className="Ok_btn" onClick={onPwCheck}>
           확인

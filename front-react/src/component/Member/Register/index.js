@@ -407,7 +407,7 @@ function Register({ history }) {
             {errortext ? (
               <p className="text-white">{error}</p>
             ) : (
-              <p className="text-warning">{error}</p>
+              <p className="errortext on">{error}</p>
             )}
             <p>
               <button className="regist_btn">회원가입</button>

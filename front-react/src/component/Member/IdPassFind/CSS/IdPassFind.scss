@@ -169,5 +169,21 @@ p{
 }
 
 .errorText{
-    color: #fff;
+    color:  rgba(0, 0, 0, 0);
+    transition-property: color;
+    transition-duration: 1.1s;
+}
+
+.errorText.on{
+    font-weight: bold;
+    color: rgb(238, 23, 23);
+    
+}
+
+.errorTextBox{
+    height: 10px;
+}
+
+.errorText.white{
+    color: white;
 }

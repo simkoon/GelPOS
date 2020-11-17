@@ -46,12 +46,14 @@ function reducer(state, action) {
     case "CODE_NO":
       return {
         ...state,
+        errorTextColor: false,
         errorText: "코드가 일치하지 않습니다.",
       };
     case "CODESEND":
       return {
         ...state,
         codesendOk: true,
+        errorTextColor: true,
         errorText: "코드전송을 성공 하였습니다.",
       };
     case "BACK":
@@ -100,6 +102,11 @@ function reducer(state, action) {
         pwChange: false,
         errorText: "비밀번호 변경이 완료 되었습니다.",
       };
+    case "ERRORSET":
+      return {
+        ...state,
+        errorText: "",
+      };
   }
   return {
     ...state,
@@ -122,6 +129,7 @@ function IdPassFind() {
     password: "",
     passwordConfirm: "",
     pwChangeOk: false,
+    errorTextColor: false,
   });
 
   const {
@@ -138,6 +146,7 @@ function IdPassFind() {
     password,
     passwordConfirm,
     pwChangeOk,
+    errorTextColor,
   } = state;
 
   const [userid, setUserid] = useState("");
@@ -150,6 +159,7 @@ function IdPassFind() {
   };
 
   const codeSend = async (e) => {
+    dispatch({type: "ERRORSET"});
     e.preventDefault();
 
     if ([email].includes("")) {
@@ -198,6 +208,7 @@ function IdPassFind() {
   };
 
   const codeCheck = async (e) => {
+    
     e.preventDefault();
 
     console.log("emailCode", emailCode);
@@ -225,8 +236,10 @@ function IdPassFind() {
 
   // 비밀번호 변경에서 확인을 누를때 실행
   const onPwCheck = async () => {
+    dispatch({type: "ERRORSET"});
     if (!(password === passwordConfirm)) {
       dispatch({ type: "PWCONFIRM_ERROR" });
+      return;
     }
 
     console.log("email", email);
@@ -369,7 +382,20 @@ function IdPassFind() {
             </span>
           )}
           {/* 에러 텍스트 (비밀번호 변경 페이지가 아닐때만 보여준다)*/}
-          {!pwChange && <span className="errorText">{errorText}</span>}
+          {!pwChange && !mainPage ? 
+          <p className="errorTextBox">
+          {(errorText !== "" ?
+
+          (errorTextColor ? (<span className="errorText white">{errorText}</span>) :(
+          <span className="errorText on">{errorText}</span>))
+          :
+          (<span className="errorText">{errorText}</span>)
+          
+          )}
+          </p>
+          :
+          null
+          }
           {/* 페이지에 다르게 돌아가기 바꿔주기 */}
           {mainPage || idReport ? (
             <p>

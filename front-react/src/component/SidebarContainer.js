@@ -4,6 +4,7 @@ import Scheduler from "./Scheduler";
 import StoreAdd from "./StoreAdd/StoreAddContainer";
 import Invoice from "./Invoice/Invoice";
 import Table from "./Table";
+import StoreInfo from "./StoreInfo";
 
 export default function SidebarContainer(params) {
   return (
@@ -13,6 +14,7 @@ export default function SidebarContainer(params) {
         <Route path="/store/storeAdd" component={StoreAdd} />
         <Route path="/store/invoice" component={Invoice} />
         <Route path="/store/table" component={Table} />
+        <Route path="/store/storeinfo" component={StoreInfo} />
       </Sidebar>
     </>
   );
