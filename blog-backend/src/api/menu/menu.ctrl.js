@@ -7,15 +7,15 @@ export const addMenu = async (ctx) => {
 
   console.log('menu값!!', menu);
 
-  //   const newMenu = menu.childMenu.create({
-  //     category: value,
-  //     name: menuName,
-  //     price: menuPrice,
-  //   });
+  const newMenu = menu.menu.create({
+    category: value,
+    name: menuName,
+    price: menuPrice,
+  });
 
-  //   menu.push(newMenu);
+  menu.menu.push(newMenu);
   try {
-    // await menu.save();
+    await menu.save();
     ctx.body = menu;
   } catch (e) {
     ctx.throw(500, e);
