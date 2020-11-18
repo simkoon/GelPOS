@@ -7,6 +7,7 @@ const childMenu = new Schema({
 });
 
 const childTable = new Schema({
+  name: String,
   tableNum: Number,
   startAt: Date,
   nowMenu: [{ name: String, price: String, EA: Number, priceSum: String }],

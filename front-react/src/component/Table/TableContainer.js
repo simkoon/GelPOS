@@ -4,11 +4,17 @@ import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 export default function TableContainer() {
-  const [msg, setMsg] = useState('');
+  const [tables, setTables] = useState([]);
+
   console.log(document.cookie);
   const socket = io.connect('/');
   socket.emit('joinRoom', '123');
-  axios.post('/socket', 'hi');
+  socket.emit('getTables');
+  socket.on('getTables', function (data) {
+    console.log('데이터수신');
+    console.log(data);
+    setTables(() => data.table);
+  });
   return (
     <Container
       fluid
@@ -22,7 +28,7 @@ export default function TableContainer() {
     >
       <Row className="pl-4 m-1 pt-5 pb-3 h-100 " style={{ flex: 0 }}>
         <Col>
-          <h1>§ 현재 매장 정보{msg}</h1>
+          <h1>§ 현재 매장 정보</h1>
         </Col>
       </Row>
       <Row
@@ -34,18 +40,7 @@ export default function TableContainer() {
           maxWidth: '1400px',
         }}
       >
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
-        <TableItem />
+        {tables.map}
         <TableItem />
       </Row>
     </Container>
