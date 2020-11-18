@@ -17,6 +17,7 @@ export const listUserlists = createAction(
 );
 
 const listUserlistsSaga = createRequestSaga(LIST_USERLISTS, userlistAPI.listUserlists);
+
 export function* userlistsSaga() {
     yield takeLatest(LIST_USERLISTS, listUserlistsSaga);
 }

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import {Container, Row, Col} from 'react-bootstrap';
 import Sidebar from '../../comm/Sidebar/Tsidebar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Dropdown, DropdownButton} from 'react-bootstrap';
 import * as menuAPI from "../../lib/api/menu";
 import CreatableSelect from 'react-select/creatable';
 
@@ -45,6 +44,7 @@ const AddCon = styled.div`
     }
 
     .underSelectP {
+        margin-top: 10px;
         color: gray;
         font-weight: lighter;
     }
@@ -65,7 +65,6 @@ function AddMenu() {
         { value: "피자", label: "피자" },
         { value: "사이드", label: "사이드" },
     ]);
-
     const handleChange = useCallback((inputValue) => setValue(inputValue), []);
     const handleCreate = useCallback(
         (inputValue) => {
@@ -94,6 +93,7 @@ function AddMenu() {
 
     const onSubmit = async (event) => {
         event.preventDefault();
+        console.log(menuCategory, menuName, menuPrice);
         try {
             const formData = {
                 menuCategory,
@@ -119,7 +119,7 @@ function AddMenu() {
                                 <CreatableSelect
                                 isClearable
                                 name="menuCategory"
-                                value={[value, menuCategory]}
+                                value={value}
                                 options={options}
                                 onChange={handleChange}
                                 onCreateOption={handleCreate}
