@@ -9,6 +9,7 @@ export const addMenu = async (ctx) => {
         menuName,
         menuPrice
     });
+    console.log(menu);
     try {
         await menu.save();
         ctx.body = menu;
