@@ -1,22 +1,26 @@
-//import mongoose from 'mongoose';
-import {Menu} from '../../models/menu';
+import Tables from '../../models/table';
 
 export const addMenu = async (ctx) => {
-    const { storeId, menuCategory, menuName, menuPrice } = ctx.request.body;
-    const menu = new Menu({
-        storeId,
-        menuCategory,
-        menuName,
-        menuPrice
-    });
-    console.log(menu);
-    try {
-        await menu.save();
-        ctx.body = menu;
-    } catch(e) {
-        ctx.throw(500, e);
-    }
-}
+  const { storeid, value, menuName, menuPrice } = ctx.request.body;
+
+  const menu = await Tables.findByStoreId(storeid);
+
+  console.log('menu값!!', menu);
+
+  //   const newMenu = menu.childMenu.create({
+  //     category: value,
+  //     name: menuName,
+  //     price: menuPrice,
+  //   });
+
+  //   menu.push(newMenu);
+  try {
+    // await menu.save();
+    ctx.body = menu;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 // export const addCategory = async (ctx) => {
 //     const { storeId, categoryName } = ctx.request.body;
