@@ -79,7 +79,7 @@ app.io
       console.log('getTables 이벤트 ');
       console.log(msg);
       const tables = await Table.findByStoreId(decoded.nowstore);
-      app.io.to().emit('getTables');
+      // app.io.to().emit('getTables');
       socket.emit('getTables', tables);
     });
   });

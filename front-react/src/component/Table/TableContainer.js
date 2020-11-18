@@ -11,7 +11,7 @@ export default function TableContainer() {
   socket.emit('joinRoom', '123');
   socket.emit('getTables');
   socket.on('getTables', function (data) {
-    console.log('데이터수신');
+    console.log('데이터수신1');
     console.log(data);
     setTables(() => data.table);
   });
