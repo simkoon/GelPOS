@@ -8,6 +8,12 @@ import CreatableSelect from "react-select/creatable";
 import { useSelector } from "react-redux";
 
 const AddCon = styled.div`
+  position: absolute;
+  width: 1000px;
+  height: 100%;
+  margin-left: 90%;
+  margin-top: 150px;
+  text-align: left;
   h2 {
     text-align: center;
     font-weight: bold;
@@ -115,59 +121,58 @@ function AddMenu() {
 
   return (
     <AddCon>
-      <Sidebar>
-        <Container
-          fluid
-          className="h-100 w-50 justify-content-center"
-          style={{
-            boxSizing: "border-box",
-            padding: "0px",
-            margin: "0px",
-            flex: 1,
-          }}
-        >
-          <Row className="p-4 m-1 pt-0 h-100" style={{ flex: 1 }}>
-            <Col className="addMenuCol" md={{ span: 8, offset: 8 }}>
-              <h2>메뉴추가</h2>
-              <form onSubmit={onSubmit}>
-                <CreatableSelect
-                  isClearable
-                  name="menuCategory"
-                  value={value}
-                  options={options}
-                  onChange={handleChange}
-                  onCreateOption={handleCreate}
-                />
-                <p className="underSelectP">
-                  {" "}
-                  * 위 박스에 입력하시면 카테고리가 추가됩니다.
-                </p>
-                <input
-                  type="text"
-                  placeholder="메뉴 이름"
-                  name="menuName"
-                  className="AddConInput"
-                  onChange={onChange}
-                  value={menuName}
-                ></input>
-                <br />
-                <input
-                  type="text"
-                  placeholder="메뉴 가격"
-                  name="menuPrice"
-                  className="AddConInput"
-                  onChange={onChange}
-                  value={menuPrice}
-                ></input>
-                <br />
-                <button className="menuButton" className="menuAddBtn">
-                  메뉴 추가
-                </button>
-              </form>
-            </Col>
-          </Row>
-        </Container>
-      </Sidebar>
+      <Container
+        fluid
+        className="h-100 w-50 justify-content-center"
+        style={{
+          boxSizing: "border-box",
+          padding: "0px",
+          margin: "0px",
+          flex: 1,
+        }}
+      >
+        <Row className="p-4 m-1 pt-0 h-100" style={{ flex: 1 }}>
+          <Col className="addMenuCol">
+            <h2>메뉴추가</h2>
+            <form onSubmit={onSubmit}>
+              <div></div>
+              <CreatableSelect
+                isClearable
+                name="menuCategory"
+                value={value}
+                options={options}
+                onChange={handleChange}
+                onCreateOption={handleCreate}
+              />
+              <p className="underSelectP">
+                {" "}
+                * 위 박스에 입력하시면 카테고리가 추가됩니다.
+              </p>
+              <input
+                type="text"
+                placeholder="메뉴 이름"
+                name="menuName"
+                className="AddConInput"
+                onChange={onChange}
+                value={menuName}
+              ></input>
+              <br />
+              <input
+                type="text"
+                placeholder="메뉴 가격"
+                name="menuPrice"
+                className="AddConInput"
+                onChange={onChange}
+                value={menuPrice}
+              ></input>
+              <br />
+              <button className="menuButton" className="menuAddBtn">
+                메뉴 추가
+              </button>
+            </form>
+          </Col>
+        </Row>
+      </Container>
     </AddCon>
   );
 }
