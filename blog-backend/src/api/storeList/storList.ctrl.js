@@ -1,6 +1,7 @@
 import Schedule from '../../models/schedule';
 import Joi from 'joi';
 import User from '../../models/user';
+import Table from '../../models/table';
 import jwt from 'jsonwebtoken';
 
 // async () => {
@@ -123,13 +124,93 @@ export const register = async (ctx) => {
     await user.save();
 
     const storeid = newStore._id;
-
+    // 스케줄 생성
     const schedule = new Schedule({
       storeid: storeid,
       Schedulelist: [{}],
     });
 
     await schedule.save();
+
+    // 테이블 생성
+    const table = new Table({
+      storeId: storeid,
+      table: [
+        {
+          name: '기본 테이블1',
+          startAt: '',
+          nowMenu: [],
+        },
+        {
+          name: '기본 테이블2',
+          startAt: '',
+          nowMenu: [],
+        },
+        {
+          name: '기본 테이블3',
+          startAt: '',
+          nowMenu: [],
+        },
+        {
+          name: '기본 테이블4',
+          startAt: '',
+          nowMenu: [],
+        },
+        {
+          name: '기본 테이블5',
+          startAt: '',
+          nowMenu: [],
+        },
+        {
+          name: '기본 테이블6',
+          startAt: '',
+          nowMenu: [],
+        },
+        {
+          name: '기본 테이블7',
+          startAt: '',
+          nowMenu: [],
+        },
+        {
+          name: '기본 테이블8',
+          startAt: Date(2020, 11, 11, 13, 20, 12),
+          nowMenu: [
+            {
+              name: '짬뽕',
+              price: '5000',
+              EA: 4,
+              priceSum: '20000',
+            },
+            {
+              name: '탕슉',
+              price: '15000',
+              EA: 1,
+              priceSum: '15000',
+            },
+          ],
+        },
+      ],
+      menu: [
+        {
+          name: '짬뽕',
+          price: '5000',
+          category: '면류',
+        },
+        {
+          name: '탕슉',
+          price: '15000',
+          category: '요리류',
+        },
+        {
+          name: '짜장',
+          price: '3000',
+          category: '면류',
+        },
+      ],
+    });
+
+    const resultTable = await table.save();
+
     ctx.body = user;
     const token = user.generateToken();
     ctx.cookies.set('access_token', token, {

@@ -1,18 +1,37 @@
-import { Card, Col } from 'react-bootstrap';
+import { Card } from "react-bootstrap";
 
-export default function TableItem() {
+export default function TableItem({ table }) {
   return (
     <Card
       className="col-xs-2"
       style={{
-        height: '150px',
-        margin: '20px',
-        width: '220px',
-        overflow: 'auto',
+        height: "150px",
+        margin: "20px",
+        width: "220px",
+        overflow: "auto",
       }}
     >
       <Card.Body>
-        <Card.Title>테이블 이름</Card.Title>
+        <Card.Title className="text-center">{table.name}</Card.Title>
+        {table.nowMenu.map((i) => (
+          <>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <span>{i.name}</span>
+              <span
+                style={{
+                  paddingLeft: "auto",
+                }}
+              >
+                {i.EA}
+              </span>
+            </p>
+          </>
+        ))}
       </Card.Body>
     </Card>
   );
