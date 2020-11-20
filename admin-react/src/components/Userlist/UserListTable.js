@@ -27,8 +27,7 @@ const ULT = styled.div`
   }
 `;
 
-function UserListTable({userid, username, email}) {
-
+function UserListTable({ users, loading, error }) {
   return (
     <ULT>    
         <Container fluid>
@@ -92,26 +91,6 @@ function UserListTable({userid, username, email}) {
                     <td>peach</td>
                     <td>황복숭</td>
                     <td>www.kimmail.com</td>
-                    <td>2020-10-18</td>
-                    <td>
-                      <button className="btn btn-light">탈퇴</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">6</th>
-                    <td>jok</td>
-                    <td>조옥상</td>
-                    <td>www.rooftop.com</td>
-                    <td>2020-10-18</td>
-                    <td>
-                      <button className="btn btn-light">탈퇴</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">7</th>
-                    <td>Damwon</td>
-                    <td>킹담원</td>
-                    <td>www.dwg.com</td>
                     <td>2020-10-18</td>
                     <td>
                       <button className="btn btn-light">탈퇴</button>

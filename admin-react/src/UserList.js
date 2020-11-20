@@ -1,15 +1,15 @@
 import React from 'react';
 import AdminContainer from './components/Container';
 import AsideMenu from './components/AsideMenu';
-import UserListTable from './components/UserListTable';
 import 'bootstrap/dist/css/bootstrap.css';
+import UserListContainer from './components/Userlist/UserListContainer';
 
 const UserList = () => {
     return(
         <>
             <AdminContainer>
                 <AsideMenu/>
-                <UserListTable/>
+                <UserListContainer/>
             </AdminContainer>
         </>
     )
