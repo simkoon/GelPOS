@@ -119,7 +119,7 @@ app.listen(port, () => {
 
   // (async () => {
   //   const invoice = new Table({
-  //     storeId: '5fb689206615240a4409435e',
+  //     storeId: '5fb4887e9b4d570ae420df43',
   //     table: [
   //       {
   //         name: '홀 테이블1',
@@ -152,21 +152,45 @@ app.listen(port, () => {
   //         ],
   //       },
   //     ],
-  //     menu: [
+  //     category: [
   //       {
-  //         name: '짬뽕',
-  //         price: '5000',
-  //         category: '면류',
+  //         name: '면류',
+  //         menu: [
+  //           {
+  //             name: '짬뽕',
+  //             price: '5000',
+  //           },
+  //           {
+  //             name: '짜장',
+  //             price: '3000',
+  //           },
+  //         ],
   //       },
   //       {
-  //         name: '탕슉',
-  //         price: '15000',
-  //         category: '요리류',
+  //         name: '볶음류',
+  //         menu: [
+  //           {
+  //             name: '계란볶음밥',
+  //             price: '7000',
+  //           },
+  //           {
+  //             name: '짜장',
+  //             price: '3000',
+  //           },
+  //         ],
   //       },
   //       {
-  //         name: '짜장',
-  //         price: '3000',
-  //         category: '면류',
+  //         name: '사이드',
+  //         menu: [
+  //           {
+  //             name: '군만두',
+  //             price: '4000',
+  //           },
+  //           {
+  //             name: '튀김만두',
+  //             price: '5000',
+  //           },
+  //         ],
   //       },
   //     ],
   //   });

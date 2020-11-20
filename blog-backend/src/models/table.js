@@ -3,7 +3,11 @@ import mongoose, { Schema } from 'mongoose';
 const childMenu = new Schema({
   name: String,
   price: String,
-  category: String,
+});
+
+const childCategory = new Schema({
+  name: String,
+  menu: [childMenu],
 });
 
 const childTable = new Schema({
@@ -16,7 +20,7 @@ const childTable = new Schema({
 const TablesSchema = new Schema({
   storeId: mongoose.Types.ObjectId,
   table: [childTable],
-  menu: [childMenu],
+  category: [childCategory],
 });
 
 TablesSchema.statics.findByStoreId = function (storeId) {

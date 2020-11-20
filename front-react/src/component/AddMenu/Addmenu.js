@@ -1,60 +1,10 @@
-import React, { useReducer, useState, useCallback } from "react";
-import styled from "styled-components";
-import { Container, Row, Col } from "react-bootstrap";
-import Sidebar from "../../comm/Sidebar/Tsidebar";
+import React, { useReducer, useState, useCallback, useEffect } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as menuAPI from "../../lib/api/menu";
 import CreatableSelect from "react-select/creatable";
 import { useSelector } from "react-redux";
-
-const AddCon = styled.div`
-  position: absolute;
-  width: 1000px;
-  height: 100%;
-  margin-left: 90%;
-  margin-top: 150px;
-  text-align: left;
-  h2 {
-    text-align: center;
-    font-weight: bold;
-  }
-
-  .AddConInput {
-    border: none;
-    border-bottom: 1px solid gray;
-    padding-bottom: 0.5rem;
-    outline: none;
-    width: 100%;
-    margin-top: 3rem;
-  }
-
-  .categoryBtn {
-    background-color: skyblue;
-    margin-top: 0.5rem;
-    color: white;
-    border: none;
-    &:hover {
-      background-color: deepskyblue;
-    }
-  }
-
-  .menuAddBtn {
-    background-color: skyblue;
-    width: 100%;
-    margin-top: 1.5rem;
-    padding: 10px;
-    color: white;
-    border: none;
-    &:hover {
-      background-color: deepskyblue;
-    }
-  }
-
-  .underSelectP {
-    color: gray;
-    font-weight: lighter;
-  }
-`;
+import { AddCon, CategoryBtn, CategoryBtnBox } from "./CSS/AddMenuCss";
 
 function reducer(state, action) {
   return {
@@ -65,12 +15,50 @@ function reducer(state, action) {
 
 function AddMenu() {
   const [value, setValue] = useState();
+
   const [options, setOptions] = useState([
     { value: "치킨", label: "치킨" },
     { value: "햄버거", label: "햄버거" },
     { value: "피자", label: "피자" },
     { value: "사이드", label: "사이드" },
   ]);
+
+  const [category, setCategory] = useState();
+
+  // 카테고리 버튼 움직임을 주기위한 marhin 설정 값
+  //const [categoryMargin, setCategoryMargin] = useState(0);
+
+  //유저 가게 아이디 가져오기
+  const { user } = useSelector(({ user }) => ({
+    user: user.user,
+  }));
+
+  const storeid = user.nowstore;
+
+  // 가게 아이디로 메뉴 리스트 뽑아오기
+  useEffect(async () => {
+    const result = await menuAPI.menuList(storeid);
+
+    const AllCategory = [];
+    result.data.map((category) => AllCategory.push(category.name));
+    console.log("카테고리값만 뽑기", AllCategory);
+
+    //중복 카테고리 제거
+    // const uniqCategory = AllCategory.reduce(function (a, b) {
+    //   if (a.indexOf(b) < 0) a.push(b);
+    //   return a;
+    // }, []);
+
+    setCategory(
+      AllCategory.map((category) => (
+        <CategoryBtn onClick={onCategoryBtn} name={category}>
+          {category}
+        </CategoryBtn>
+      ))
+    );
+
+    console.log("최종 중복제거 후 뽑아온 카테고리들", category);
+  }, []);
 
   const handleChange = useCallback((inputValue) => setValue(inputValue), []);
   const handleCreate = useCallback(
@@ -94,14 +82,8 @@ function AddMenu() {
     dispatch(e.target);
   };
 
-  const { user } = useSelector(({ user }) => ({
-    user: user.user,
-  }));
-
   const onSubmit = async (event) => {
     event.preventDefault();
-
-    const storeid = user.nowstore;
 
     try {
       const formData = {
@@ -119,7 +101,12 @@ function AddMenu() {
     }
   };
 
-  
+  const onCategoryBtn = (e) => {
+    console.log("onCategoryBtn으로 넘어오는 값", e.target.name);
+  };
+
+  // categoryMargin 버튼을 누렀을때 값 주기
+
   return (
     <AddCon>
       <Container
@@ -132,11 +119,21 @@ function AddMenu() {
           flex: 1,
         }}
       >
-        <Row className="p-4 m-1 pt-0 h-100" style={{ flex: 1 }}>
+        <Row>
           <Col className="addMenuCol">
+            <h2>카테고리 목록</h2>
+            <CategoryBtnBox>
+              <div className="btnContainer">
+                {category}
+                {category}
+                {category}
+                {category}
+                {category}
+                {category}
+              </div>
+            </CategoryBtnBox>
             <h2>메뉴추가</h2>
             <form onSubmit={onSubmit}>
-              <div></div>
               <CreatableSelect
                 isClearable
                 name="menuCategory"

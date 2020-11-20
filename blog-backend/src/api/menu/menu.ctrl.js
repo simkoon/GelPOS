@@ -22,6 +22,24 @@ export const addMenu = async (ctx) => {
   }
 };
 
+export const menuList = async (ctx) => {
+  console.log('프론트에서 서버로 가져오는 그냥 값', ctx.params);
+
+  const { storeid } = ctx.params;
+
+  console.log('프론트에서 서버로 가져오는 가게아이디 값', storeid);
+
+  const { category } = await Tables.findByStoreId(storeid);
+
+  console.log('디비에서 가져오는 메뉴 걊', category);
+
+  try {
+    ctx.body = category;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
 // export const addCategory = async (ctx) => {
 //     const { storeId, categoryName } = ctx.request.body;
 //     const category = new Category({
