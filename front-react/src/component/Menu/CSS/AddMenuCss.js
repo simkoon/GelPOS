@@ -2,11 +2,13 @@ import styled from "styled-components";
 import { Button } from "react-bootstrap";
 
 export const AddCon = styled.div`
+  overflow-y: hidden;
   position: absolute;
-  width: 1000px;
+  top: 100px;
+  width: 80%;
   height: 100%;
   margin-left: 90%;
-  margin-top: 150px;
+  //margin-top: 150px;
   text-align: left;
   h2 {
     text-align: center;
@@ -23,14 +25,28 @@ export const AddCon = styled.div`
   }
 
   .menuAddBtn {
+    margin-right: 30px;
     background-color: skyblue;
-    width: 100%;
+    width: 30%;
     margin-top: 1.5rem;
     padding: 10px;
     color: white;
     border: none;
     &:hover {
       background-color: deepskyblue;
+    }
+  }
+
+  .menuDelBtn {
+    margin-right: 30px;
+    background-color: rgb(200, 100, 100);
+    width: 30%;
+    margin-top: 1.5rem;
+    padding: 10px;
+    color: white;
+    border: none;
+    &:hover {
+      background-color: rgb(136, 0, 0);
     }
   }
 
@@ -41,33 +57,42 @@ export const AddCon = styled.div`
 `;
 
 export const CategoryBtn = styled(Button)`
-  width: 100px;
-  height: 50px;
-  background-color: rgb(92, 110, 136);
+  box-shadow: 5px 5px 10px 1px rgb(190, 190, 190) !important;
+  border: none;
+  width: 120px;
+  height: 70px;
+  background-color: rgb(140, 70, 77);
   & + & {
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 20px;
+    margin-left: 20px;
   }
 
   &:first-child {
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+
+  &:hover {
+    background-color: rgb(80, 10, 17);
+  }
+  &:focus {
+    border: none;
+    background-color: rgb(80, 10, 17) !important;
   }
 `;
 
 export const CategoryBtnBox = styled.div`
   position: relative;
   margin: 0px auto;
-  text-align: left;
+  text-align: center;
   width: 500px;
-  height: 150px;
-  background-color: rgb(230, 230, 230);
-  margin-bottom: 20px;
-  border: 1px solid black;
+  height: 500px;
+  background-color: white;
+  border: 0.5px solid rgb(200, 200, 200);
   overflow: hidden;
   .btnContainer {
     padding: 25px 25px;
     height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
   }
 `;

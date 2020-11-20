@@ -119,7 +119,7 @@ app.listen(port, () => {
 
   // (async () => {
   //   const invoice = new Table({
-  //     storeId: '5fb4887e9b4d570ae420df43',
+  //     storeId: '5fb7778aaa45dca90a8ff159',
   //     table: [
   //       {
   //         name: '홀 테이블1',

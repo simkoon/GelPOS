@@ -6,7 +6,7 @@ export const onBtn = keyframes`
     transform: translateX(0px);
   }
   to {
-    transform: translateX(-1100px);
+    transform: translateX(-1600px);
   }
 
 `;
@@ -14,7 +14,7 @@ export const onBtn = keyframes`
 export const offBtn = keyframes`
   
   from {
-    transform: translateX(-1100px);
+    transform: translateX(-1600px);
   }
   to {
     transform: translateX(0px);
@@ -24,7 +24,7 @@ export const offBtn = keyframes`
 
 export const MainContainer = styled.div`
   padding-left: 200px;
-  transition: all 3s linear;
+  transition: all 2s linear;
   ${(props) =>
     props.Animation === "true" &&
     css`
