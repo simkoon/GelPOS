@@ -83,9 +83,12 @@ app.io
       socket.emit('getTables', tables);
     });
 
-    socket.on('getOneTable', async function (table) {
+    socket.on('getOneTable', async function (tableSeq) {
       console.log('getOneTable 이벤트');
-      
+      const tables = await Table.findByStoreId(decoded.nowstore);
+      console.log(tables);
+      tables.table = [tables.table[tableSeq]];
+      socket.emit('getOneTable', tables);
     });
   });
 
