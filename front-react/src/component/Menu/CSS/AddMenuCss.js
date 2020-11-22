@@ -37,6 +37,19 @@ export const AddCon = styled.div`
     }
   }
 
+  .menuUpdateBtn {
+    margin-right: 30px;
+    background-color: rgb(152, 201, 132);
+    width: 30%;
+    margin-top: 1.5rem;
+    padding: 10px;
+    color: white;
+    border: none;
+    &:hover {
+      background-color: rgb(102, 151, 82);
+    }
+  }
+
   .menuDelBtn {
     margin-right: 30px;
     background-color: rgb(200, 100, 100);
@@ -81,6 +94,32 @@ export const CategoryBtn = styled(Button)`
   }
 `;
 
+export const MenuBtn = styled(Button)`
+  box-shadow: 5px 5px 10px 1px rgb(190, 190, 190) !important;
+  border-radius: 10px 10px;
+  border: none;
+  width: 120px;
+  height: 70px;
+  background-color: rgb(140, 70, 77);
+  & + & {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+
+  &:first-child {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+
+  &:hover {
+    background-color: rgb(80, 10, 17);
+  }
+  &:focus {
+    border: none;
+    background-color: rgb(80, 10, 17) !important;
+  }
+`;
+
 export const CategoryBtnBox = styled.div`
   position: relative;
   margin: 0px auto;
@@ -94,5 +133,36 @@ export const CategoryBtnBox = styled.div`
     padding: 25px 25px;
     height: 100%;
     overflow-y: scroll;
+  }
+`;
+
+export const MenuBtnBox = styled.div`
+  margin: 0px auto;
+  width: 500px;
+  text-align: left;
+  height: 150px;
+  background-color: white;
+  border: 0.5px solid rgb(200, 200, 200);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  ::-webkit-scrollbar-thumb {
+    background-color: black;
+    width: 50px;
+    height: 50px;
+  }
+  ::-webkit-scrollbar {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  .btnContainer {
+    padding: 25px 25px;
+    width: 100%;
+    height: 150px;
+    ::-webkit-scrollbar {
+      width: 50px;
+      height: 50px;
+    }
   }
 `;
