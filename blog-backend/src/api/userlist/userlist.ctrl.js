@@ -20,7 +20,7 @@ export const userlist = async (ctx) => {
         .skip((page - 1) * 10)
         .exec();
       const userlistCount = await User.countDocuments().exec();
-      ctx.set("Last-Page", Math.ceil(userlistCount / 10)); //header에 Last-Page라는 이름으로 값을 저장
+      ctx.set("Last-Page", Math.ceil(userlistCount / 10));
       ctx.body = userlists
         .map((users) => users.toJSON())
         .map((users) => ({

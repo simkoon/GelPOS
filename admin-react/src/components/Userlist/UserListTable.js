@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.css";
 import { Container, Row, Col } from "react-bootstrap";
+import userlists from "../../modules/userlists";
 
 const ULT = styled.div`
   width: 100%;
@@ -28,6 +29,15 @@ const ULT = styled.div`
 `;
 
 function UserListTable({ users, loading, error }) {
+  if(error) {
+    return <Container fluid>
+      <Row>
+        <Col md={{ span:8, offset: 2}} className="test">
+            <h2>에러가 발생했습니다</h2>
+        </Col>
+      </Row>
+    </Container>
+  }
   return (
     <ULT>    
         <Container fluid>
@@ -46,16 +56,22 @@ function UserListTable({ users, loading, error }) {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    {/* <th scope="row">1</th>
-                    <td>{user.userid}</td>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td> */}
-                    <td>{new Date().toLocaleDateString()}</td>
-                    <td>
-                      <button className="btn btn-light">탈퇴</button>
-                    </td>
-                  </tr>
+                  {!loading && users (
+                    <div>
+                    {users.map(userlists => (
+                      <tr>
+                      <th scope="row">1</th>
+                      <td>{user.userid}</td>
+                      <td>{user.username}</td>
+                      <td>{user.email}</td>
+                      <td>{new Date().toLocaleDateString()}</td>
+                      <td>
+                        <button className="btn btn-light">탈퇴</button>
+                      </td>
+                    </tr>
+                    ))} 
+                    </div>          
+                  )}
                   <tr>
                     <th scope="row">2</th>
                     <td>banana</td>
