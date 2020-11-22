@@ -82,6 +82,11 @@ app.io
       // app.io.to().emit('getTables');
       socket.emit('getTables', tables);
     });
+
+    socket.on('getOneTable', async function (table) {
+      console.log('getOneTable 이벤트');
+      
+    });
   });
 
 // 라우터 설정

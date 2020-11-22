@@ -1,10 +1,11 @@
-import { Route } from "react-router-dom";
-import Sidebar from "../comm/Sidebar/Tsidebar";
-import Scheduler from "./Scheduler";
-import StoreAdd from "./StoreAdd/StoreAddContainer";
-import Invoice from "./Invoice/Invoice";
-import StoreInfo from "./StoreInfo";
-import Table from "./Table/TableContainer";
+import { Route } from 'react-router-dom';
+import Sidebar from '../comm/Sidebar/Tsidebar';
+import Scheduler from './Scheduler';
+import StoreAdd from './StoreAdd/StoreAddContainer';
+import Invoice from './Invoice/Invoice';
+import StoreInfo from './StoreInfo';
+import Table from './Table/TableContainer';
+import TableDetail from './Table/TableDetail';
 
 export default function SidebarContainer(params) {
   return (
@@ -15,6 +16,7 @@ export default function SidebarContainer(params) {
         <Route path="/store/invoice" component={Invoice} />
         <Route path="/store/table" component={Table} />
         <Route path="/store/storeinfo" component={StoreInfo} />
+        <Route path="/store/tableDetail:objectid" component={TableDetail} />
       </Sidebar>
     </>
   );
