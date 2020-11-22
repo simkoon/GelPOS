@@ -5,7 +5,7 @@ import StoreInfoBtn from "./comm/StoreInfoBtn";
 import StoreCloseBtn from "./Main/StoreCloseBtn";
 import { useSelector } from "react-redux";
 import { MainContainer } from "./CSS/indexCss";
-import MenuAddPage from "../AddMenu/Addmenu";
+import Menu from "../Menu";
 
 function StoreInfo() {
   const { user } = useSelector(({ user }) => ({
@@ -61,11 +61,8 @@ function StoreInfo() {
     <>
       <Row>
         <div>
-          <MainContainer
-            className="align-items-center mx-auto "
-            Animation={Animation}
-          >
-            <Row className="w-100" style={{ flex: 1 }}>
+          <MainContainer Animation={Animation}>
+            <Row>
               <StInfomation
                 Animation={Animation}
                 storeName={info.name}
@@ -74,13 +71,12 @@ function StoreInfo() {
                 storeExPiredDate={info.expiredDate}
               />
               <StoreInfoBtn onBtnClick={onBtnClick} Animation={Animation} />
-              {isPage !== "" && <button onClick={offBtnClick}>가게정보</button>}
-              {isPage === "MenuAdd" && (
-                <>
-                  <MenuAddPage />
-                </>
-              )}
             </Row>
+            {isPage === "MenuAdd" && (
+              <>
+                <Menu offBtnClick={offBtnClick} />
+              </>
+            )}
             <div>
               <StoreCloseBtn />
             </div>
