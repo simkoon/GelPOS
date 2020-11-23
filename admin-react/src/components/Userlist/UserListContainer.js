@@ -11,21 +11,21 @@ const UserListContainer = ({ location }) => {
       ({ userlists, loading }) => ({
         userlists: userlists.userlists,
         error: userlists.error,
-        loading: loading['userlists/LIST_USERLISTS'],
+        loading: loading['userList/LIST_USERLISTS'],
       }),
     );
     useEffect(() => {
-      const { page, userid, username, email } = qs.parse(location.search, {
+      const { userid } = qs.parse(location.search, {
         ignoreQueryPrefix: true,
       });
-      dispatch(listUserlists({ page, userid, username, email }));
+      dispatch(listUserlists({ userid }));
     }, [dispatch, location.search]);
   
     return (
       <UserListTable
         loading={loading}
         error={error}
-        userlists={userlists}
+        user={userlists}
       />
     );
   };

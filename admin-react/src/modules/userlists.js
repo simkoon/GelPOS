@@ -9,7 +9,7 @@ const [
     LIST_USERLISTS,
     LIST_USERLISTS_SUCCESS,
     LIST_USERLISTS_FAILURE
-] = createRequestActionTypes('userlist/LIST_USERLISTS');
+] = createRequestActionTypes('userList/LIST_USERLISTS');
 
 export const listUserlists = createAction(
     LIST_USERLISTS,

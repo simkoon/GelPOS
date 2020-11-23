@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.css";
 import { Container, Row, Col } from "react-bootstrap";
-import userlists from "../../modules/userlists";
 
 const ULT = styled.div`
   width: 100%;
@@ -28,16 +27,22 @@ const ULT = styled.div`
   }
 `;
 
-function UserListTable({ users, loading, error }) {
-  if(error) {
-    return <Container fluid>
-      <Row>
-        <Col md={{ span:8, offset: 2}} className="test">
-            <h2>에러가 발생했습니다</h2>
-        </Col>
-      </Row>
-    </Container>
-  }
+const TableItem = ({users, index}) => {
+    return (
+      <tr>
+        <th scope="row">{index + 1}</th>
+        <td>{users.userid}</td>
+        <td>{users.username}</td>
+        <td>{users.email}</td>
+        <td>{new Date().toLocaleDateString()}</td>
+        <td>
+          <button className="btn btn-light">탈퇴</button>
+        </td>
+      </tr>
+    )
+}
+
+function UserListTable({ user, loading, error }) {
   return (
     <ULT>    
         <Container fluid>
@@ -56,62 +61,13 @@ function UserListTable({ users, loading, error }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {!loading && users (
-                    <div>
-                    {users.map(userlists => (
-                      <tr>
-                      <th scope="row">1</th>
-                      <td>{user.userid}</td>
-                      <td>{user.username}</td>
-                      <td>{user.email}</td>
-                      <td>{new Date().toLocaleDateString()}</td>
-                      <td>
-                        <button className="btn btn-light">탈퇴</button>
-                      </td>
-                    </tr>
+                  {!loading && user && (
+                    <>
+                    {user.reverse().map((users, index) => (
+                      <TableItem users={users} key={users._id} index={index}/>
                     ))} 
-                    </div>          
-                  )}
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>banana</td>
-                    <td>반하나</td>
-                    <td>www.daum.net</td>
-                    <td>2020-10-18</td>
-                    <td>
-                      <button className="btn btn-light">탈퇴</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>orange</td>
-                    <td>오렌지</td>
-                    <td>www.google.com</td>
-                    <td>2020-10-18</td>
-                    <td>
-                      <button className="btn btn-light">탈퇴</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>avocado</td>
-                    <td>안복도</td>
-                    <td>www.email.com</td>
-                    <td>2020-10-18</td>
-                    <td>
-                      <button className="btn btn-light">탈퇴</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>peach</td>
-                    <td>황복숭</td>
-                    <td>www.kimmail.com</td>
-                    <td>2020-10-18</td>
-                    <td>
-                      <button className="btn btn-light">탈퇴</button>
-                    </td>
-                  </tr>
+                    </>        
+                  )}          
                 </tbody>
               </table>
             </Col>

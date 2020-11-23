@@ -21,11 +21,12 @@ export const userlist = async (ctx) => {
         .exec();
       const userlistCount = await User.countDocuments().exec();
       ctx.set("Last-Page", Math.ceil(userlistCount / 10));
+
       ctx.body = userlists
         .map((users) => users.toJSON())
         .map((users) => ({
           ...users,
-          body: removeHtmlAndShorten(users.body)
+          body: users.body
         }));
     } catch (e) {
       ctx.throw(500, e);
