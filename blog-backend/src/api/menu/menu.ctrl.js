@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import Tables from '../../models/table';
 
+// 카테고리 추가
 export const addCategory = async (ctx) => {
   const schema = Joi.object().keys({
     storeid: Joi.string(),
@@ -18,9 +19,7 @@ export const addCategory = async (ctx) => {
 
   const { storeid, categoryname } = ctx.request.body;
 
-  const store = await Tables.findByStoreId(storeid);
-
-  console.log('categoryname', categoryname);
+  const table = await Tables.findByStoreId(storeid);
 
   try {
     const newMenu = {
@@ -28,10 +27,67 @@ export const addCategory = async (ctx) => {
       menu: [],
     };
 
-    store.category.push(newMenu);
+    table.category.push(newMenu);
 
-    await store.save();
-    ctx.body = store.category;
+    await table.save();
+    ctx.body = table.category;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+// 카테고리 삭제
+export const categoryDel = async (ctx) => {
+  const { storeid, categoryid } = ctx.request.body;
+
+  const table = await Tables.findByStoreId(storeid);
+
+  function isCategory(element) {
+    console.log('element', element);
+    if (element.id === categoryid) {
+      return element;
+    }
+  }
+
+  console.log('categoryid', categoryid);
+
+  const findCategory = table.category.find(isCategory);
+  console.log('table.category', findCategory);
+
+  try {
+    findCategory.remove();
+
+    await table.save();
+
+    ctx.body = table.category;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+// 카테고리 수정
+export const categoryUpdate = async (ctx) => {
+  const { storeid, categoryid, updatename } = ctx.request.body;
+
+  console.log('updatename', updatename);
+
+  const table = await Tables.findByStoreId(storeid);
+
+  function isCategory(element) {
+    console.log('element', element);
+    if (element.id === categoryid) {
+      return element;
+    }
+  }
+
+  const findCategory = table.category.find(isCategory);
+
+  findCategory.name = updatename;
+
+  try {
+    await table.save();
+
+    ctx.body = table.category;
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -41,8 +97,6 @@ export const addMenu = async (ctx) => {
   const { storeid, value, menuName, menuPrice } = ctx.request.body;
 
   const menu = await Tables.findByStoreId(storeid);
-
-  console.log('menu값!!', menu);
 
   const newMenu = menu.menu.create({
     category: value,
@@ -60,15 +114,9 @@ export const addMenu = async (ctx) => {
 };
 
 export const menuList = async (ctx) => {
-  console.log('프론트에서 서버로 가져오는 그냥 값', ctx.params);
-
   const { storeid } = ctx.params;
 
-  console.log('프론트에서 서버로 가져오는 가게아이디 값', storeid);
-
   const { category } = await Tables.findByStoreId(storeid);
-
-  console.log('디비에서 가져오는 메뉴 걊', category);
 
   try {
     ctx.body = category;

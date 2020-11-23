@@ -5,6 +5,10 @@ export const categoryAdd = (formData) =>
 
 export const addMenu = (formData) => client.post("/api/menu", formData);
 
-// export const addCategory = (formData) => client.post("/api/addmenu/addcategory", formData);
+export const categoryDel = (formData) =>
+  client.post("/api/menu/categoryDel", formData);
 
 export const menuList = (storeid) => client.get(`/api/menu/${storeid}`);
+
+export const categoryUpdate = (formData) =>
+  client.post("/api/menu/categoryUpdate", formData);

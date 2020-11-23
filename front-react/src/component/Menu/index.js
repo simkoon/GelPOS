@@ -25,6 +25,7 @@ function reducer(state, action) {
         menuName: action.name,
         menuPrice: action.price,
       };
+
     // 다른 카테고리를 고를때마다 기존 메뉴값 초기화
     case "RESET_MEUE_VALUE":
       return {
@@ -32,6 +33,7 @@ function reducer(state, action) {
         menuName: "",
         menuPrice: "",
       };
+
     // 카테고리 버튼 생성
     case "CATEGORY_ADD_OPEN":
       return {
@@ -39,6 +41,7 @@ function reducer(state, action) {
         isPage: "categoryAdd",
         categoryName: "",
       };
+
     // 카테고리 선택시
     case "CATEGORY_OPEN":
       return {
@@ -52,8 +55,7 @@ function reducer(state, action) {
     case "CATEGORY_ADD":
       return {
         ...state,
-        isPage: "main",
-        categoryName: "",
+        isPage: "categoryChoose",
       };
 
     // 카테고리 생성 인풋에 아무것도 안쓰고  에러
@@ -61,6 +63,7 @@ function reducer(state, action) {
       console.log("에러!!!!!!!!!!");
       return {
         ...state,
+        errorText: "값을 입력해 주세요.",
       };
 
     // 카테고리에서 메뉴 버튼을 눌렀을때
@@ -68,6 +71,22 @@ function reducer(state, action) {
       return {
         ...state,
         isPage: "categoryMenu",
+      };
+
+    // 카테고리 메인으로
+    case "CATEGORY_MAIN":
+      return {
+        ...state,
+        isPage: "main",
+        categoryName: "",
+        categoryId: "",
+      };
+
+    // 카테고리 수정 페이지로 이동
+    case "CATEGORY_UPDATE_OPEN":
+      return {
+        ...state,
+        isPage: "categoryUpdate",
       };
   }
   return {
@@ -247,33 +266,103 @@ function Menu({ offBtnClick }) {
     categoryList();
   };
 
+  // 카테고리 삭제 실행
+  const categoryDel = async () => {
+    console.log("categoryId", categoryId);
+
+    const formData = {
+      storeid: storeid,
+      categoryid: categoryId,
+    };
+
+    const result = await menuAPI.categoryDel(formData);
+    categoryList();
+
+    console.log("result", result);
+  };
+
+  // 카테고리 수정 실행
+  const categoryUpdate = async () => {
+    console.log("cateUpdateName", cateUpdateName);
+
+    const formData = {
+      storeid: storeid,
+      categoryid: categoryId,
+      updatename: cateUpdateName,
+    };
+
+    const result = await menuAPI.categoryUpdate(formData);
+    categoryList();
+
+    console.log("result", result);
+  };
+
   // 버튼 클릭시 실행되는 함수
   const onClickAddBtn = (e) => {
     const targetName = e.target.name;
 
-    // 카테고리 추가 버튼을 누를때
-    targetName === "categoryAdd" && dispatch({ type: "CATEGORY_ADD_OPEN" });
-
-    // 카테고리에서 메뉴 버튼을 누를때
-    console.log("targetName", targetName);
-    targetName === "categoryMenuBtn" &&
-      dispatch({ type: "CATEGORY_MENU_OPEN" });
-
-    // 메뉴 추가 버튼을 누를때
-    targetName === "menuAdd" && dispatch({ type: "MENU_ADD_OPEN" });
-
-    // 카테고리 추가해주기
-    if (targetName === "categoryAddBtn") {
-      if (categoryName === "") {
-        dispatch({ type: "CATEGORY_ERROR" });
+    switch (targetName) {
+      // 카테고리 추가 버튼을 누를때
+      case "categoryAdd": {
+        dispatch({ type: "CATEGORY_ADD_OPEN" });
         return;
       }
-      dispatch({ type: "CATEGORY_ADD" });
-      categorySub();
+
+      // 카테고리에서 메뉴 버튼을 누를때
+      case "categoryMenuBtn": {
+        dispatch({ type: "CATEGORY_MENU_OPEN" });
+        return;
+      }
+
+      // 메뉴 추가 버튼을 누를때
+      case "menuAdd": {
+        dispatch({ type: "MENU_ADD_OPEN" });
+        return;
+      }
+
+      // 카테고리 추가해주기
+      case "categoryAddBtn": {
+        if (categoryName === "") {
+          dispatch({ type: "CATEGORY_ERROR" });
+          return;
+        }
+        categorySub();
+        dispatch({ type: "CATEGORY_MAIN" });
+        return;
+      }
+
+      // 카테고리 추가에서 취소 눌러줄 때
+      case "categoryAddBackBtn": {
+        dispatch({ type: "CATEGORY_ADD" });
+        return;
+      }
+
+      // 카테고리 삭제를 눌렀을 때
+      case "categoryDeleteBtn": {
+        categoryDel();
+        dispatch({ type: "CATEGORY_MAIN" });
+        return;
+      }
+
+      // 카테고리 수정을 눌렀을 때
+      case "categoryUpdateBtn": {
+        dispatch({ type: "CATEGORY_UPDATE_OPEN" });
+        return;
+      }
+
+      // 카테고리 수정에서 수정 버튼을 눌렀을 때
+      case "categoryUpBtn": {
+        if (cateUpdateName === "") {
+          dispatch({ type: "CATEGORY_ERROR" });
+          return;
+        }
+        categoryUpdate();
+        dispatch({ type: "CATEGORY_MAIN" });
+        return;
+      }
     }
   };
 
-  console.log(categoryName);
   return (
     <AddCon>
       <Row>
@@ -348,7 +437,36 @@ function Menu({ offBtnClick }) {
                 <Button className="categoryAddBtn" name="categoryAddBtn">
                   추가
                 </Button>
-                <Button className="categoryBackBtn" name="categoryBackBtn">
+                <Button className="categoryBackBtn" name="categoryAddBackBtn">
+                  취소
+                </Button>
+              </form>
+            </CategoryAddContainer>
+          )}
+
+          {isPage === "categoryUpdate" && (
+            <CategoryAddContainer>
+              <h2>
+                {" "}
+                <span style={{ color: "red" }}>{categoryName}</span> 카테고리
+                수정
+              </h2>
+              <form onClick={onClickAddBtn}>
+                <input
+                  onChange={onChange}
+                  text="text"
+                  placeholder={categoryName}
+                  name="cateUpdateName"
+                  value={cateUpdateName}
+                  maxLength="7"
+                />
+                <p className="underSelectP">
+                  * 1자 이상 7자 이하로 입력해 주세요.
+                </p>
+                <Button className="categoryAddBtn" name="categoryUpBtn">
+                  수정
+                </Button>
+                <Button className="categoryBackBtn" name="categoryAddBackBtn">
                   취소
                 </Button>
               </form>
