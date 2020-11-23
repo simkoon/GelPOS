@@ -69,18 +69,43 @@ export const AddCon = styled.div`
   }
 `;
 
+export const NewCategoryBtn = styled(Button)`
+  box-shadow: 5px 5px 10px 1px rgb(190, 190, 190) !important;
+  border-radius: 10px 10px;
+  border: none;
+  width: 120px;
+  height: 70px;
+  background-color: rgb(222, 222, 231);
+  margin-top: 20px;
+  margin-left: 20px;
+
+  & + & {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+
+  &:hover {
+    background-color: rgb(192, 192, 201);
+  }
+  &:focus {
+    border: none;
+    background-color: rgb(192, 192, 201) !important;
+  }
+`;
+
 export const CategoryBtn = styled(Button)`
   box-shadow: 5px 5px 10px 1px rgb(190, 190, 190) !important;
   border: none;
   width: 120px;
   height: 70px;
   background-color: rgb(140, 70, 77);
+  border-radius: 10px 10px;
   & + & {
     margin-top: 20px;
     margin-left: 20px;
   }
 
-  &:first-child {
+  &:nth-child(2) {
     margin-top: 20px;
     margin-left: 20px;
   }
@@ -91,6 +116,30 @@ export const CategoryBtn = styled(Button)`
   &:focus {
     border: none;
     background-color: rgb(80, 10, 17) !important;
+  }
+`;
+
+export const NewMenuBtn = styled(Button)`
+  box-shadow: 5px 5px 10px 1px rgb(190, 190, 190) !important;
+  border-radius: 10px 10px;
+  border: none;
+  width: 120px;
+  height: 70px;
+  background-color: rgb(222, 222, 231);
+  margin-top: 20px;
+  margin-left: 20px;
+
+  & + & {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+
+  &:hover {
+    background-color: rgb(192, 192, 201);
+  }
+  &:focus {
+    border: none;
+    background-color: rgb(192, 192, 201) !important;
   }
 `;
 
@@ -100,30 +149,31 @@ export const MenuBtn = styled(Button)`
   border: none;
   width: 120px;
   height: 70px;
-  background-color: rgb(140, 70, 77);
+  background-color: rgb(140, 191, 255);
+
   & + & {
     margin-top: 20px;
     margin-left: 20px;
   }
 
-  &:first-child {
+  &:nth-child(2) {
     margin-top: 20px;
     margin-left: 20px;
   }
 
   &:hover {
-    background-color: rgb(80, 10, 17);
+    background-color: rgb(110, 161, 235);
   }
   &:focus {
     border: none;
-    background-color: rgb(80, 10, 17) !important;
+    background-color: rgb(110, 161, 235) !important;
   }
 `;
 
 export const CategoryBtnBox = styled.div`
   position: relative;
   margin: 0px auto;
-  text-align: center;
+  text-align: left;
   width: 500px;
   height: 500px;
   background-color: white;
@@ -137,32 +187,83 @@ export const CategoryBtnBox = styled.div`
 `;
 
 export const MenuBtnBox = styled.div`
-  margin: 0px auto;
-  width: 500px;
+  width: 100%;
   text-align: left;
-  height: 150px;
   background-color: white;
   border: 0.5px solid rgb(200, 200, 200);
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
   ::-webkit-scrollbar-thumb {
     background-color: black;
-    width: 50px;
-    height: 50px;
   }
+
   ::-webkit-scrollbar {
     display: block;
-    width: 20px;
-    height: 20px;
+    width: 17px;
   }
 
   .btnContainer {
     padding: 25px 25px;
     width: 100%;
     height: 150px;
-    ::-webkit-scrollbar {
-      width: 50px;
-      height: 50px;
+  }
+`;
+
+export const MenuBtnContainer = styled.div`
+  margin-top: 35px;
+  text-align: left;
+`;
+
+export const CategoryAddContainer = styled.div`
+  margin-top: 35px;
+  text-align: center;
+
+  input {
+    display: block;
+    margin-top: 50px;
+    margin-left: 20%;
+    margin-bottom: 10px;
+    border: none;
+    border-bottom: 1px solid black;
+  }
+
+  .categoryAddBtn {
+    margin-left: 20%;
+    margin-right: 30px;
+    background-color: skyblue;
+    width: 20%;
+    margin-top: 1.5rem;
+    padding: 10px;
+    color: white;
+    border: none;
+    &:hover {
+      background-color: deepskyblue;
+    }
+  }
+
+  .categoryUpdateBtn {
+    margin-right: 30px;
+    background-color: skyblue;
+    width: 20%;
+    margin-top: 1.5rem;
+    padding: 10px;
+    color: white;
+    border: none;
+    &:hover {
+      background-color: deepskyblue;
+    }
+  }
+
+  .categoryBackBtn {
+    margin-right: 30px;
+    background-color: rgb(200, 100, 100);
+    width: 20%;
+    margin-top: 1.5rem;
+    padding: 10px;
+    color: white;
+    border: none;
+    &:hover {
+      background-color: rgb(136, 0, 0);
     }
   }
 `;

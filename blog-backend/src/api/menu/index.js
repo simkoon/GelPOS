@@ -3,7 +3,7 @@ import * as menuCtrl from './menu.ctrl';
 
 const menus = new Router();
 
-menus.post('/', menuCtrl.addMenu);
+menus.post('/categoryAdd', menuCtrl.addCategory);
 // menus.post('/addcategory', menuCtrl.addCategory);
 
 menus.get('/:storeid', menuCtrl.menuList);
