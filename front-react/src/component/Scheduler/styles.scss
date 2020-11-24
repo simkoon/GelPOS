@@ -1,0 +1,70 @@
+.App {
+    font-family: sans-serif;
+}
+
+.tui-full-calendar-section-private{
+  display: none;
+}
+
+.tui-full-calendar-section-state{
+  display: none;
+}
+
+.tui-full-calendar-popup-detail-item:nth-child(2){
+  display: none;
+}
+
+.tui-view-6{
+  background-color: rgb(85, 84, 126);
+}
+/* 일요일 sun만 빨간색으로 */
+.tui-full-calendar-month-dayname .tui-full-calendar-month-dayname-item:first-child span{
+  color: #ff4040 !important;
+}
+/* 나머지 요일 색 */
+.tui-full-calendar-month-dayname-item span{
+  color: white !important;
+}
+
+/* 테두리 선 */
+.tui-full-calendar-weekday-grid-line{
+  border:1px solid rgb(85, 84, 126);
+}
+
+/* 오늘날 표시 */
+.tui-full-calendar-weekday-grid-date-decorator{
+  background-color: rgb(85, 84, 126) !important;
+}
+
+.tui-full-calendar-popup-save{
+  background-color: rgb(85, 84, 126) !important;
+}
+.tui-full-calendar-popup-save:focus{
+  background-color: rgb(55, 54, 96) !important;
+}
+
+/* 일자  */
+.tui-full-calendar-weekday-grid-header span{
+  font-weight: bold;
+}
+
+/* 헤터 컨테이너 */
+.headerContainer{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+
+  h1{
+    display: inline-block;
+    margin: 0 15%;
+  }
+}
+
+// 헤더에 있는 버튼
+.monthBtn{
+  background-color: white ;
+  border: none ;
+  background-image: url(./image/leftBtnImg.png);
+  background-size: 70%;
+}

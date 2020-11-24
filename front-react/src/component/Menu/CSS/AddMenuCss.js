@@ -2,7 +2,6 @@ import styled, { css, keyframes } from "styled-components";
 import { Button, Row } from "react-bootstrap";
 
 export const AddCon = styled.div`
-  overflow-y: hidden;
   position: absolute;
   top: 100px;
   width: 80%;
@@ -183,7 +182,7 @@ export const CategoryBtnBox = styled.div`
     text-align: left;
     padding: 25px 25px;
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 `;
 
@@ -193,17 +192,9 @@ export const MenuBtnBox = styled.div`
   background-color: white;
   border: 0.5px solid rgb(200, 200, 200);
   overflow-x: hidden;
-  /* scroll-behavior: smooth; */
-  ::-webkit-scrollbar-thumb {
-    background-color: black;
-  }
-
-  ::-webkit-scrollbar {
-    display: block;
-    width: 17px;
-  }
 
   .btnContainer {
+    overflow-y: auto;
     padding: 25px 25px;
     width: 100%;
     height: 150px;

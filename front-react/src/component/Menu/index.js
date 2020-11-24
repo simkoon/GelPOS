@@ -588,6 +588,7 @@ function Menu({ offBtnClick }) {
                   text="text"
                   placeholder="카테고리 이름"
                   name="categoryName"
+                  autoComplete="off"
                   value={categoryName}
                   maxLength="7"
                 />
@@ -672,6 +673,7 @@ function Menu({ offBtnClick }) {
                   name="menuName"
                   value={menuName}
                   maxLength="7"
+                  autoComplete="off"
                 />
                 <p className="underSelectP">
                   * 1자 이상 7자 이하로 입력해 주세요.
@@ -683,6 +685,7 @@ function Menu({ offBtnClick }) {
                   name="menuPrice"
                   value={menuPrice}
                   maxLength="9"
+                  autoComplete="off"
                 />
                 <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
                 {errorText !== "" && (
@@ -712,6 +715,7 @@ function Menu({ offBtnClick }) {
                   name="newMenuName"
                   value={newMenuName}
                   maxLength="7"
+                  autoComplete="off"
                 />
                 <p className="underSelectP">
                   * 1자 이상 7자 이하로 입력해 주세요.
@@ -723,6 +727,7 @@ function Menu({ offBtnClick }) {
                   name="newMenuPrice"
                   value={newMenuPrice}
                   maxLength="9"
+                  autoComplete="off"
                 />
                 <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
                 {errorText !== "" && (

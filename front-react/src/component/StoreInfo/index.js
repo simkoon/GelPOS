@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Row } from "react-bootstrap";
 import StInfomation from "./Main/StInformation";
 import StoreInfoBtn from "./comm/StoreInfoBtn";
-import StoreCloseBtn from "./Main/StoreCloseBtn";
 import { useSelector } from "react-redux";
 import { MainContainer } from "./CSS/indexCss";
 import Menu from "../Menu";
@@ -68,11 +67,9 @@ function StoreInfo() {
     setIsPage("");
   };
 
-  // MenuAdd    MenuUpDel     CategoryAdd       CategoryUpDel
-
   return (
     <>
-      <div>
+      <div style={{ height: "100%" }}>
         <MainContainer Animation={Animation}>
           <Row>
             <StInfomation

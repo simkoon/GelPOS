@@ -9,7 +9,7 @@ import "tui-calendar/dist/tui-calendar.css";
 import "tui-date-picker/dist/tui-date-picker.css";
 import "tui-time-picker/dist/tui-time-picker.css";
 
-import "./styles.css";
+import "./styles.scss";
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
@@ -270,16 +270,18 @@ function Scheduler() {
     <>
       {loading ? (
         <div className="App">
-          <div className="mb-3 mt-3">
-            <h2>
-              {year}년 {month + 1}월
-            </h2>
-            <Button className="ml-3" onClick={viewBtnClick} name="prev">
+          <div className="headerContainer">
+            <button className="monthBtn" onClick={viewBtnClick} name="prev">
               이전
-            </Button>
-            <Button className="ml-3" onClick={viewBtnClick} name="next">
+            </button>
+
+            <h1>
+              {year}년 {month + 1}월
+            </h1>
+
+            <button className="monthBtn" onClick={viewBtnClick} name="next">
               다음
-            </Button>
+            </button>
           </div>
           <TUICalendar
             ref={cal}
