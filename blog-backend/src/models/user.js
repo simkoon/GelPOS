@@ -65,6 +65,10 @@ const UserSchema = new Schema({
   hashedPassword: String,
   username: String,
   email: String,
+  publishedDate: {
+    type: Date,
+    default: Date.now, // 현재 날짜를 기본 값으로 지정
+  },
   store: [childStore],
 });
 

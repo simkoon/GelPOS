@@ -44,6 +44,7 @@ function reducer(state, action) {
         isPage: "categoryAdd",
         categoryName: "",
         isMenuPage: "",
+        errorText: "",
       };
 
     // 카테고리 선택시
@@ -499,6 +500,12 @@ function Menu({ offBtnClick }) {
         return;
       }
 
+      // 메뉴 추가에서 취소 눌러줄 때
+      case "menuAddBackBtn": {
+        dispatch({ type: "CATEGORY_MENU_OPEN" });
+        return;
+      }
+
       // 메뉴 추가 버튼 클릭시
       case "menuAddBtn": {
         if (menuName === "" || menuPrice === "") {
@@ -677,10 +684,10 @@ function Menu({ offBtnClick }) {
                   value={menuPrice}
                   maxLength="9"
                 />
+                <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
                 {errorText !== "" && (
                   <ErrorText error={errorText}>{errorText}</ErrorText>
                 )}
-                <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
                 <Button className="categoryAddBtn" name="menuAddBtn">
                   추가
                 </Button>
@@ -717,10 +724,10 @@ function Menu({ offBtnClick }) {
                   value={newMenuPrice}
                   maxLength="9"
                 />
+                <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
                 {errorText !== "" && (
                   <ErrorText error={errorText}>{errorText}</ErrorText>
                 )}
-                <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
                 <Button className="categoryAddBtn" name="menuUpdateBtn">
                   수정
                 </Button>

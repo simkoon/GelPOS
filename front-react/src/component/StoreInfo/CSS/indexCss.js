@@ -23,7 +23,7 @@ export const offBtn = keyframes`
 `;
 
 export const MainContainer = styled.div`
-  height: 100vh;
+  height: 120vh;
   padding-left: 200px;
   transition: all 2s linear;
   ${(props) =>
