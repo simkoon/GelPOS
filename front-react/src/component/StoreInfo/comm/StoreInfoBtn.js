@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 
 const ButtonBox = styled.div`
   margin-top: 15vh;
-  margin-left: 140px;
+  margin-left: 37% !important;
 
   .btn1_size_color {
     box-sizing: border-box;
@@ -48,16 +48,16 @@ const ButtonBox = styled.div`
 function StoreInfoBtn({ onBtnClick, isPage }) {
   return (
     <>
-      <Col lg={5} sm={4}>
+      <Col>
         <ButtonBox isPage={isPage}>
           <Button
-            className="btn1_size_color "
+            className="btn1_size_color"
             value="MenuAdd"
             onClick={onBtnClick}
           >
-            메뉴 추가
+            카테고리
           </Button>
-          <Button
+          {/* <Button
             className="btn1_size_color mt-3"
             value="MenuUpDel"
             onClick={onBtnClick}
@@ -84,7 +84,7 @@ function StoreInfoBtn({ onBtnClick, isPage }) {
             onClick={onBtnClick}
           >
             문의 보내기 할까요말까요
-          </Button>
+          </Button> */}
         </ButtonBox>
       </Col>
     </>

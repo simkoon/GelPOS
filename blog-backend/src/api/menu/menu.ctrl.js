@@ -42,6 +42,7 @@ export const categoryDel = async (ctx) => {
 
   const table = await Tables.findByStoreId(storeid);
 
+  // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
   function isCategory(element) {
     console.log('element', element);
     if (element.id === categoryid) {
@@ -73,8 +74,9 @@ export const categoryUpdate = async (ctx) => {
 
   const table = await Tables.findByStoreId(storeid);
 
+  // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
   function isCategory(element) {
-    console.log('element', element);
+    //console.log('element', element);
     if (element.id === categoryid) {
       return element;
     }
@@ -93,27 +95,38 @@ export const categoryUpdate = async (ctx) => {
   }
 };
 
-export const addMenu = async (ctx) => {
-  const { storeid, value, menuName, menuPrice } = ctx.request.body;
+export const menuAdd = async (ctx) => {
+  const { storeid, categoryid, menuName, menuPrice } = ctx.request.body;
 
-  const menu = await Tables.findByStoreId(storeid);
+  const table = await Tables.findByStoreId(storeid);
 
-  const newMenu = menu.menu.create({
-    category: value,
+  // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
+  function isCategory(element) {
+    // console.log('element', element);
+    if (element.id === categoryid) {
+      return element;
+    }
+  }
+
+  const findCategory = table.category.find(isCategory);
+
+  const newMenu = {
     name: menuName,
     price: menuPrice,
-  });
+  };
 
-  menu.menu.push(newMenu);
+  console.log('table!!!!!!!!!', findCategory.menu);
+
+  findCategory.menu.push(newMenu);
   try {
-    await menu.save();
-    ctx.body = menu;
+    await table.save();
+    ctx.body = findCategory;
   } catch (e) {
     ctx.throw(500, e);
   }
 };
 
-export const menuList = async (ctx) => {
+export const categoryList = async (ctx) => {
   const { storeid } = ctx.params;
 
   const { category } = await Tables.findByStoreId(storeid);
@@ -125,16 +138,87 @@ export const menuList = async (ctx) => {
   }
 };
 
-// export const addCategory = async (ctx) => {
-//     const { storeId, categoryName } = ctx.request.body;
-//     const category = new Category({
-//         storeId,
-//         categoryName
-//     });
-//     try {
-//         await category.save();
-//         ctx.body = category;
-//     } catch(e) {
-//         ctx.throw(500, e);
-//     }
-// }
+// 메뉴 삭제
+export const menuDel = async (ctx) => {
+  const { storeid, categoryid, menuid } = ctx.request.body;
+
+  const table = await Tables.findByStoreId(storeid);
+
+  // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
+  function isCategory(element) {
+    if (element.id === categoryid) {
+      return element;
+    }
+  }
+
+  console.log('categoryid', categoryid);
+
+  const findCategory = table.category.find(isCategory);
+  console.log('table.category', findCategory);
+
+  // 객체중 가져온 메뉴 아이디와 일치한 객체 찾아주기
+  function isMenu(element) {
+    console.log('element', element);
+    if (element.id === menuid) {
+      return element;
+    }
+  }
+
+  const findMenu = findCategory.menu.find(isMenu);
+
+  console.log('findMenu', findMenu);
+
+  try {
+    findMenu.remove();
+
+    await table.save();
+
+    ctx.body = table.category;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+// 메뉴 수정
+export const menuUpdate = async (ctx) => {
+  const {
+    storeid,
+    categoryid,
+    menuid,
+    updatename,
+    updateprice,
+  } = ctx.request.body;
+
+  const table = await Tables.findByStoreId(storeid);
+
+  // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
+  function isCategory(element) {
+    //console.log('element', element);
+    if (element.id === categoryid) {
+      return element;
+    }
+  }
+
+  const findCategory = table.category.find(isCategory);
+
+  // 객체중 가져온 메뉴 아이디와 일치한 객체 찾아주기
+  function isMenu(element) {
+    console.log('element', element);
+    if (element.id === menuid) {
+      return element;
+    }
+  }
+
+  const findMenu = findCategory.menu.find(isMenu);
+
+  findMenu.name = updatename;
+  findMenu.price = updateprice;
+
+  try {
+    await table.save();
+
+    ctx.body = table.category;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};

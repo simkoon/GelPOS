@@ -17,7 +17,7 @@ function StInfomation({
 }) {
   return (
     <>
-      <Col lg={6} sm={12} xs={5}>
+      <Col>
         <StoreTextBox>
           <InfoTitle>
             <h3>

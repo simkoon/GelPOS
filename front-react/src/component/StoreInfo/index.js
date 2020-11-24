@@ -6,6 +6,19 @@ import StoreCloseBtn from "./Main/StoreCloseBtn";
 import { useSelector } from "react-redux";
 import { MainContainer } from "./CSS/indexCss";
 import Menu from "../Menu";
+import styled from "styled-components";
+
+const MenuContainer = styled(Row)`
+  @media all and (max-width: 1700px) {
+    margin-left: 200px;
+  }
+  @media all and (max-width: 1475px) {
+    margin-left: 400px;
+  }
+  @media all and (max-width: 1115px) {
+    margin-left: 700px;
+  }
+`;
 
 function StoreInfo() {
   const { user } = useSelector(({ user }) => ({
@@ -59,30 +72,25 @@ function StoreInfo() {
 
   return (
     <>
-      <Row>
-        <div>
-          <MainContainer Animation={Animation}>
-            <Row>
-              <StInfomation
-                Animation={Animation}
-                storeName={info.name}
-                storeAddress={info.address}
-                storeRegNumber={info.regNumber}
-                storeExPiredDate={info.expiredDate}
-              />
-              <StoreInfoBtn onBtnClick={onBtnClick} Animation={Animation} />
-            </Row>
-            {isPage === "MenuAdd" && (
-              <>
-                <Menu offBtnClick={offBtnClick} />
-              </>
-            )}
-            <div>
-              <StoreCloseBtn />
-            </div>
-          </MainContainer>
-        </div>
-      </Row>
+      <div>
+        <MainContainer Animation={Animation}>
+          <Row>
+            <StInfomation
+              Animation={Animation}
+              storeName={info.name}
+              storeAddress={info.address}
+              storeRegNumber={info.regNumber}
+              storeExPiredDate={info.expiredDate}
+            />
+            <StoreInfoBtn onBtnClick={onBtnClick} Animation={Animation} />
+          </Row>
+          {isPage === "MenuAdd" && (
+            <MenuContainer>
+              <Menu offBtnClick={offBtnClick} />
+            </MenuContainer>
+          )}
+        </MainContainer>
+      </div>
     </>
   );
 }

@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import * as menuAPI from "../../lib/api/menu";
 import { useSelector } from "react-redux";
 import {
+  AddConContainer,
   AddCon,
   CategoryBtn,
   CategoryBtnBox,
@@ -13,8 +14,9 @@ import {
   NewCategoryBtn,
   MenuBtnContainer,
   CategoryAddContainer,
+  ErrorText,
 } from "./CSS/AddMenuCss";
-import AddMenu from "./AddMenu";
+import addComma from "../../utility/addComma";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -27,19 +29,21 @@ function reducer(state, action) {
       };
 
     // 다른 카테고리를 고를때마다 기존 메뉴값 초기화
-    case "RESET_MEUE_VALUE":
+    case "RESET_CATEGORY_VALUE":
       return {
         ...state,
         menuName: "",
         menuPrice: "",
+        isMenuPage: "",
       };
 
-    // 카테고리 버튼 생성
+    // 카테고리 추가 버튼
     case "CATEGORY_ADD_OPEN":
       return {
         ...state,
         isPage: "categoryAdd",
         categoryName: "",
+        isMenuPage: "",
       };
 
     // 카테고리 선택시
@@ -60,7 +64,6 @@ function reducer(state, action) {
 
     // 카테고리 생성 인풋에 아무것도 안쓰고  에러
     case "CATEGORY_ERROR":
-      console.log("에러!!!!!!!!!!");
       return {
         ...state,
         errorText: "값을 입력해 주세요.",
@@ -71,6 +74,7 @@ function reducer(state, action) {
       return {
         ...state,
         isPage: "categoryMenu",
+        isMenuPage: "",
       };
 
     // 카테고리 메인으로
@@ -87,6 +91,79 @@ function reducer(state, action) {
       return {
         ...state,
         isPage: "categoryUpdate",
+        errorText: "",
+      };
+
+    // 메뉴 추가 페이지로 이동
+    case "MENU_ADD_OPEN":
+      return {
+        ...state,
+        isPage: "categoryMenu",
+        isMenuPage: "menuAdd",
+        menuName: "",
+        menuPrice: "",
+        menuId: "",
+        errorText: "",
+      };
+
+    // 메뉴 추가 에러
+    case "MENU_ADD_ERROR":
+      return {
+        ...state,
+        isPage: "categoryMenu",
+        isMenuPage: "menuAdd",
+        errorText: "메뉴 이름과 메뉴 가격을 입력해 주세요.",
+      };
+
+    // 메뉴 추가 완료
+    case "MENU_ADD":
+      return {
+        ...state,
+        isPage: "categoryMenu",
+        isMenuPage: "",
+        menuName: "",
+        menuPrice: "",
+        errorText: "",
+      };
+
+    // 메뉴 페이지에서 메뉴 버튼을 클릭 했을 때
+    case "MENU_OPEN":
+      return {
+        ...state,
+        isPage: "categoryMenu",
+        isMenuPage: "menu",
+        menuName: action.name,
+        menuPrice: action.price,
+        menuId: action.id,
+        errorText: "",
+      };
+
+    // 메뉴 메인으로
+    case "MENU_MAIN":
+      return {
+        ...state,
+        isPage: "categoryMenu",
+        isMenuPage: "",
+        menuName: "",
+        menuPrice: "",
+        menuId: "",
+        newMenuName: "",
+        newMenuPrice: "",
+        errorText: "",
+      };
+
+    // 메뉴 메인으로
+    case "RESET_MEUE_VALUE":
+      return {
+        ...state,
+        isPage: "categoryMenu",
+        isMenuPage: "",
+        menuName: "",
+        menuPrice: "",
+        menuId: "",
+        newMenuName: "",
+        newMenuPrice: "",
+        errorText: "",
       };
   }
   return {
@@ -99,19 +176,29 @@ function Menu({ offBtnClick }) {
   const [state, dispatch] = useReducer(reducer, {
     menuName: "",
     menuPrice: "",
+    menuId: "",
     categoryName: "",
     categoryId: "",
     isPage: "main",
-    cateUpdateName: "",
+    isMenuPage: "",
+    newCategoryName: "",
+    newMenuName: "",
+    newMenuPrice: "",
+    errorText: "",
   });
 
   const {
     menuName,
     menuPrice,
+    menuId,
     isPage,
+    isMenuPage,
     categoryName,
     categoryId,
-    cateUpdateName,
+    newCategoryName,
+    newMenuName,
+    newMenuPrice,
+    errorText,
   } = state;
 
   const [value, setValue] = useState([]);
@@ -133,7 +220,7 @@ function Menu({ offBtnClick }) {
 
   // 가게 아이디로 메뉴 리스트 뽑아오기
   const categoryList = async () => {
-    const result = await menuAPI.menuList(storeid);
+    const result = await menuAPI.categoryList(storeid);
 
     // const AllCategory = [];
     // result.data.map((category) => AllCategory.push(category.name));
@@ -166,41 +253,37 @@ function Menu({ offBtnClick }) {
     categoryList();
   }, []);
 
-  // 메뉴이름이랑 가격이 변할때마다 실행
+  // 카테고리, 메뉴 이름이랑 가격이 변할때마다 실행
   const onChange = (e) => {
     dispatch(e.target);
   };
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
+  // 메뉴값 받아와 뿌려주기
+  async function menuList(name, value) {
+    console.log("onCategoryBtn으로 넘어오는 name값", name);
+    console.log("onCategoryBtn으로 넘어오는 value값", value);
 
-    // 버튼의 name값 가져오기 add - 추가 및 수정 delete - 삭제 버튼
-    const eventName = event.target.name;
+    // 카테고리 가져오기
+    const result = await menuAPI.categoryList(storeid);
 
-    console.log("넘어오는 값", eventName);
+    const categoryMenu = result.data.filter((it) =>
+      new RegExp(value).test(it._id)
+    )[0].menu;
 
-    if (eventName === "add") {
-      const formData = {
-        name: menuName,
-        price: menuPrice,
-      };
-    }
-
-    // try {
-    //   const formData = {
-    //     value: value.value,
-    //     menuName,
-    //     menuPrice,
-    //     storeid,
-    //   };
-
-    //   const result = await menuAPI.addMenu(formData);
-    //   console.log(formData);
-    // } catch (e) {
-    //   const resulterror = e.response.status;
-    //   console.log(resulterror);
-    // }
-  };
+    setMenuBtnList(
+      categoryMenu.map((menu) => (
+        <MenuBtn
+          onClick={onMenuBtn}
+          name={menu.name}
+          value={menu.price}
+          id={menu._id}
+          key={menu._id}
+        >
+          {menu.name}
+        </MenuBtn>
+      ))
+    );
+  }
 
   // 카테고리 버튼을 누렀을때 메뉴값 받아오기
   const onCategoryBtn = async (e) => {
@@ -208,36 +291,11 @@ function Menu({ offBtnClick }) {
     console.log("onCategoryBtn으로 넘어오는 value값", e.target.value);
 
     // 다른 카테고리 버튼을 누를 때마다 기존 값 초기화 해주기
-    dispatch({ type: "RESET_MEUE_VALUE" });
+    dispatch({ type: "RESET_CATEGORY_VALUE" });
     setValue("");
 
     // 카테고리 가져오기
-    const result = await menuAPI.menuList(storeid);
-
-    const categoryMenu = result.data.filter((it) =>
-      new RegExp(e.target.value).test(it._id)
-    )[0].menu;
-
-    setMenuBtnList(
-      categoryMenu.map((menu) => (
-        <MenuBtn name={menu.name} value={menu.price} key={menu._id}>
-          {menu.name}
-        </MenuBtn>
-      ))
-    );
-
-    // setCategory(
-    //   result.data.map((category) => (
-    //     <CategoryBtn
-    //       onClick={onCategoryBtn}
-    //       name={category.name}
-    //       key={category._id}
-    //       value={category._id}
-    //     >
-    //       {category.name}
-    //     </CategoryBtn>
-    //   ))
-    // );
+    menuList(e.target.name, e.target.value);
 
     dispatch({
       type: "CATEGORY_OPEN",
@@ -246,11 +304,27 @@ function Menu({ offBtnClick }) {
     });
   };
 
+  const onMenuBtn = async (e) => {
+    console.log("onMenuBtn으로 넘어오는 name값", e.target.name);
+    console.log("onMenuBtn으로 넘어오는 value값", e.target.value);
+    console.log("onMenuBtn으로 넘어오는 id값", e.target.id);
+
+    // 다른 메뉴 버튼을 누를 때마다 기존 값 초기화 해주기
+    dispatch({ type: "RESET_MEUE_VALUE" });
+
+    dispatch({
+      type: "MENU_OPEN",
+      id: e.target.id,
+      name: e.target.name,
+      price: e.target.value,
+    });
+  };
+
   // 메뉴 목록에서 메뉴를 선택할 때마다 값이 메뉴 이름과 가격이 저절로 입력
-  useEffect(() => {
-    console.log("value");
-    dispatch({ type: "MENUVALUE", name: value.label, price: value.price });
-  }, [value]);
+  // useEffect(() => {
+  //   console.log("value");
+  //   dispatch({ type: "MENUVALUE", name: value.label, price: value.price });
+  // }, [value]);
 
   // 카테고리 추가 실행
   const categorySub = async () => {
@@ -283,16 +357,80 @@ function Menu({ offBtnClick }) {
 
   // 카테고리 수정 실행
   const categoryUpdate = async () => {
-    console.log("cateUpdateName", cateUpdateName);
-
     const formData = {
       storeid: storeid,
       categoryid: categoryId,
-      updatename: cateUpdateName,
+      updatename: newCategoryName,
     };
 
     const result = await menuAPI.categoryUpdate(formData);
     categoryList();
+
+    console.log("result", result);
+  };
+
+  // 메뉴 추가
+  const menuAdd = async () => {
+    const formData = {
+      storeid: storeid,
+      categoryid: categoryId,
+      menuName,
+      menuPrice,
+    };
+
+    const result = await menuAPI.menuAdd(formData);
+
+    menuList(categoryName, categoryId);
+  };
+
+  // 메뉴 삭제 실행
+  const menuDel = async () => {
+    console.log("menuId", menuId);
+
+    const formData = {
+      storeid: storeid,
+      categoryid: categoryId,
+      menuid: menuId,
+    };
+
+    const result = await menuAPI.menuDel(formData);
+    menuList(categoryName, categoryId);
+
+    // console.log("result", result);
+  };
+
+  // 메뉴 수정 실행
+  const menuUpdate = async () => {
+    let formData;
+
+    if (newMenuName === "") {
+      formData = {
+        storeid: storeid,
+        categoryid: categoryId,
+        menuid: menuId,
+        updatename: menuName,
+        updateprice: newMenuPrice,
+      };
+    } else if (newMenuPrice === "") {
+      formData = {
+        storeid: storeid,
+        categoryid: categoryId,
+        menuid: menuId,
+        updatename: newMenuName,
+        updateprice: menuPrice,
+      };
+    } else {
+      formData = {
+        storeid: storeid,
+        categoryid: categoryId,
+        menuid: menuId,
+        updatename: newMenuName,
+        updateprice: newMenuPrice,
+      };
+    }
+
+    const result = await menuAPI.menuUpdate(formData);
+    menuList(categoryName, categoryId);
 
     console.log("result", result);
   };
@@ -311,12 +449,6 @@ function Menu({ offBtnClick }) {
       // 카테고리에서 메뉴 버튼을 누를때
       case "categoryMenuBtn": {
         dispatch({ type: "CATEGORY_MENU_OPEN" });
-        return;
-      }
-
-      // 메뉴 추가 버튼을 누를때
-      case "menuAdd": {
-        dispatch({ type: "MENU_ADD_OPEN" });
         return;
       }
 
@@ -352,7 +484,7 @@ function Menu({ offBtnClick }) {
 
       // 카테고리 수정에서 수정 버튼을 눌렀을 때
       case "categoryUpBtn": {
-        if (cateUpdateName === "") {
+        if (newCategoryName === "") {
           dispatch({ type: "CATEGORY_ERROR" });
           return;
         }
@@ -360,13 +492,49 @@ function Menu({ offBtnClick }) {
         dispatch({ type: "CATEGORY_MAIN" });
         return;
       }
+
+      // 메뉴 추가 화면으로 이동
+      case "menuAdd": {
+        dispatch({ type: "MENU_ADD_OPEN" });
+        return;
+      }
+
+      // 메뉴 추가 버튼 클릭시
+      case "menuAddBtn": {
+        if (menuName === "" || menuPrice === "") {
+          dispatch({ type: "MENU_ADD_ERROR" });
+          return;
+        }
+        menuAdd();
+        dispatch({ type: "MENU_ADD" });
+        return;
+      }
+
+      // 메뉴 삭제 버튼을 눌렀을때
+      case "menuDeleteBtn": {
+        menuDel();
+        dispatch({ type: "MENU_MAIN" });
+        return;
+      }
+
+      // 메뉴 수정 버튼 클릭시
+      case "menuUpdateBtn": {
+        if (newMenuName === "" && newMenuPrice === "") {
+          dispatch({ type: "CATEGORY_ERROR" });
+          return;
+        }
+        menuUpdate();
+        dispatch({ type: "MENU_MAIN" });
+        return;
+      }
     }
   };
 
   return (
     <AddCon>
-      <Row>
-        <Col>
+      <AddConContainer>
+        <Col md={12} xl={7}>
+          {/* 카테고리 목록 */}
           <Button onClick={offBtnClick}>가게정보</Button>
           <h2>카테고리 목록</h2>
           <CategoryBtnBox>
@@ -381,6 +549,8 @@ function Menu({ offBtnClick }) {
             * 위 박스안에 있는 카테고리를 클릭해 주세요.
           </p>
         </Col>
+
+        {/* 카테고리 설정 선택 */}
         <Col>
           {isPage === "categoryChoose" && (
             <CategoryAddContainer>
@@ -400,6 +570,70 @@ function Menu({ offBtnClick }) {
               </form>
             </CategoryAddContainer>
           )}
+
+          {/* 카테고리 만드는 화면 */}
+          {isPage === "categoryAdd" && (
+            <CategoryAddContainer>
+              <h2>카테고리 </h2>
+              <form onClick={onClickAddBtn}>
+                <input
+                  onChange={onChange}
+                  text="text"
+                  placeholder="카테고리 이름"
+                  name="categoryName"
+                  value={categoryName}
+                  maxLength="7"
+                />
+                <p className="underSelectP">
+                  * 1자 이상 7자 이하로 입력해 주세요.
+                </p>
+                {errorText !== "" && (
+                  <ErrorText error={errorText}>{errorText}</ErrorText>
+                )}
+                <Button className="categoryAddBtn" name="categoryAddBtn">
+                  추가
+                </Button>
+                <Button className="categoryBackBtn" name="categoryAddBackBtn">
+                  취소
+                </Button>
+              </form>
+            </CategoryAddContainer>
+          )}
+
+          {/* 카테코리 업데이트 화면 */}
+          {isPage === "categoryUpdate" && (
+            <CategoryAddContainer>
+              <h2>
+                {" "}
+                <span style={{ color: "red" }}>{categoryName}</span> 카테고리
+                수정
+              </h2>
+              <form onClick={onClickAddBtn}>
+                <input
+                  onChange={onChange}
+                  text="text"
+                  placeholder={categoryName}
+                  name="newCategoryName"
+                  value={newCategoryName}
+                  maxLength="7"
+                />
+                <p className="underSelectP">
+                  * 1자 이상 7자 이하로 입력해 주세요.
+                </p>
+                {errorText !== "" && (
+                  <ErrorText error={errorText}>{errorText}</ErrorText>
+                )}
+                <Button className="categoryAddBtn" name="categoryUpBtn">
+                  수정
+                </Button>
+                <Button className="categoryBackBtn" name="categoryAddBackBtn">
+                  취소
+                </Button>
+              </form>
+            </CategoryAddContainer>
+          )}
+
+          {/* 메뉴 나타나는 화면 */}
           {isPage === "categoryMenu" && (
             <MenuBtnContainer>
               <h2>
@@ -419,61 +653,85 @@ function Menu({ offBtnClick }) {
             </MenuBtnContainer>
           )}
 
-          {isPage === "categoryAdd" && (
+          {/* 메뉴 추가 화면 */}
+          {isMenuPage === "menuAdd" && (
             <CategoryAddContainer>
-              <h2>카테고리 </h2>
+              <h2>메뉴 추가</h2>
               <form onClick={onClickAddBtn}>
                 <input
                   onChange={onChange}
-                  text="text"
-                  placeholder="카테고리 이름"
-                  name="categoryName"
-                  value={categoryName}
+                  type="text"
+                  placeholder="메뉴 이름"
+                  name="menuName"
+                  value={menuName}
                   maxLength="7"
                 />
                 <p className="underSelectP">
                   * 1자 이상 7자 이하로 입력해 주세요.
                 </p>
-                <Button className="categoryAddBtn" name="categoryAddBtn">
+                <input
+                  onChange={onChange}
+                  type="number"
+                  placeholder="메뉴 가격"
+                  name="menuPrice"
+                  value={menuPrice}
+                  maxLength="9"
+                />
+                {errorText !== "" && (
+                  <ErrorText error={errorText}>{errorText}</ErrorText>
+                )}
+                <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
+                <Button className="categoryAddBtn" name="menuAddBtn">
                   추가
                 </Button>
-                <Button className="categoryBackBtn" name="categoryAddBackBtn">
+                <Button className="categoryBackBtn" name="menuAddBackBtn">
                   취소
                 </Button>
               </form>
             </CategoryAddContainer>
           )}
 
-          {isPage === "categoryUpdate" && (
+          {/* 메뉴 클릭시 화면 */}
+          {isMenuPage === "menu" && (
             <CategoryAddContainer>
               <h2>
-                {" "}
-                <span style={{ color: "red" }}>{categoryName}</span> 카테고리
-                수정
+                <span style={{ color: "blue" }}>{menuName}</span>메뉴
               </h2>
               <form onClick={onClickAddBtn}>
                 <input
                   onChange={onChange}
-                  text="text"
-                  placeholder={categoryName}
-                  name="cateUpdateName"
-                  value={cateUpdateName}
+                  type="text"
+                  placeholder={menuName}
+                  name="newMenuName"
+                  value={newMenuName}
                   maxLength="7"
                 />
                 <p className="underSelectP">
                   * 1자 이상 7자 이하로 입력해 주세요.
                 </p>
-                <Button className="categoryAddBtn" name="categoryUpBtn">
+                <input
+                  onChange={onChange}
+                  type="number"
+                  placeholder={menuPrice}
+                  name="newMenuPrice"
+                  value={newMenuPrice}
+                  maxLength="9"
+                />
+                {errorText !== "" && (
+                  <ErrorText error={errorText}>{errorText}</ErrorText>
+                )}
+                <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
+                <Button className="categoryAddBtn" name="menuUpdateBtn">
                   수정
                 </Button>
-                <Button className="categoryBackBtn" name="categoryAddBackBtn">
-                  취소
+                <Button className="categoryBackBtn" name="menuDeleteBtn">
+                  삭제
                 </Button>
               </form>
             </CategoryAddContainer>
           )}
         </Col>
-      </Row>
+      </AddConContainer>
     </AddCon>
   );
 }

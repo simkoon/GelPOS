@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Button } from "react-bootstrap";
+import styled, { css, keyframes } from "styled-components";
+import { Button, Row } from "react-bootstrap";
 
 export const AddCon = styled.div`
   overflow-y: hidden;
@@ -175,11 +175,12 @@ export const CategoryBtnBox = styled.div`
   margin: 0px auto;
   text-align: left;
   width: 500px;
-  height: 500px;
+  height: 300px;
   background-color: white;
   border: 0.5px solid rgb(200, 200, 200);
   overflow: hidden;
   .btnContainer {
+    text-align: left;
     padding: 25px 25px;
     height: 100%;
     overflow-y: scroll;
@@ -239,18 +240,24 @@ export const CategoryAddContainer = styled.div`
     &:hover {
       background-color: deepskyblue;
     }
+    &:focus {
+      background-color: deepskyblue !important;
+    }
   }
 
   .categoryUpdateBtn {
     margin-right: 30px;
-    background-color: skyblue;
+    background-color: rgb(130, 170, 154);
     width: 20%;
     margin-top: 1.5rem;
     padding: 10px;
     color: white;
     border: none;
     &:hover {
-      background-color: deepskyblue;
+      background-color: rgb(78, 102, 92);
+    }
+    &:focus {
+      background-color: rgb(78, 102, 92) !important;
     }
   }
 
@@ -265,5 +272,27 @@ export const CategoryAddContainer = styled.div`
     &:hover {
       background-color: rgb(136, 0, 0);
     }
+    &:focus {
+      background-color: rgb(136, 0, 0) !important;
+    }
   }
+`;
+
+// export const TextOn = keyframes`
+
+//   from {
+//     opacity: 0;
+//   }
+//   to {
+//     opacity: 1;
+//   }
+
+// `;
+
+export const ErrorText = styled.p`
+  color: red;
+`;
+
+export const AddConContainer = styled(Row)`
+  height: auto;
 `;
