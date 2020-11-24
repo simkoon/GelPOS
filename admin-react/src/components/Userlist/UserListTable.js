@@ -27,7 +27,11 @@ const ULT = styled.div`
   }
 `;
 
-const TableItem = ({users, index}) => {
+const TableItem = ({users, index, onRemove}) => {
+  const onRemoveClick = () => {
+    onRemove();
+  }
+
     return (
       <tr>
         <th scope="row">{index + 1}</th>
@@ -36,7 +40,7 @@ const TableItem = ({users, index}) => {
         <td>{users.email}</td>
         <td>{new Date().toLocaleDateString()}</td>
         <td>
-          <button className="btn btn-light">탈퇴</button>
+          <button className="btn btn-light" onClick={onRemoveClick}>탈퇴</button>
         </td>
       </tr>
     )
@@ -63,7 +67,7 @@ function UserListTable({ user, loading, error }) {
                 <tbody>
                   {!loading && user && (
                     <>
-                    {user.reverse().map((users, index) => (
+                    {user.map((users, index) => (
                       <TableItem users={users} key={users._id} index={index}/>
                     ))} 
                     </>        

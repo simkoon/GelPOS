@@ -4,19 +4,21 @@ import { Switch, Route } from 'react-router-dom';
 import Adlogin from './components/Adlogin';
 import 'bootstrap/dist/css/bootstrap.css';
 import UserList from './UserList';
+import AwaitList from './AwaitList';
 
 function App() {
   return (
     <>
         <Switch>
-            <Route path="/admin" exact={true} component={Adlogin}/>
+            <Route path="/" exact={true} component={Adlogin}/>
             <Route path="/userList" component={UserList} />
+            <Route path="/awaitlist" component={AwaitList}/>
             <Route
             render={({ location }) => (
               <div>
                 <h2>이 페이지는 존재하지 않습니다:</h2>  
                 <p>{location.pathname}</p>
-                <p>*** /admin이 로그인화면 ***</p>
+                {/* <p>*** /admin이 로그인화면 ***</p> */}
               </div>
             )}
             /> 

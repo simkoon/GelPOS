@@ -1,59 +1,112 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { Link, withRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 
 const Aside = styled.div`
-    width: 25vh;
-    height: 100vh;
-    background-color: ${props => {
-      if(props.selected) return 'lightgray';
-      else return 'gray';
-    }};
-    float: left;
+  width: 25vh;
+  height: 100vh;
+  background-color: ${(props) => {
+    if (props.selected) {
+      return "blue";
+    } else {
+      return "gray";
+    }
+  }};
+  float: left;
+
+  a {
+    text-decoration: none;
+  }
 `;
 
 const AsideBox = styled.div`
-    display: flex;
-    height: 25%;
-    border-left: none !important;
-    flex-direction: column;
-    justify-content: space-around;
+  display: flex;
+  height: 25%;
+  border-left: none !important;
+  flex-direction: column;
+  justify-content: space-around;
 
-    p {
-        text-align: center;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 0;
-    }
+  ${(props) =>
+    props.selected &&
+    css`
+      background-color: burlywood;
+    `};
 
-    &:hover {
-        cursor: pointer;
-    }
+  p {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 0;
+  }
 
-    &:hover p {
-        text-shadow: 2px 2px black;
-    }
-`
+  &:hover {
+    cursor: pointer;
+  }
 
-function AsideMenu({location}) {
+  &:hover p {
+    text-shadow: 2px 2px black;
+  }
+`;
 
+function AsideMenu({ location }) {
   return (
-      <Aside>
-          <AsideBox className="border border-secondary">
-            <p>유저 리스트</p>
-          </AsideBox>
-          <AsideBox className="border border-secondary">
-            <p>가게 리스트</p>
-          </AsideBox>
-          <AsideBox className="border border-secondary">
-            <p>승인 가게 대기 리스트</p>
-          </AsideBox>
-          <AsideBox className="border border-secondary">
-            <p>문의 내역</p>
-          </AsideBox>
-      </Aside>
+    <Aside>
+      <Link to="/UserList">
+      <AsideBox
+        className="border border-secondary"
+        selected={(() => {
+          if (location.pathname === "/UserList") {
+            return true;
+          } else {
+            return false;
+          }
+        })()}
+      >
+        <p>유저 리스트</p>
+      </AsideBox>
+      </Link>
+      <AsideBox
+        className="border border-secondary"
+        selected={(() => {
+          if (location.pathname === "/storelist") {
+            return true;
+          } else {
+            return false;
+          }
+        })()}
+      >
+        <p>가게 리스트</p>
+      </AsideBox>
+      <Link to="/awaitlist">
+      <AsideBox
+        className="border border-secondary"
+        selected={(() => {
+          if (location.pathname === "/awaitlist") {
+            return true;
+          } else {
+            return false;
+          }
+        })()}
+      >
+        <p>승인 가게 대기 리스트</p>
+      </AsideBox>
+      </Link>
+      <AsideBox
+        className="border border-secondary"
+        selected={(() => {
+          if (location.pathname === "/inquiry") {
+            return true;
+          } else {
+            return false;
+          }
+        })()}
+      >
+        <p>문의 내역</p>
+      </AsideBox>
+    </Aside>
   );
 }
 
-export default AsideMenu;
+export default withRouter(AsideMenu);
