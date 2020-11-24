@@ -258,7 +258,7 @@ function Invoice({ history }) {
                         }}
                       >
                         <Card.Title>영수증</Card.Title>
-                        <Card.Text>
+                        <div className="card-text">
                           {receipt._seq === '' ? (
                             <p>거래를 선택해주세요.</p>
                           ) : (
@@ -269,7 +269,7 @@ function Invoice({ history }) {
                               <InvoiceItem menu={receipt._menu} />
                             </>
                           )}
-                        </Card.Text>
+                        </div>
                       </Card.Body>
                     </Card>
                   </Col>
@@ -293,8 +293,9 @@ function Invoice({ history }) {
       ) : (
         <Container
           fluid
-          className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
+          className="d-flex h-100 flex-column w-100  justify-content-center "
           style={{
+            overflow: 'hidden',
             height: '100%',
             padding: 0,
             margin: 0,

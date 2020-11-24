@@ -140,36 +140,43 @@ export const register = async (ctx) => {
           name: '기본 테이블1',
           startAt: '',
           nowMenu: [],
+          done: false,
         },
         {
           name: '기본 테이블2',
           startAt: '',
           nowMenu: [],
+          done: false,
         },
         {
           name: '기본 테이블3',
           startAt: '',
           nowMenu: [],
+          done: false,
         },
         {
           name: '기본 테이블4',
           startAt: '',
           nowMenu: [],
+          done: false,
         },
         {
           name: '기본 테이블5',
           startAt: '',
           nowMenu: [],
+          done: false,
         },
         {
           name: '기본 테이블6',
           startAt: '',
           nowMenu: [],
+          done: false,
         },
         {
           name: '기본 테이블7',
           startAt: '',
           nowMenu: [],
+          done: false,
         },
         {
           name: '기본 테이블8',
@@ -188,23 +195,50 @@ export const register = async (ctx) => {
               priceSum: '15000',
             },
           ],
+          done: false,
         },
       ],
-      menu: [
+      category: [
         {
-          name: '짬뽕',
-          price: '5000',
-          category: '면류',
+          name: '면류',
+          menu: [
+            {
+              name: '짬뽕',
+              price: '5000',
+            },
+            {
+              name: '짜장면',
+              price: '4000',
+            },
+          ],
         },
         {
-          name: '탕슉',
-          price: '15000',
-          category: '요리류',
+          name: '식사류',
+          menu: [
+            {
+              name: '볶음밥',
+              price: '6000',
+            },
+            {
+              name: '짬뽕밥',
+              price: '3000',
+            },
+            {
+              name: '마파두부밥',
+              price: '9000',
+            },
+          ],
         },
         {
-          name: '짜장',
-          price: '3000',
-          category: '면류',
+          name: '요리류',
+          menu: [
+            { name: '탕수육', price: '12000' },
+            {
+              name: '난자완스',
+              price: '23000',
+            },
+            { name: '깐풍기', price: '21000' },
+          ],
         },
       ],
     });

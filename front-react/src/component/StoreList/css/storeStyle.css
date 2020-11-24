@@ -7,12 +7,12 @@ body {
   height: 100% !important;
   width: 100% !important;
 }
-* {
+/* * {
   -ms-overflow-style: none;
-}
-::-webkit-scrollbar {
+} */
+/* ::-webkit-scrollbar {
   display: none;
-}
+} */
 /* 버튼 설정 */
 
 /* 보라 버튼 */
@@ -29,7 +29,7 @@ body {
   background-color: rgb(45, 44, 86) !important;
 }
 .btn_color_purple:focus {
-  background-color: rgb(95, 94, 136)  !important;
+  background-color: rgb(95, 94, 136) !important;
 }
 
 /* 회색 버튼 */

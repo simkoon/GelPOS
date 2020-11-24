@@ -80,8 +80,9 @@ export default withRouter(function StoreListContainer({ history }) {
       ) : (
         <Container
           fluid
-          className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
+          className="d-flex h-100 flex-column w-100  justify-content-center "
           style={{
+            overflow: 'hidden',
             height: '100%',
             padding: 0,
             margin: 0,

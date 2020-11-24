@@ -16,7 +16,7 @@ export default function SidebarContainer(params) {
         <Route path="/store/invoice" component={Invoice} />
         <Route path="/store/table" component={Table} />
         <Route path="/store/storeinfo" component={StoreInfo} />
-        <Route path="/store/tableDetail:objectid" component={TableDetail} />
+        <Route path="/store/tableDetail/:seq" component={TableDetail} />
       </Sidebar>
     </>
   );

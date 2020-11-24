@@ -1,12 +1,14 @@
 import { Container, Col, Row, Spinner } from 'react-bootstrap';
 import TableItem from './TableItem';
 import io from 'socket.io-client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 const socket = io();
-export default function TableContainer() {
+export default memo(function TableContainer() {
   const [loading, setLoading] = useState(false);
   const [tables, setTables] = useState([]);
+
   socket.on('getTables', function (data) {
     console.log('데이터수신1');
     console.log(data);
@@ -19,6 +21,8 @@ export default function TableContainer() {
     return () => {
       console.log('웹소켓 꺼짐');
       socket.close();
+      socket.disconnect();
+      console.log(socket.disconnected);
     };
   }, []);
 
@@ -45,27 +49,29 @@ export default function TableContainer() {
             </Col>
           </Row>
           <Row
-            className="h-100 pl-5 pr-5 pb-0 pt-4 mb-4 text-center"
+            className="h-100 pl-5 pr-5 pb-0 pt-0 mb-4 text-center"
             style={{
               flex: 1,
               justifyContent: 'center',
+              alignItems: 'center',
               margin: '10px auto',
               backgroundColor: 'rgba(61, 74, 150, 0.1)',
               width: '100%',
               maxWidth: '1400px',
             }}
           >
-            {tables.map((table) => {
+            {tables.map((table, index) => {
               console.log(table);
-              return <TableItem key={table._id} table={table} />;
+              return <TableItem key={table._id} table={table} index={index} />;
             })}
           </Row>
         </Container>
       ) : (
         <Container
           fluid
-          className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
+          className="d-flex h-100 flex-column w-100  justify-content-center "
           style={{
+            overflow: 'hidden',
             height: '100%',
             padding: 0,
             margin: 0,
@@ -93,4 +99,4 @@ export default function TableContainer() {
       )}
     </>
   );
-}
+});

@@ -1,37 +1,46 @@
 import { Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-export default function TableItem({ table }) {
+export default function TableItem({ table, index }) {
   return (
-    <Card
-      className="col-xs-2"
+    <Link
+      className="nav-link p-0"
+      to={`/store/TableDetail/${index}`}
       style={{
-        height: '150px',
-        margin: '20px',
-        width: '220px',
-        overflow: 'auto',
+        margin: '25px',
+        color: 'black',
       }}
     >
-      <Card.Body>
-        <Card.Title className="text-center">{table.name}</Card.Title>
-        {table.nowMenu.map((i, index) => (
-          <p
-            key={index}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-            <span>{i.name}</span>
-            <span
+      <Card
+        className="col-xs-2"
+        style={{
+          height: '150px',
+          width: '220px',
+          overflow: 'auto',
+        }}
+      >
+        <Card.Body>
+          <Card.Title className="text-center">{table.name}</Card.Title>
+          {table.nowMenu.map((i, index) => (
+            <p
+              key={index}
               style={{
-                paddingLeft: 'auto',
+                display: 'flex',
+                justifyContent: 'space-between',
               }}
             >
-              {i.EA}
-            </span>
-          </p>
-        ))}
-      </Card.Body>
-    </Card>
+              <span>{i.name}</span>
+              <span
+                style={{
+                  paddingLeft: 'auto',
+                }}
+              >
+                {i.EA}
+              </span>
+            </p>
+          ))}
+        </Card.Body>
+      </Card>
+    </Link>
   );
 }

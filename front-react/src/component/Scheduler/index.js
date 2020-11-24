@@ -1,35 +1,35 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 //import { render } from "react-dom";
-import { Button, Container, Row, Col, Spinner } from "react-bootstrap";
+import { Button, Container, Row, Col, Spinner } from 'react-bootstrap';
 
-import { useSelector } from "react-redux";
-import TUICalendar from "@toast-ui/react-calendar";
-import * as authAPI from "../../lib/api/scheduler";
-import "tui-calendar/dist/tui-calendar.css";
-import "tui-date-picker/dist/tui-date-picker.css";
-import "tui-time-picker/dist/tui-time-picker.css";
+import { useSelector } from 'react-redux';
+import TUICalendar from '@toast-ui/react-calendar';
+import * as authAPI from '../../lib/api/scheduler';
+import 'tui-calendar/dist/tui-calendar.css';
+import 'tui-date-picker/dist/tui-date-picker.css';
+import 'tui-time-picker/dist/tui-time-picker.css';
 
-import "./styles.css";
+import './styles.css';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
 
 const calendars = [
   {
-    id: "1",
-    name: "일정",
-    color: "#ffffff",
-    bgColor: "#9e5fff",
-    dragBgColor: "#9e5fff",
-    borderColor: "#9e5fff",
+    id: '1',
+    name: '일정',
+    color: '#ffffff',
+    bgColor: '#9e5fff',
+    dragBgColor: '#9e5fff',
+    borderColor: '#9e5fff',
   },
   {
-    id: "2",
-    name: "예약",
-    color: "#ffffff",
-    bgColor: "#00a9ff",
-    dragBgColor: "#00a9ff",
-    borderColor: "#00a9ff",
+    id: '2',
+    name: '예약',
+    color: '#ffffff',
+    bgColor: '#00a9ff',
+    dragBgColor: '#00a9ff',
+    borderColor: '#00a9ff',
   },
 ];
 
@@ -47,9 +47,9 @@ function Scheduler() {
     const storeid = user.nowstore;
     console.log(storeid);
     const result = await authAPI.schedulelist(storeid);
-    console.log("서버에서 넘어오는 scheduler데이터", result.data);
+    console.log('서버에서 넘어오는 scheduler데이터', result.data);
     setSchedules(result.data.Schedulelist);
-    console.log("schedules 값", schedules);
+    console.log('schedules 값', schedules);
     setLoading(true);
   };
 
@@ -70,7 +70,7 @@ function Scheduler() {
   // 데이터 생성
   const onBeforeCreateSchedule = useCallback(async (scheduleData) => {
     console.log(
-      "프론트에서 schedule에서 onBeforeCreateSchedule로 넘어오는 생성 데이터",
+      '프론트에서 schedule에서 onBeforeCreateSchedule로 넘어오는 생성 데이터',
       scheduleData
     );
 
@@ -79,21 +79,21 @@ function Scheduler() {
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start.toDate(),
       end: scheduleData.end.toDate(),
-      category: scheduleData.isAllDay ? "allday" : "time",
+      category: scheduleData.isAllDay ? 'allday' : 'time',
       calendarId: scheduleData.calendarId,
-      dueDateClass: "",
+      dueDateClass: '',
       location: scheduleData.location,
       raw: {
-        class: scheduleData.raw["class"],
+        class: scheduleData.raw['class'],
       },
       state: scheduleData.state,
     };
 
-    console.log("프론트에서 서버로 보내는 schedule 생성 데이터", schedule);
+    console.log('프론트에서 서버로 보내는 schedule 생성 데이터', schedule);
 
     const result = await authAPI.scheduleAdd(schedule);
 
-    console.log("서버에서 리턴 받은 schedule 생성 데이터", result);
+    console.log('서버에서 리턴 받은 schedule 생성 데이터', result);
 
     //cal.current.calendarInst.createSchedules([schedule]);
     listAdd();
@@ -102,13 +102,13 @@ function Scheduler() {
   // 데이터 삭제시
   const onBeforeDeleteSchedule = useCallback(async (res) => {
     console.log(
-      "schedule에서 onBeforeDeleteSchedule 넘어오는 삭제 데이터",
+      'schedule에서 onBeforeDeleteSchedule 넘어오는 삭제 데이터',
       res
     );
 
     const { id, calendarId } = res.schedule;
 
-    console.log(id, "-----", calendarId);
+    console.log(id, '-----', calendarId);
 
     // const delData = {
     //   id: id,
@@ -124,7 +124,7 @@ function Scheduler() {
 
   // 데이터 수정시
   const onBeforeUpdateSchedule = useCallback(async (e) => {
-    console.log("schedule에서 onBeforeUpdateSchedule 넘어오는 수정 데이터 ", e);
+    console.log('schedule에서 onBeforeUpdateSchedule 넘어오는 수정 데이터 ', e);
 
     const { schedule, changes } = e;
 
@@ -157,7 +157,7 @@ function Scheduler() {
         : schedule.isAllDay,
     };
 
-    console.log("수정 후 값 : ", updateSchedule);
+    console.log('수정 후 값 : ', updateSchedule);
 
     await authAPI.scheduleUpdate(updateSchedule);
 
@@ -181,11 +181,11 @@ function Scheduler() {
     var html = [];
 
     if (!isAllDay) {
-      html.push("<strong>" + _getFormattedTime(schedule.start) + "</strong> ");
+      html.push('<strong>' + _getFormattedTime(schedule.start) + '</strong> ');
     }
     if (schedule.isPrivate) {
       html.push('<span class="calendar-font-icon ic-lock-b"></span>');
-      html.push(" Private");
+      html.push(' Private');
     } else {
       if (schedule.isReadOnly) {
         html.push('<span class="calendar-font-icon ic-readonly-b"></span>');
@@ -196,10 +196,10 @@ function Scheduler() {
       } else if (schedule.location) {
         html.push('<span class="calendar-font-icon ic-location-b"></span>');
       }
-      html.push(" " + schedule.title);
+      html.push(' ' + schedule.title);
     }
 
-    return html.join("");
+    return html.join('');
   }
 
   const templates = {
@@ -233,17 +233,17 @@ function Scheduler() {
 
   const viewBtnClick = (e) => {
     const calendarInstance = cal.current.getInstance();
-    console.log("month", cal.current.calendarInst.getDate());
+    console.log('month', cal.current.calendarInst.getDate());
     //.toDate()
     switch (e.target.name) {
-      case "prev": {
+      case 'prev': {
         calendarInstance.prev();
         setMonth(cal.current.calendarInst.getDate().getMonth());
         setYear(cal.current.calendarInst.getDate().getFullYear());
         return;
       }
 
-      case "next": {
+      case 'next': {
         calendarInstance.next();
         setMonth(cal.current.calendarInst.getDate().getMonth());
         setYear(cal.current.calendarInst.getDate().getFullYear());
@@ -292,12 +292,13 @@ function Scheduler() {
       ) : (
         <Container
           fluid
-          className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
+          className="d-flex h-100 flex-column w-100  justify-content-center "
           style={{
-            height: "70vh",
+            overflow: 'hidden',
+            height: '100%',
             padding: 0,
             margin: 0,
-            backgroundColor: "rgb(249,250,252)",
+            backgroundColor: 'rgb(249,250,252)',
           }}
         >
           <Row className="text-center">
@@ -306,13 +307,13 @@ function Scheduler() {
                 animation="border"
                 role="status"
                 style={{
-                  verticalAlign: "center",
+                  verticalAlign: 'center',
                 }}
               >
                 <span className="sr-only">Loading...</span>
               </Spinner>
-              <h1 className={"d-inline-block text-center m-0 ml-2"}>
-                {" "}
+              <h1 className={'d-inline-block text-center m-0 ml-2'}>
+                {' '}
                 로딩중입니다...
               </h1>
             </Col>

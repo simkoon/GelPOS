@@ -57,17 +57,15 @@ app.io
     return next(error);
   })
   .on('connection', function (socket) {
-    console.log('connected');
     const token = socket.cookies.get('access_token');
     if (!token) return; // 토큰이 없음
-    console.log('connected2');
-    console.log(socket);
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
 
     // 가게 고유번호로 룸을 만들고 그안에서 해결
     if (app.io.sockets.adapter.rooms.has(decoded.nowstore)) {
       console.log('이미방잇음');
+      socket.join(decoded.nowstore);
     } else {
       console.log('방을 새로만듬');
       const createRoomId = decoded.nowstore;
@@ -76,19 +74,58 @@ app.io
     }
 
     socket.on('getTables', async function (msg) {
-      console.log('getTables 이벤트 ');
-      console.log(msg);
       const tables = await Table.findByStoreId(decoded.nowstore);
       // app.io.to().emit('getTables');
       socket.emit('getTables', tables);
     });
 
     socket.on('getOneTable', async function (tableSeq) {
-      console.log('getOneTable 이벤트');
+      tableSeq = tableSeq.seq;
       const tables = await Table.findByStoreId(decoded.nowstore);
-      console.log(tables);
-      tables.table = [tables.table[tableSeq]];
+
+      tables.table = tables.table[tableSeq];
+
       socket.emit('getOneTable', tables);
+    });
+
+    socket.on('modifyTable', async function (msg) {
+      console.log('modify소켓 실행!!!!!!!!!');
+      const tables = await Table.findByStoreId(decoded.nowstore);
+
+      console.log(msg);
+      const menuItem = msg.item;
+      if (msg.act === 'add') {
+        // console.log('act는 ㅣ ', msg.act);
+        // console.log(tables.table[msg.seq]);
+        let isThere = false;
+        tables.table[msg.seq].nowMenu.filter((item) => {
+          if (item.name === menuItem.name) {
+            item.EA++;
+            // console.log('아이템');
+            // console.log(item);
+            isThere = true;
+          }
+          return item;
+        });
+
+        if (!isThere) {
+          tables.table[msg.seq].nowMenu.push({
+            name: menuItem.name,
+            price: menuItem.price,
+            EA: 1,
+            priceSum: menuItem.price,
+          });
+        }
+      }
+      try {
+        await tables.save();
+        app.io.to(decoded.nowstore).emit('getTables', tables);
+
+        tables.table = tables.table[msg.seq];
+        socket.emit('getOneTable', tables);
+      } catch (error) {
+        console.log(error);
+      }
     });
   });
 
