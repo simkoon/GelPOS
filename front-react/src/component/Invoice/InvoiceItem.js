@@ -19,15 +19,13 @@ export default function InvoiceItem({ menu }) {
             index += 1;
             getSum += Number(item.priceSum);
             return (
-              <>
-                <tr>
-                  <td>{index}</td>
-                  <td>{item.name}</td>
-                  <td>{addComma(item.price)}</td>
-                  <td>{item.EA}</td>
-                  <td>{addComma(item.EA * item.price)}</td>
-                </tr>
-              </>
+              <tr key={index}>
+                <td>{index}</td>
+                <td>{item.name}</td>
+                <td>{addComma(item.price)}</td>
+                <td>{item.EA}</td>
+                <td>{addComma(item.EA * item.price)}</td>
+              </tr>
             );
           })}
         </tbody>
