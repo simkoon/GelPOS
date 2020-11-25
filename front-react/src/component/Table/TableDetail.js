@@ -1,4 +1,4 @@
-import { Container, Row, Col, Spinner, Table } from 'react-bootstrap';
+import { Container, Row, Col, Spinner, Table, Button } from 'react-bootstrap';
 import { useEffect, useState, memo } from 'react';
 import TableOrderList from './TableOrderList';
 import TableMenuList from './TableMenuList';
@@ -7,9 +7,10 @@ import io from 'socket.io-client';
 
 const socket = io();
 
-export default memo(function TableDetail({ match }) {
+export default memo(function TableDetail({ match, history }) {
   const { seq } = match.params;
 
+  let getSum = 0;
   const [loading, setLoading] = useState(false);
   const [table, setTable] = useState([]);
   const [category, setCategory] = useState([]);
@@ -19,6 +20,11 @@ export default memo(function TableDetail({ match }) {
     setTable(() => data.table[0]);
     setCategory(() => data.category);
     setLoading(() => true);
+  });
+
+  socket.on('getPayResult', function (result) {
+    console.log('getPayResutl왓다뵤');
+    console.log(result);
   });
   useEffect(() => {
     socket.connect('/');
@@ -38,6 +44,11 @@ export default memo(function TableDetail({ match }) {
 
   const modifyTable = (act, item) => {
     socket.emit('modifyTable', { table, item, seq, act });
+  };
+
+  const paymentTable = (act) => {
+    console.log('페이먼트테이블');
+    socket.emit('paymentTable', { table, seq, act, getSum });
   };
   return (
     <>
@@ -69,10 +80,11 @@ export default memo(function TableDetail({ match }) {
             </Col>
             <Col
               md={5}
-              className="h-100 w-100 p-0"
+              className="h-100 w-100 p-0 d-flex"
               style={{
                 border: '1px solid #dee2e6',
                 borderRadius: '8px 8px',
+                flexDirection: 'column',
               }}
             >
               <div
@@ -81,6 +93,7 @@ export default memo(function TableDetail({ match }) {
                   overflowY: 'auto',
                   height: '80%',
                   borderBottom: '1px solid #dee2e6',
+                  flex: 5,
                 }}
               >
                 <Table className="w-100" hover>
@@ -96,6 +109,7 @@ export default memo(function TableDetail({ match }) {
                   {table ? (
                     <tbody>
                       {table.nowMenu.map((menu, index) => {
+                        getSum += Number(menu.priceSum);
                         return (
                           <TableOrderList
                             key={menu._id}
@@ -108,6 +122,50 @@ export default memo(function TableDetail({ match }) {
                     </tbody>
                   ) : null}
                 </Table>
+              </div>
+              <div
+                className="d-flex h-100"
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  flex: 1,
+                }}
+              >
+                <div
+                  className="p-2"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <span>총 금액 :</span>
+                  <span className="ml-1">{addComma(getSum)} 원</span>
+                </div>
+                <div
+                  className="p-2"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <Button
+                    variant="success"
+                    className="mr-1"
+                    onClick={() => {
+                      paymentTable('cashPay');
+                    }}
+                  >
+                    현금 결제
+                  </Button>
+                  <Button
+                    variant="warning"
+                    onClick={() => {
+                      paymentTable('kakao');
+                    }}
+                  >
+                    카카오페이 결제
+                  </Button>
+                </div>
               </div>
             </Col>
           </Row>

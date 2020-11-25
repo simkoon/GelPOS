@@ -2,13 +2,13 @@ import mongoose, { Schema } from 'mongoose';
 
 const InvoiceSchema = new Schema({
   storeId: mongoose.Types.ObjectId,
-  seq: Number,
+  seq: { type: Number, default: 0 },
   menu: [
     {
       name: String,
+      price: String,
       EA: Number,
-      unitPrice: String,
-      sum: String,
+      priceSum: String,
     },
   ],
   paymentOption: String,
@@ -20,8 +20,6 @@ const InvoiceSchema = new Schema({
   user: {
     _id: mongoose.Types.ObjectId,
     userid: String,
-    username: String,
-    email: String,
   },
 });
 

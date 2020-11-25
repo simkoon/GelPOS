@@ -2,8 +2,6 @@ import { Container, Col, Row, Spinner } from 'react-bootstrap';
 import TableItem from './TableItem';
 import io from 'socket.io-client';
 import { useEffect, useState, memo } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
 const socket = io();
 export default memo(function TableContainer() {
   const [loading, setLoading] = useState(false);
@@ -58,7 +56,7 @@ export default memo(function TableContainer() {
               backgroundColor: 'rgba(61, 74, 150, 0.1)',
               width: '100%',
               maxWidth: '1400px',
-              borderRadius:'8px 8px'
+              borderRadius: '8px 8px',
             }}
           >
             {tables.map((table, index) => {

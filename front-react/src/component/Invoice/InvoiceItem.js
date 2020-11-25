@@ -17,15 +17,15 @@ export default function InvoiceItem({ menu }) {
         <tbody>
           {menu.map((item, index) => {
             index += 1;
-            getSum += Number(item.sum);
+            getSum += Number(item.priceSum);
             return (
               <>
                 <tr>
                   <td>{index}</td>
                   <td>{item.name}</td>
-                  <td>{addComma(item.unitPrice)}</td>
+                  <td>{addComma(item.price)}</td>
                   <td>{item.EA}</td>
-                  <td>{addComma(item.EA * item.unitPrice)}</td>
+                  <td>{addComma(item.EA * item.price)}</td>
                 </tr>
               </>
             );

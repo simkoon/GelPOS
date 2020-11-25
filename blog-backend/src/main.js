@@ -12,6 +12,8 @@ import http from 'http';
 import socketIO from 'socket.io';
 
 import Table from './models/table';
+import Invoice from './models/invoice';
+
 import api from './api';
 import jwtMiddleware from './lib/jwtMiddleware';
 import { create } from 'domain';
@@ -134,6 +136,52 @@ app.io
         socket.emit('getOneTable', tables);
       } catch (error) {
         console.log(error);
+      }
+    });
+
+    socket.on('paymentTable', async function (msg) {
+      // console.log('paymentTable ~~~~~~~~~~~~~~~');
+      // console.log(msg);
+      if (msg.act === 'cashPay') {
+        msg.act = '현금';
+      }
+      if (msg.act === 'kakao') {
+        msg.act = '카카오페이';
+      }
+      const tables = await Table.findByStoreId(decoded.nowstore);
+      if (tables.table[msg.seq] === []) {
+        socket.emit('getPayResult', { err: 'empty' });
+        return;
+      }
+      let seq = 0;
+      const seqInvoice = await Invoice.findSeq(decoded.nowstore);
+      if (seqInvoice) {
+        seq = seqInvoice.seq + 1;
+      }
+      const invoice = new Invoice({
+        storeId: decoded.nowstore,
+        seq,
+        menu: tables.table[msg.seq].nowMenu,
+        paymentOption: msg.act,
+        payment: msg.getSum,
+        user: {
+          _id: decoded._id,
+          userid: decoded.userid,
+        },
+      });
+
+      try {
+        const result = await invoice.save();
+        console.log(result);
+        tables.table[msg.seq].nowMenu = [];
+        await tables.save();
+        socket.emit('getPayResult', result);
+        app.io.to(decoded.nowstore).emit('getTables', tables);
+        tables.table = tables.table[msg.seq];
+        socket.emit('getOneTable', tables);
+      } catch (error) {
+        console.log(error);
+        socket.emit('getPayResult', error);
       }
     });
   });
