@@ -88,7 +88,6 @@ function Invoice({ history }) {
         thisDate.getMinutes() +
         ':' +
         thisDate.getSeconds();
-      console.log(node['menu']);
       setReceipt(() => ({
         _seq: node['seq'],
         _menu: node['menu'],
@@ -100,7 +99,6 @@ function Invoice({ history }) {
   };
 
   useEffect(() => {
-    console.log('useEffect');
     storename.current = '';
     listener = window.addEventListener('resize', () => {
       if (gridApi) {
@@ -187,8 +185,6 @@ function Invoice({ history }) {
                           filter={true}
                           resizable={true}
                           valueFormatter={function (params) {
-                            console.log('여기벨류');
-                            console.log(params.value);
                             const menu = params.value;
 
                             if (menu.length > 2) {

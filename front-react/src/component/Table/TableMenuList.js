@@ -1,9 +1,6 @@
 import { Tab, Nav, Row } from 'react-bootstrap';
 import TableMenuItem from './TableMenuItem';
 export default function TableMenuList({ category, modifyTable }) {
-  console.log('카테고리~~~~~~~~~~~~~~~~~~~~~~~~~~');
-  console.log(category);
-
   return (
     <Tab.Container defaultActiveKey={category[0].name}>
       <Nav variant="tabs">

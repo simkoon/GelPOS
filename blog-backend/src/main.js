@@ -43,7 +43,6 @@ app.io
     try {
       let ctx = app.createContext(socket.request, new http.OutgoingMessage());
       socket.cookies = ctx.cookies;
-
       // if (!ctx.state.user) {
       //   console.log(ctx);
       //   ctx.status = 401; // Unauthorized
@@ -64,19 +63,21 @@ app.io
 
     // 가게 고유번호로 룸을 만들고 그안에서 해결
     if (app.io.sockets.adapter.rooms.has(decoded.nowstore)) {
-      console.log('이미방잇음');
       socket.join(decoded.nowstore);
     } else {
-      console.log('방을 새로만듬');
       const createRoomId = decoded.nowstore;
       socket.join(createRoomId);
-      console.log(app.io.sockets.adapter.rooms.has(decoded.nowstore));
     }
 
     socket.on('getTables', async function (msg) {
-      const tables = await Table.findByStoreId(decoded.nowstore);
-      // app.io.to().emit('getTables');
-      socket.emit('getTables', tables);
+      try {
+        const tables = await Table.findByStoreId(decoded.nowstore);
+        // app.io.to().emit('getTables');
+        socket.emit('getTables', tables);
+      } catch (e) {
+        console.log('getTables err');
+        console.log(e);
+      }
     });
 
     socket.on('getOneTable', async function (tableSeq) {
@@ -89,20 +90,19 @@ app.io
     });
 
     socket.on('modifyTable', async function (msg) {
-      console.log('modify소켓 실행!!!!!!!!!');
+      // console.log('modify소켓 실행!!!!!!!!!');
       const tables = await Table.findByStoreId(decoded.nowstore);
-
-      console.log(msg);
+      // console.log(msg);
       const menuItem = msg.item;
+      // findIndex로도 로직설계가능 익스플로러 x
+      const nowMenu = tables.table[msg.seq].nowMenu;
+
       if (msg.act === 'add') {
-        // console.log('act는 ㅣ ', msg.act);
-        // console.log(tables.table[msg.seq]);
         let isThere = false;
         tables.table[msg.seq].nowMenu.filter((item) => {
           if (item.name === menuItem.name) {
             item.EA++;
-            // console.log('아이템');
-            // console.log(item);
+            item.priceSum = item.EA * item.price;
             isThere = true;
           }
           return item;
@@ -116,6 +116,15 @@ app.io
             priceSum: menuItem.price,
           });
         }
+      }
+
+      if (msg.act === 'subtract') {
+        tables.table[msg.seq].nowMenu = nowMenu.filter((e) => {
+          if (e.name === menuItem.name) {
+            e.EA = e.EA - 1;
+          }
+          return e.EA > 0;
+        });
       }
       try {
         await tables.save();

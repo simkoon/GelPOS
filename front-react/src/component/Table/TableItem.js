@@ -1,7 +1,14 @@
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
+import { useCallback } from 'react';
 export default function TableItem({ table, index }) {
+  const getmenus = useCallback((menu) => {
+    if (menu.length > 2) {
+      return [menu[0], menu[1]];
+    } else {
+      return menu;
+    }
+  }, []);
   return (
     <Link
       className="nav-link p-0"
@@ -14,14 +21,14 @@ export default function TableItem({ table, index }) {
       <Card
         className="col-xs-2"
         style={{
-          height: '150px',
+          height: '180px',
           width: '220px',
           overflow: 'auto',
         }}
       >
         <Card.Body>
           <Card.Title className="text-center">{table.name}</Card.Title>
-          {table.nowMenu.map((i, index) => (
+          {getmenus(table.nowMenu).map((i, index) => (
             <p
               key={index}
               style={{
@@ -39,6 +46,16 @@ export default function TableItem({ table, index }) {
               </span>
             </p>
           ))}
+          {table.nowMenu.length > 2 ? (
+            <p
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+              }}
+            >
+              외 {table.nowMenu.length}
+            </p>
+          ) : null}
         </Card.Body>
       </Card>
     </Link>

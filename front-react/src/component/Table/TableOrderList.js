@@ -1,12 +1,7 @@
 import { OverlayTrigger, Popover, ButtonGroup, Button } from 'react-bootstrap';
 import addComma from '../../utility/addComma';
 
-export default function TableOrderList({
-  menu,
-  menuSeq,
-  clickRemove,
-  clickAdd,
-}) {
+export default function TableOrderList({ menu, menuSeq, modifyTable }) {
   return (
     <OverlayTrigger
       rootCloseEvent="click"
@@ -20,7 +15,15 @@ export default function TableOrderList({
           </Popover.Title>
           <Popover.Content>
             <ButtonGroup>
-              <Button variant="danger"> - </Button>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  modifyTable('subtract', menu);
+                }}
+              >
+                {' '}
+                -{' '}
+              </Button>
               <div
                 className="btn"
                 style={{
@@ -29,7 +32,15 @@ export default function TableOrderList({
               >
                 {menu.EA}
               </div>
-              <Button variant="primary"> + </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  modifyTable('add', menu);
+                }}
+              >
+                {' '}
+                +{' '}
+              </Button>
             </ButtonGroup>
           </Popover.Content>
         </Popover>

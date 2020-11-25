@@ -32,14 +32,11 @@ export default memo(function TableDetail({ match }) {
 
   useEffect(() => {
     if (seq) {
-      console.log('getOneTable 에밋트');
       socket.emit('getOneTable', { seq: seq });
     }
   }, [seq]);
 
   const modifyTable = (act, item) => {
-    console.log('모디파이 테이블');
-    console.log(act, item);
     socket.emit('modifyTable', { table, item, seq, act });
   };
   return (
@@ -58,7 +55,7 @@ export default memo(function TableDetail({ match }) {
         >
           <Row className="h-100 w-100 m-0 p-5">
             <Col
-              md={8}
+              md={7}
               className="h-100 w-100 p-0 d-flex"
               style={{
                 border: '1px solid #dee2e6',
@@ -71,7 +68,7 @@ export default memo(function TableDetail({ match }) {
               ) : null}
             </Col>
             <Col
-              md={4}
+              md={5}
               className="h-100 w-100 p-0"
               style={{
                 border: '1px solid #dee2e6',
@@ -99,13 +96,12 @@ export default memo(function TableDetail({ match }) {
                   {table ? (
                     <tbody>
                       {table.nowMenu.map((menu, index) => {
-                        console.log('메뉴');
-                        console.log(menu._id);
                         return (
                           <TableOrderList
                             key={menu._id}
                             menu={menu}
                             menuSeq={index}
+                            modifyTable={modifyTable}
                           />
                         );
                       })}

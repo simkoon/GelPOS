@@ -35,7 +35,7 @@ export default memo(function TableContainer() {
       {loading ? (
         <Container
           fluid
-          className="d-flex h-100 w-100 flex-column"
+          className="d-flex h-100 w-100 p-2 flex-column"
           style={{
             height: '100%',
             padding: 0,
@@ -58,6 +58,7 @@ export default memo(function TableContainer() {
               backgroundColor: 'rgba(61, 74, 150, 0.1)',
               width: '100%',
               maxWidth: '1400px',
+              borderRadius:'8px 8px'
             }}
           >
             {tables.map((table, index) => {
