@@ -8,8 +8,6 @@ export default memo(function TableContainer() {
   const [tables, setTables] = useState([]);
 
   socket.on('getTables', function (data) {
-    console.log('데이터수신1');
-    console.log(data);
     setTables(() => data.table);
     setLoading(() => true);
   });
@@ -20,7 +18,7 @@ export default memo(function TableContainer() {
       console.log('웹소켓 꺼짐');
       socket.close();
       socket.disconnect();
-      console.log(socket.disconnected);
+      // console.log(socket.disconnected);
     };
   }, []);
 
@@ -60,7 +58,6 @@ export default memo(function TableContainer() {
             }}
           >
             {tables.map((table, index) => {
-              console.log(table);
               return <TableItem key={table._id} table={table} index={index} />;
             })}
           </Row>

@@ -3,7 +3,7 @@ import { Row, Col, Card, Button, Container, Spinner } from 'react-bootstrap';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ko from 'date-fns/locale/ko';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { getList, refund } from '../../lib/api/invoice';
@@ -17,7 +17,7 @@ let listener = null;
 
 function Invoice({ history }) {
   const [loading, setLoading] = useState(false);
-
+  const listener2 = useRef(null);
   const [receipt, setReceipt] = useState({
     _seq: '',
     _menu: '',
@@ -82,8 +82,6 @@ function Invoice({ history }) {
           }
         });
         listSum.netSum = listSum.allSum - listSum.refundSum;
-        console.log(listSum);
-        console.log('11``````````````````~~~~~~~~');
         setlistSumState(() => listSum);
       } catch (error) {
         history.push('/');
@@ -171,11 +169,12 @@ function Invoice({ history }) {
 
   useEffect(() => {
     storename.current = '';
-    listener = window.addEventListener('resize', () => {
+    listener2.current = () => {
       if (gridApi) {
         gridApi.sizeColumnsToFit();
       }
-    });
+    };
+    window.addEventListener('resize', listener2.current);
     if (user) {
       user.store.forEach((i) => {
         if (i._id === user.nowstore) {
@@ -186,7 +185,7 @@ function Invoice({ history }) {
     }
     return () => {
       storename.current = '';
-      window.removeEventListener('resize', listener);
+      window.removeEventListener('resize', listener2.current);
     };
   });
   return (
