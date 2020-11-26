@@ -1,7 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.css";
 import { Container, Row, Col } from "react-bootstrap";
+import AskRemove from './AskRemove';
+import {removeUser} from '../../lib/api/userlist';
 
 const ULT = styled.div`
   width: 100%;
@@ -27,26 +29,54 @@ const ULT = styled.div`
   }
 `;
 
-const TableItem = ({users, index, onRemove}) => {
-  const onRemoveClick = () => {
-    onRemove();
-  }
 
+const RemoveButton = ({users}) => {
+  const userid = users._id;
+  const [modal, setModal] = useState(false);
+  const onRemoveClick = () => {
+    setModal(true);
+  };
+  const onCancel = () => {
+    setModal(false);
+  };
+  const onConfirm = () => {
+    setModal(false);
+    onRemove();
+  };
+
+  const onRemove = async () => {
+    try {
+      await removeUser(userid);
+      window.location.href="http://localhost:9090/UserList";
+    } catch(e) {
+      console.log(e);
+    }
+  };
+
+  return (
+    <>
+      <button className="btn btn-light" onClick={onRemoveClick}>탈퇴</button>
+      <AskRemove visible={modal} onConfirm={onConfirm} onCancel={onCancel}/>
+    </>
+  )
+}
+
+const TableItem = ({users, index, onRemove}) => {
     return (
       <tr>
         <th scope="row">{index + 1}</th>
         <td>{users.userid}</td>
         <td>{users.username}</td>
         <td>{users.email}</td>
-        <td>{new Date().toLocaleDateString()}</td>
+        <td>{users.publishedDate.toString()}</td>
         <td>
-          <button className="btn btn-light" onClick={onRemoveClick}>탈퇴</button>
+          <RemoveButton onRemove={onRemove} users={users}/>
         </td>
       </tr>
     )
 }
 
-function UserListTable({ user, loading, error }) {
+function UserListTable({ user, loading}) {
   return (
     <ULT>    
         <Container fluid>
@@ -65,13 +95,13 @@ function UserListTable({ user, loading, error }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {!loading && user && (
+                  { !loading && user && (
                     <>
                     {user.map((users, index) => (
                       <TableItem users={users} key={users._id} index={index}/>
                     ))} 
                     </>        
-                  )}          
+                  )}         
                 </tbody>
               </table>
             </Col>

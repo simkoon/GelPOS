@@ -34,7 +34,9 @@ export const userlist = async (ctx) => {
 };
 
 export const remove = async (ctx) => {
-    const { userid } = ctx.params;
+  console.log('삭제들어옴?')
+   console.log(ctx.params.userid);
+   const userid = ctx.params.userid;
     try {
       await User.findByIdAndRemove(userid).exec();
       ctx.status = 204;

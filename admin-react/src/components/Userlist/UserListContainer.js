@@ -4,10 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import UserListTable from './UserListTable';
 import {listUserlists} from '../../modules/userlists';
-import {removeUser} from '../../lib/api/userlist';
 
 const UserListContainer = ({ match, location, history }) => {
-    const { userid } = match.params;
 
     const dispatch = useDispatch();
     const { userlists, error, loading } = useSelector(
@@ -24,22 +22,12 @@ const UserListContainer = ({ match, location, history }) => {
       });
       dispatch(listUserlists({ userid }));
     }, [dispatch, location.search]);
-
-    const onRemove = async () => {
-      try {
-        await removeUser(userid);
-        history.push('/userList');
-      } catch(e) {
-        console.log(e);
-      }
-    };
   
     return (
       <UserListTable
         loading={loading}
         error={error}
         user={userlists}
-        onRemove={onRemove}
       />
     );
   };

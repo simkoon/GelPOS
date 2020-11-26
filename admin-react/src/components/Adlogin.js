@@ -54,7 +54,7 @@ function Adlogin() {
                 {
                     //onClick={ (event) => event.preventDefault()}
                 }
-                <Link to="/userList" ><button type="button" className="btn btn-secondary btn-lg btn-block">로그인</button></Link>
+                <Link to="/UserList" ><button type="button" className="btn btn-secondary btn-lg btn-block">로그인</button></Link>
             </LoginCon>
                 </Col>
             </Row>
