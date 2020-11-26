@@ -22,7 +22,6 @@ export default memo(function TableDetail({ match, history }) {
 
   useEffect(() => {
     socket.connect('/');
-
     return () => {
       socket.close();
       socket.disconnect();
@@ -152,6 +151,7 @@ export default memo(function TableDetail({ match, history }) {
                         onClick={() => {
                           paymentTable('cashPay');
                         }}
+                        size="lg"
                         disabled
                       >
                         현금 결제
@@ -161,6 +161,7 @@ export default memo(function TableDetail({ match, history }) {
                         onClick={() => {
                           paymentTable('kakao');
                         }}
+                        size="lg"
                         disabled
                       >
                         카카오페이 결제
@@ -171,6 +172,7 @@ export default memo(function TableDetail({ match, history }) {
                       <Button
                         variant="success"
                         className="mr-1"
+                        size="lg"
                         onClick={() => {
                           paymentTable('cashPay');
                         }}
@@ -182,6 +184,7 @@ export default memo(function TableDetail({ match, history }) {
                         onClick={() => {
                           paymentTable('kakao');
                         }}
+                        size="lg"
                       >
                         카카오페이 결제
                       </Button>

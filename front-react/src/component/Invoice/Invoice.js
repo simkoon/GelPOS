@@ -381,14 +381,14 @@ function Invoice({ history }) {
                     receipt._paymentOption === '카카오페이(환불완료)' ? null : (
                       <Button
                         onClick={onClickRefund}
-                        size="sm"
+                        size="lg"
                         className="btn_color_purple mr-1"
                       >
                         주문 취소
                       </Button>
                     )}{' '}
                     <Button
-                      size="sm"
+                      size="lg"
                       className="btn_color_purple"
                       onClick={print}
                     >
