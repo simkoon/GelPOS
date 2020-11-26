@@ -1,5 +1,5 @@
 import React, { useReducer, useState, useCallback, useEffect } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as menuAPI from "../../lib/api/menu";
 import { useSelector } from "react-redux";
@@ -20,14 +20,6 @@ import addComma from "../../utility/addComma";
 
 function reducer(state, action) {
   switch (action.type) {
-    // 메뉴를 고르면 메뉴 이름과 가격 값 바꿔주기
-    case "MENUVALUE":
-      return {
-        ...state,
-        menuName: action.name,
-        menuPrice: action.price,
-      };
-
     // 다른 카테고리를 고를때마다 기존 메뉴값 초기화
     case "RESET_CATEGORY_VALUE":
       return {
@@ -54,6 +46,13 @@ function reducer(state, action) {
         isPage: "categoryChoose",
         categoryName: action.name,
         categoryId: action.id,
+      };
+
+    // 카테고리 수정페이지에서 취소를 눌었을 때 화면 유지
+    case "CATEGORY_UPDATE_OUT":
+      return {
+        ...state,
+        isPage: "categoryChoose",
       };
 
     // 카테고리 Add 버튼을 눌렀을 때
@@ -83,6 +82,7 @@ function reducer(state, action) {
       return {
         ...state,
         isPage: "main",
+        isMenuPage: "",
         categoryName: "",
         categoryId: "",
       };
@@ -103,6 +103,7 @@ function reducer(state, action) {
         isMenuPage: "menuAdd",
         menuName: "",
         menuPrice: "",
+        fakeMenuPrice: "",
         menuId: "",
         errorText: "",
       };
@@ -124,6 +125,7 @@ function reducer(state, action) {
         isMenuPage: "",
         menuName: "",
         menuPrice: "",
+        fakeMenuPrice: "",
         errorText: "",
       };
 
@@ -135,6 +137,7 @@ function reducer(state, action) {
         isMenuPage: "menu",
         menuName: action.name,
         menuPrice: action.price,
+        fakeMenuPrice: "",
         menuId: action.id,
         errorText: "",
       };
@@ -147,13 +150,14 @@ function reducer(state, action) {
         isMenuPage: "",
         menuName: "",
         menuPrice: "",
+        fakeMenuPrice: "",
         menuId: "",
         newMenuName: "",
         newMenuPrice: "",
         errorText: "",
       };
 
-    // 메뉴 메인으로
+    // 메뉴값 초기화
     case "RESET_MEUE_VALUE":
       return {
         ...state,
@@ -161,10 +165,27 @@ function reducer(state, action) {
         isMenuPage: "",
         menuName: "",
         menuPrice: "",
+        fakeMenuPrice: "",
         menuId: "",
         newMenuName: "",
         newMenuPrice: "",
         errorText: "",
+      };
+
+    // 가격 입력시
+    case "PRICECHANGE":
+      return {
+        ...state,
+        [action.name]: action.value,
+        fakeMenuPrice: addComma(action.value),
+      };
+
+    // 가격 입력시 원 추가
+    case "FAKEPRICE":
+      console.log("wwwwwwwwwwww");
+      return {
+        ...state,
+        fakeMenuPrice: action.value + "원",
       };
   }
   return {
@@ -186,6 +207,7 @@ function Menu({ offBtnClick }) {
     newMenuName: "",
     newMenuPrice: "",
     errorText: "",
+    fakeMenuPrice: "",
   });
 
   const {
@@ -200,9 +222,12 @@ function Menu({ offBtnClick }) {
     newMenuName,
     newMenuPrice,
     errorText,
+    fakeMenuPrice,
   } = state;
 
-  const [value, setValue] = useState([]);
+  const [modalCategoryDel, setModalCategoryDel] = useState(false);
+  const [modalMenuDel, setModalMenuDel] = useState(false);
+  const [modalMenu, setModalMenu] = useState(false);
 
   const [MenuBtnList, setMenuBtnList] = useState();
 
@@ -259,6 +284,19 @@ function Menu({ offBtnClick }) {
     dispatch(e.target);
   };
 
+  // 가격 입력했을 때 인풋 체인지
+  const onPriceChange = (e) => {
+    const inputValue = e.target.value;
+    const intStr = e.target.value.replace(/[^0-9]/g, "");
+
+    dispatch({
+      type: "PRICECHANGE",
+      value: intStr,
+      name: e.target.name,
+      fakeValue: e.target.value,
+    });
+  };
+
   // 메뉴값 받아와 뿌려주기
   async function menuList(name, value) {
     console.log("onCategoryBtn으로 넘어오는 name값", name);
@@ -293,7 +331,6 @@ function Menu({ offBtnClick }) {
 
     // 다른 카테고리 버튼을 누를 때마다 기존 값 초기화 해주기
     dispatch({ type: "RESET_CATEGORY_VALUE" });
-    setValue("");
 
     // 카테고리 가져오기
     menuList(e.target.name, e.target.value);
@@ -312,6 +349,9 @@ function Menu({ offBtnClick }) {
 
     // 다른 메뉴 버튼을 누를 때마다 기존 값 초기화 해주기
     dispatch({ type: "RESET_MEUE_VALUE" });
+
+    // 모달 켜주기
+    setModalMenu(true);
 
     dispatch({
       type: "MENU_OPEN",
@@ -464,16 +504,11 @@ function Menu({ offBtnClick }) {
         return;
       }
 
-      // 카테고리 추가에서 취소 눌러줄 때
-      case "categoryAddBackBtn": {
-        dispatch({ type: "CATEGORY_ADD" });
-        return;
-      }
-
       // 카테고리 삭제를 눌렀을 때
       case "categoryDeleteBtn": {
         categoryDel();
         dispatch({ type: "CATEGORY_MAIN" });
+        setModalCategoryDel(false);
         return;
       }
 
@@ -500,12 +535,6 @@ function Menu({ offBtnClick }) {
         return;
       }
 
-      // 메뉴 추가에서 취소 눌러줄 때
-      case "menuAddBackBtn": {
-        dispatch({ type: "CATEGORY_MENU_OPEN" });
-        return;
-      }
-
       // 메뉴 추가 버튼 클릭시
       case "menuAddBtn": {
         if (menuName === "" || menuPrice === "") {
@@ -521,6 +550,7 @@ function Menu({ offBtnClick }) {
       case "menuDeleteBtn": {
         menuDel();
         dispatch({ type: "MENU_MAIN" });
+        setModalMenuDel(false);
         return;
       }
 
@@ -535,6 +565,18 @@ function Menu({ offBtnClick }) {
         return;
       }
     }
+  };
+
+  // 카테고리 모달 추가페이지에서 취소 했을때 닫을 때
+  const CategoryAddClose = () => dispatch({ type: "CATEGORY_MAIN" });
+
+  // 카테고리 모달 수정페이지에서 취소 했을때 닫을 때
+  const CategoryUpdateClose = () => dispatch({ type: "CATEGORY_UPDATE_OUT" });
+
+  // 메뉴 모달 추가페이지에서 취소 했을때 닫을 때
+  const menuAddClose = () => {
+    setModalMenu(false);
+    dispatch({ type: "CATEGORY_MENU_OPEN" });
   };
 
   return (
@@ -552,9 +594,9 @@ function Menu({ offBtnClick }) {
               {category}
             </div>
           </CategoryBtnBox>
-          <p className="underSelectP ml-5">
+          {/* <p className="underSelectP ml-5">
             * 위 박스안에 있는 카테고리를 클릭해 주세요.
-          </p>
+          </p> */}
         </Col>
 
         {/* 카테고리 설정 선택 */}
@@ -571,74 +613,141 @@ function Menu({ offBtnClick }) {
                 <Button className="categoryUpdateBtn" name="categoryUpdateBtn">
                   수정
                 </Button>
-                <Button className="categoryBackBtn" name="categoryDeleteBtn">
+                <Button
+                  className="categoryBackBtn"
+                  onClick={() => setModalCategoryDel(true)}
+                >
                   삭제
                 </Button>
               </form>
             </CategoryAddContainer>
           )}
 
-          {/* 카테고리 만드는 화면 */}
-          {isPage === "categoryAdd" && (
+          {/* 카테고리 삭제시 재차 확인 모달 */}
+          <Modal
+            size="md"
+            show={modalCategoryDel}
+            onHide={() => setModalCategoryDel(false)}
+          >
             <CategoryAddContainer>
-              <h2>카테고리 </h2>
-              <form onClick={onClickAddBtn}>
-                <input
-                  onChange={onChange}
-                  text="text"
-                  placeholder="카테고리 이름"
-                  name="categoryName"
-                  autoComplete="off"
-                  value={categoryName}
-                  maxLength="7"
-                />
-                <p className="underSelectP">
-                  * 1자 이상 7자 이하로 입력해 주세요.
-                </p>
-                {errorText !== "" && (
-                  <ErrorText error={errorText}>{errorText}</ErrorText>
-                )}
-                <Button className="categoryAddBtn" name="categoryAddBtn">
-                  추가
+              <Modal.Header>
+                <h2>
+                  카테고리
+                  <span style={{ color: "red" }}>삭제</span>
+                </h2>
+              </Modal.Header>
+              <Modal.Body>
+                정말 <span style={{ color: "red" }}>{categoryName}</span>{" "}
+                카테고리를 삭제 하시겠습니까?
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  className="categoryBackBtn"
+                  name="categoryDeleteBtn"
+                  onClick={onClickAddBtn}
+                >
+                  삭제
                 </Button>
-                <Button className="categoryBackBtn" name="categoryAddBackBtn">
+                <Button
+                  className="categoryBackBtn"
+                  onClick={() => setModalCategoryDel(false)}
+                >
                   취소
                 </Button>
-              </form>
+              </Modal.Footer>
             </CategoryAddContainer>
+          </Modal>
+
+          {/* 카테고리 만드는 화면 */}
+          {isPage === "categoryAdd" && (
+            <Modal show={isPage === "categoryAdd"} onHide={CategoryAddClose}>
+              <CategoryAddContainer>
+                <form onClick={onClickAddBtn}>
+                  <Modal.Header>
+                    <h2>카테고리 </h2>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <input
+                      onChange={onChange}
+                      text="text"
+                      placeholder="카테고리 이름"
+                      name="categoryName"
+                      autoComplete="off"
+                      value={categoryName}
+                      maxLength="7"
+                    />
+                    <p className="underSelectP">
+                      * 1자 이상 7자 이하로 입력해 주세요.
+                    </p>
+                    {errorText !== "" && (
+                      <ErrorText error={errorText}>{errorText}</ErrorText>
+                    )}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button className="categoryAddBtn" name="categoryAddBtn">
+                      추가
+                    </Button>
+                    <Button
+                      className="categoryBackBtn"
+                      onClick={CategoryAddClose}
+                    >
+                      취소
+                    </Button>
+                  </Modal.Footer>
+                </form>
+              </CategoryAddContainer>
+            </Modal>
           )}
 
           {/* 카테코리 업데이트 화면 */}
           {isPage === "categoryUpdate" && (
-            <CategoryAddContainer>
-              <h2>
-                {" "}
-                <span style={{ color: "red" }}>{categoryName}</span> 카테고리
-                수정
-              </h2>
-              <form onClick={onClickAddBtn}>
-                <input
-                  onChange={onChange}
-                  text="text"
-                  placeholder={categoryName}
-                  name="newCategoryName"
-                  value={newCategoryName}
-                  maxLength="7"
-                />
-                <p className="underSelectP">
-                  * 1자 이상 7자 이하로 입력해 주세요.
-                </p>
-                {errorText !== "" && (
-                  <ErrorText error={errorText}>{errorText}</ErrorText>
-                )}
-                <Button className="categoryAddBtn" name="categoryUpBtn">
-                  수정
-                </Button>
-                <Button className="categoryBackBtn" name="categoryAddBackBtn">
-                  취소
-                </Button>
-              </form>
-            </CategoryAddContainer>
+            <Modal
+              show={isPage === "categoryUpdate"}
+              onHide={CategoryUpdateClose}
+            >
+              <CategoryAddContainer>
+                <form onClick={onClickAddBtn}>
+                  <Modal.Header>
+                    <Modal.Title>
+                      <h2>
+                        {" "}
+                        <span style={{ color: "red" }}>
+                          {categoryName}
+                        </span>{" "}
+                        카테고리 수정
+                      </h2>
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <input
+                      onChange={onChange}
+                      text="text"
+                      placeholder={categoryName}
+                      name="newCategoryName"
+                      value={newCategoryName}
+                      maxLength="7"
+                    />
+                    <p className="underSelectP">
+                      * 1자 이상 7자 이하로 입력해 주세요.
+                    </p>
+                    {errorText !== "" && (
+                      <ErrorText error={errorText}>{errorText}</ErrorText>
+                    )}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button className="categoryAddBtn" name="categoryUpBtn">
+                      수정
+                    </Button>
+                    <Button
+                      className="categoryBackBtn"
+                      onClick={CategoryUpdateClose}
+                    >
+                      취소
+                    </Button>
+                  </Modal.Footer>
+                </form>
+              </CategoryAddContainer>
+            </Modal>
           )}
 
           {/* 메뉴 나타나는 화면 */}
@@ -655,93 +764,169 @@ function Menu({ offBtnClick }) {
                   {MenuBtnList}
                 </div>
               </MenuBtnBox>
-              <p className="underSelectP">
+              {/* <p className="underSelectP">
                 * 위 박스안에 있는 메뉴를 클릭해 주세여.
-              </p>
+              </p> */}
             </MenuBtnContainer>
           )}
 
           {/* 메뉴 추가 화면 */}
           {isMenuPage === "menuAdd" && (
-            <CategoryAddContainer>
-              <h2>메뉴 추가</h2>
-              <form onClick={onClickAddBtn}>
-                <input
-                  onChange={onChange}
-                  type="text"
-                  placeholder="메뉴 이름"
-                  name="menuName"
-                  value={menuName}
-                  maxLength="7"
-                  autoComplete="off"
-                />
-                <p className="underSelectP">
-                  * 1자 이상 7자 이하로 입력해 주세요.
-                </p>
-                <input
-                  onChange={onChange}
-                  type="number"
-                  placeholder="메뉴 가격"
-                  name="menuPrice"
-                  value={menuPrice}
-                  maxLength="9"
-                  autoComplete="off"
-                />
-                <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
-                {errorText !== "" && (
-                  <ErrorText error={errorText}>{errorText}</ErrorText>
-                )}
-                <Button className="categoryAddBtn" name="menuAddBtn">
-                  추가
-                </Button>
-                <Button className="categoryBackBtn" name="menuAddBackBtn">
-                  취소
-                </Button>
-              </form>
-            </CategoryAddContainer>
+            <Modal show={isMenuPage === "menuAdd"} onHide={menuAddClose}>
+              <CategoryAddContainer>
+                <form onClick={onClickAddBtn}>
+                  <Modal.Header>
+                    <Modal.Title>
+                      <span style={{ color: "red" }}>{categoryName}</span> 메뉴
+                      추가
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <input
+                      onChange={onChange}
+                      type="text"
+                      placeholder="메뉴 이름"
+                      name="menuName"
+                      value={menuName}
+                      maxLength="7"
+                      autoComplete="off"
+                    />
+                    <p className="underSelectP">
+                      * 1자 이상 7자 이하로 입력해 주세요.
+                    </p>
+                    <input
+                      onChange={onPriceChange}
+                      type="text"
+                      placeholder="메뉴 가격"
+                      name="menuPrice"
+                      value={fakeMenuPrice}
+                      maxLength="10"
+                      autoComplete="off"
+                      onBlur={() => {
+                        if (fakeMenuPrice !== "") {
+                          dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                        }
+                      }}
+                    />
+                    <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
+                    {errorText !== "" && (
+                      <ErrorText error={errorText}>{errorText}</ErrorText>
+                    )}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button className="categoryAddBtn" name="menuAddBtn">
+                      추가
+                    </Button>
+                    <Button className="categoryBackBtn" onClick={menuAddClose}>
+                      취소
+                    </Button>
+                  </Modal.Footer>
+                </form>
+              </CategoryAddContainer>
+            </Modal>
           )}
 
           {/* 메뉴 클릭시 화면 */}
-          {isMenuPage === "menu" && (
+          <Modal show={modalMenu} onHide={() => setModalMenu(false)}>
             <CategoryAddContainer>
-              <h2>
-                <span style={{ color: "blue" }}>{menuName}</span>메뉴
-              </h2>
               <form onClick={onClickAddBtn}>
-                <input
-                  onChange={onChange}
-                  type="text"
-                  placeholder={menuName}
-                  name="newMenuName"
-                  value={newMenuName}
-                  maxLength="7"
-                  autoComplete="off"
-                />
-                <p className="underSelectP">
-                  * 1자 이상 7자 이하로 입력해 주세요.
-                </p>
-                <input
-                  onChange={onChange}
-                  type="number"
-                  placeholder={menuPrice}
-                  name="newMenuPrice"
-                  value={newMenuPrice}
-                  maxLength="9"
-                  autoComplete="off"
-                />
-                <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
-                {errorText !== "" && (
-                  <ErrorText error={errorText}>{errorText}</ErrorText>
-                )}
-                <Button className="categoryAddBtn" name="menuUpdateBtn">
-                  수정
-                </Button>
-                <Button className="categoryBackBtn" name="menuDeleteBtn">
-                  삭제
-                </Button>
+                <Modal.Header>
+                  <Modal.Title>
+                    <h2>
+                      <span style={{ color: "blue" }}>{menuName}</span>메뉴
+                    </h2>
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <input
+                    onChange={onChange}
+                    type="text"
+                    placeholder={menuName}
+                    name="newMenuName"
+                    value={newMenuName}
+                    maxLength="7"
+                    autoComplete="off"
+                  />
+                  <p className="underSelectP">
+                    * 1자 이상 7자 이하로 입력해 주세요.
+                  </p>
+                  <input
+                    onChange={onPriceChange}
+                    type="text"
+                    placeholder={addComma(menuPrice) + "원"}
+                    name="newMenuPrice"
+                    value={fakeMenuPrice}
+                    maxLength="10"
+                    autoComplete="off"
+                    onBlur={() => {
+                      if (fakeMenuPrice !== "") {
+                        dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                      }
+                    }}
+                  />
+                  <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
+                  {errorText !== "" && (
+                    <ErrorText error={errorText}>{errorText}</ErrorText>
+                  )}
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button className="categoryAddBtn" name="menuUpdateBtn">
+                    수정
+                  </Button>
+                  <Button
+                    className="categoryBackBtn"
+                    onClick={() => {
+                      setModalMenuDel(true);
+                      setModalMenu(false);
+                    }}
+                  >
+                    삭제
+                  </Button>
+                  <Button className="categoryBackBtn" onClick={menuAddClose}>
+                    취소
+                  </Button>
+                </Modal.Footer>
               </form>
             </CategoryAddContainer>
-          )}
+          </Modal>
+
+          {/* 카테고리 삭제시 재차 확인 모달 */}
+          <Modal
+            size="md"
+            show={modalMenuDel}
+            onHide={() => setModalMenuDel(false)}
+          >
+            <CategoryAddContainer>
+              <Modal.Header>
+                <h2>
+                  메뉴
+                  <span style={{ color: "red" }}>삭제</span>
+                </h2>
+              </Modal.Header>
+              <Modal.Body>
+                정말 <span style={{ color: "blue" }}>{menuName}</span> 메뉴를
+                삭제 하시겠습니까?
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  className="categoryBackBtn"
+                  name="menuDeleteBtn"
+                  onClick={onClickAddBtn}
+                >
+                  삭제
+                </Button>
+                <Button
+                  className="categoryBackBtn"
+                  onClick={() => {
+                    setModalMenuDel(false);
+                    setModalMenu(true);
+                  }}
+                >
+                  취소
+                </Button>
+              </Modal.Footer>
+            </CategoryAddContainer>
+          </Modal>
         </Col>
       </AddConContainer>
     </AddCon>

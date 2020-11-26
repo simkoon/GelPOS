@@ -1,15 +1,5 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
-
-import tableImg from "./sideImg/tables.png";
-import storeImg from "./sideImg/storeInfo.png";
-import salesImg from "./sideImg/sales.png";
-import scheduleImg from "./sideImg/schedule.png";
-import tableWhiteImg from "./sideImg/tablesWhite.png";
-import storeWhiteImg from "./sideImg/storeInfoWhite.png";
-import salesWhiteImg from "./sideImg/salesWhite.png";
-import scheduleWhiteImg from "./sideImg/scheduleWhite.png";
 //background-image : url(${selImg});
 const MenuBtnBox = styled.div`
   text-decoration: none;

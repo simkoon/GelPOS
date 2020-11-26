@@ -71,7 +71,7 @@ function StoreInfo() {
     <>
       <div style={{ height: "100%" }}>
         <MainContainer Animation={Animation}>
-          <Row>
+          <Row style={{ width: "100%" }}>
             <StInfomation
               Animation={Animation}
               storeName={info.name}

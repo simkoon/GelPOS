@@ -3,9 +3,9 @@ import { Button, Row } from "react-bootstrap";
 
 export const AddCon = styled.div`
   position: absolute;
-  top: 100px;
   width: 80%;
-  height: 100%;
+  top: 0px;
+  padding-top: 50px;
   margin-left: 90%;
   //margin-top: 150px;
   text-align: left;
@@ -173,54 +173,56 @@ export const CategoryBtnBox = styled.div`
   position: relative;
   margin: 0px auto;
   text-align: left;
-  width: 500px;
-  height: 300px;
+  width: 60%;
+  height: 50vh;
   background-color: white;
-  border: 0.5px solid rgb(200, 200, 200);
   overflow: hidden;
   .btnContainer {
-    text-align: left;
+    width: 120%;
     padding: 25px 25px;
     height: 100%;
     overflow-y: auto;
   }
 `;
 
-export const MenuBtnBox = styled.div`
-  width: 100%;
-  text-align: left;
-  background-color: white;
-  border: 0.5px solid rgb(200, 200, 200);
-  overflow-x: hidden;
-
-  .btnContainer {
-    overflow-y: auto;
-    padding: 25px 25px;
-    width: 100%;
-    height: 150px;
-  }
-`;
-
 export const MenuBtnContainer = styled.div`
+  width: 80%;
+  height: 90vh;
   margin-top: 35px;
   text-align: left;
+`;
+
+export const MenuBtnBox = styled.div`
+  width: 100%;
+  height: 60%;
+  text-align: left;
+  overflow: hidden;
+  .btnContainer {
+    height: 100%;
+    padding: 25px 25px;
+    width: 120%;
+    overflow-y: auto;
+  }
 `;
 
 export const CategoryAddContainer = styled.div`
   margin-top: 35px;
   text-align: center;
+  padding: 20px;
+
+  p {
+    text-align: left;
+  }
 
   input {
     display: block;
-    margin-top: 50px;
-    margin-left: 20%;
+    margin-top: 20px;
     margin-bottom: 10px;
     border: none;
     border-bottom: 1px solid black;
   }
 
   .categoryAddBtn {
-    margin-left: 20%;
     margin-right: 30px;
     background-color: skyblue;
     width: 20%;
@@ -280,10 +282,8 @@ export const CategoryAddContainer = styled.div`
 
 // `;
 
-export const ErrorText = styled.p`
+export const ErrorText = styled.div`
   color: red;
 `;
 
-export const AddConContainer = styled(Row)`
-  height: auto;
-`;
+export const AddConContainer = styled(Row)``;
