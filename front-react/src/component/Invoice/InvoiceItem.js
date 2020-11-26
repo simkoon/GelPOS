@@ -30,6 +30,11 @@ export default function InvoiceItem({ menu }) {
           })}
         </tbody>
       </Table>
+      <hr
+        style={{
+          borderTopWidth: '3px',
+        }}
+      />
       <div
         style={{
           display: 'flex',

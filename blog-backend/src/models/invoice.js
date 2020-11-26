@@ -46,5 +46,10 @@ InvoiceSchema.statics.findAllByStoreId = function (storeId, regDate) {
     storeId,
   });
 };
+
+InvoiceSchema.statics.findOneByStoreIdAndSeq = function (storeId, seq) {
+  return this.findOne({ storeId, seq });
+};
+
 const Invoice = mongoose.model('Invoice', InvoiceSchema);
 export default Invoice;

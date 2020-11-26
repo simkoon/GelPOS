@@ -110,9 +110,7 @@ function Tsidebar({ children, location, history }) {
     dispatch(logout());
     history.push('/');
   };
-  // const disableSidebar = () => {
-  //   sidebarOpen(() => false);
-  // };
+
   return (
     <Sidebar
       sidebar={

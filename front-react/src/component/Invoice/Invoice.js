@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import { getList } from '../../lib/api/invoice';
+import { getList, refund } from '../../lib/api/invoice';
 import InvoiceItem from './InvoiceItem';
 import addComma from '../../utility/addComma';
 
@@ -17,7 +17,6 @@ let listener = null;
 
 function Invoice({ history }) {
   const [loading, setLoading] = useState(false);
-  const [isPrint, setIsPrint] = useState(false);
 
   const [receipt, setReceipt] = useState({
     _seq: '',
@@ -58,13 +57,33 @@ function Invoice({ history }) {
   }
 
   const [rowData, setRowData] = useState();
-
+  const [listSumState, setlistSumState] = useState({
+    allSum: 0,
+    refundSum: 0,
+    netSum: 0,
+  });
+  const listSum = {
+    allSum: 0,
+    refundSum: 0,
+    netSum: 0,
+  };
   useEffect(() => {
     (async () => {
       try {
         const result = await getList({ date: startDate });
         setRowData(result.data);
         setLoading(() => true);
+        result.data.forEach((item) => {
+          if (item.paymentOption === '환불') {
+            listSum.refundSum += Number(item.payment);
+          } else {
+            listSum.allSum += Number(item.payment);
+          }
+        });
+        listSum.netSum = listSum.allSum - listSum.refundSum;
+        console.log(listSum);
+        console.log('11``````````````````~~~~~~~~');
+        setlistSumState(() => listSum);
       } catch (error) {
         history.push('/');
         alert('잘못된 접근입니다.');
@@ -112,6 +131,13 @@ function Invoice({ history }) {
     document.body.style.display = 'block';
     printDiv.style.display = 'none';
   };
+
+  const onClickRefund = async () => {
+    const refundResult = await refund(receipt);
+    console.log('1111111111111111111111');
+    console.log(refundResult);
+  };
+
   useEffect(() => {
     storename.current = '';
     listener = window.addEventListener('resize', () => {
@@ -136,208 +162,210 @@ function Invoice({ history }) {
     <>
       {loading ? (
         storename.current ? (
-          !isPrint ? (
-            <Container
-              fluid
-              className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
-              style={{
-                height: '100%',
-                padding: 0,
-                margin: 0,
-                backgroundColor: 'rgb(249,250,252)',
-              }}
-            >
-              <Row className="p-4 m-1 pt-0 h-100 " style={{ flex: 1 }}>
-                <Col
-                  md={{ span: 4 }}
-                  className="justify-content-end flex-column d-flex"
-                >
-                  <h5>
-                    {storename.current
-                      ? storename.current
-                      : '잘못된 접근입니다.'}
-                  </h5>
-                  <h3>§ 거래 내역</h3>
-                </Col>
-              </Row>
-              <Row className="p-1 m-0 h-100" style={{ flex: 3 }}>
-                <Col lg={{ span: 8 }} className="text-center">
-                  <Row>
-                    <Col className="justify-content-start d-flex">
-                      <DatePicker
-                        className="text-right mb-1 pr-1"
-                        dateFormat="yyyy.MM.dd(eee)"
-                        locale="ko"
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="mb-2">
-                      <div
-                        className="ag-theme-alpine"
-                        style={{
-                          height: 400,
-                          width: '100%',
-                          textAlign: 'left',
-                        }}
-                      >
-                        <AgGridReact
-                          overlayNoRowsTemplate="<p>불러올 거래내역이 없습니다.</p>"
-                          rowSelection="single"
-                          rowData={rowData}
-                          onGridReady={onGridReady}
-                          onSelectionChanged={onButtonClick}
-                        >
-                          <AgGridColumn
-                            field="seq"
-                            headerName={'거래 번호'}
-                            sortable={true}
-                            filter={true}
-                            checkboxSelection={true}
-                            resizable={true}
-                          ></AgGridColumn>
-                          <AgGridColumn
-                            field="menu"
-                            headerName={'메뉴'}
-                            sortable={true}
-                            filter={true}
-                            resizable={true}
-                            valueFormatter={function (params) {
-                              const menu = params.value;
-
-                              if (menu.length > 2) {
-                                return (
-                                  menu[0].name +
-                                  ', ' +
-                                  menu[1].name +
-                                  '외 ' +
-                                  (params.value.length - 2) +
-                                  '가지'
-                                );
-                              } else {
-                                let sumName = '';
-                                for (const i of menu) {
-                                  if (i === menu[menu.length - 1]) {
-                                    sumName += i.name;
-                                  } else {
-                                    sumName += i.name + ', ';
-                                  }
-                                }
-                                return sumName;
-                              }
-                            }}
-                          ></AgGridColumn>
-                          <AgGridColumn
-                            field="regDate"
-                            headerName={'거래 시간'}
-                            sortable={true}
-                            filter={true}
-                            resizable={true}
-                            valueFormatter={function (params) {
-                              return new Date(
-                                params.value
-                              ).toLocaleTimeString();
-                            }}
-                          ></AgGridColumn>
-                          <AgGridColumn
-                            field="paymentOption"
-                            headerName={'거래 방식'}
-                            sortable={true}
-                            filter={true}
-                            resizable={true}
-                          ></AgGridColumn>
-                          <AgGridColumn
-                            field="payment"
-                            headerName={'금액'}
-                            sortable={true}
-                            filter={true}
-                            resizable={true}
-                            valueFormatter={function (params) {
-                              return addComma(params.value);
-                            }}
-                          ></AgGridColumn>
-                        </AgGridReact>
-                      </div>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col className="p-0 m-0" style={{ height: '80%' }}>
-                  <Row className="h-100 w-100 m-0">
-                    <Col className="h-100">
-                      <Card
-                        ref={invoicePrint}
-                        style={{ width: '100%', height: '100%' }}
-                      >
-                        <Card.Body
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            overflowY: 'auto',
-                            position: 'absolute',
-                          }}
-                        >
-                          <Card.Title>영수증</Card.Title>
-                          <div className="card-text">
-                            {receipt._seq === '' ? (
-                              <p>거래를 선택해주세요.</p>
-                            ) : (
-                              <>
-                                <p>거래번호: {receipt._seq}</p>
-                                <p>거래시간: {receipt._regDate}</p>
-                                <p>거래방식: {receipt._paymentOption}</p>
-                                <InvoiceItem menu={receipt._menu} />
-                              </>
-                            )}
-                          </div>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row className="w-100">
-                    <Col className="justify-content-end d-flex mt-1 mb-4">
-                      <Button
-                        size="sm"
-                        className="mr-1 btn_color_purple"
-                        onClick={print}
-                      >
-                        영수증 출력
-                      </Button>{' '}
-                      <Button size="sm" className="btn_color_purple">
-                        주문 취소
-                      </Button>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Container>
-          ) : (
-            <Card ref={invoicePrint} style={{ width: '100%', height: '100%' }}>
-              <Card.Body
+          <Container
+            fluid
+            className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
+            style={{
+              height: '100%',
+              padding: 0,
+              margin: 0,
+              backgroundColor: 'rgb(249,250,252)',
+            }}
+          >
+            <Row className="p-4 m-1 pt-0 h-100 " style={{ flex: 1 }}>
+              <Col
+                md={{ span: 4 }}
+                className="justify-content-end flex-column d-flex"
+              >
+                <h5>
+                  {storename.current ? storename.current : '잘못된 접근입니다.'}
+                </h5>
+                <h3>§ 거래 내역</h3>
+              </Col>
+            </Row>
+            <Row className="p-1 m-0 h-100" style={{ flex: 3 }}>
+              <Col
+                lg={{ span: 8 }}
+                className="text-center"
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  overflowY: 'auto',
-                  position: 'absolute',
+                  height: '80%',
                 }}
               >
-                <Card.Title>영수증</Card.Title>
-                <div className="card-text">
-                  {receipt._seq === '' ? (
-                    <p>거래를 선택해주세요.</p>
-                  ) : (
-                    <>
-                      <p>거래번호: {receipt._seq}</p>
-                      <p>거래시간: {receipt._regDate}</p>
-                      <p>거래방식: {receipt._paymentOption}</p>
-                      <InvoiceItem menu={receipt._menu} />
-                    </>
-                  )}
-                </div>
-              </Card.Body>
-            </Card>
-          )
+                <Row>
+                  <Col className="justify-content-start d-flex">
+                    <DatePicker
+                      className="text-right mb-1 pr-1"
+                      dateFormat="yyyy.MM.dd(eee)"
+                      locale="ko"
+                      selected={startDate}
+                      onChange={(date) => setStartDate(date)}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className="mb-2">
+                    <div
+                      className="ag-theme-alpine"
+                      style={{
+                        height: 400,
+                        width: '100%',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <AgGridReact
+                        overlayNoRowsTemplate="<p>불러올 거래내역이 없습니다.</p>"
+                        rowSelection="single"
+                        rowData={rowData}
+                        onGridReady={onGridReady}
+                        onSelectionChanged={onButtonClick}
+                      >
+                        <AgGridColumn
+                          field="seq"
+                          headerName={'거래 번호'}
+                          sortable={true}
+                          filter={true}
+                          checkboxSelection={true}
+                          resizable={true}
+                        ></AgGridColumn>
+                        <AgGridColumn
+                          field="menu"
+                          headerName={'메뉴'}
+                          sortable={true}
+                          filter={true}
+                          resizable={true}
+                          valueFormatter={function (params) {
+                            const menu = params.value;
+
+                            if (menu.length > 2) {
+                              return (
+                                menu[0].name +
+                                ', ' +
+                                menu[1].name +
+                                '외 ' +
+                                (params.value.length - 2) +
+                                '가지'
+                              );
+                            } else {
+                              let sumName = '';
+                              for (const i of menu) {
+                                if (i === menu[menu.length - 1]) {
+                                  sumName += i.name;
+                                } else {
+                                  sumName += i.name + ', ';
+                                }
+                              }
+                              return sumName;
+                            }
+                          }}
+                        ></AgGridColumn>
+                        <AgGridColumn
+                          field="regDate"
+                          headerName={'거래 시간'}
+                          sortable={true}
+                          filter={true}
+                          resizable={true}
+                          valueFormatter={function (params) {
+                            return new Date(params.value).toLocaleTimeString();
+                          }}
+                        ></AgGridColumn>
+                        <AgGridColumn
+                          field="paymentOption"
+                          headerName={'거래 방식'}
+                          sortable={true}
+                          filter={true}
+                          resizable={true}
+                        ></AgGridColumn>
+                        <AgGridColumn
+                          field="payment"
+                          headerName={'금액'}
+                          sortable={true}
+                          filter={true}
+                          resizable={true}
+                          valueFormatter={function (params) {
+                            return addComma(params.value);
+                          }}
+                        ></AgGridColumn>
+                      </AgGridReact>
+                      <p
+                        className="mb-3"
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          fontSize: '16px',
+                        }}
+                      >
+                        <span className="mr-1">판매금액 : </span>
+                        <span className="mr-2">
+                          {addComma(listSumState.allSum)} 원
+                        </span>
+                        <span className="mr-1">환불액 : </span>{' '}
+                        <span className="mr-2">
+                          {addComma(listSumState.refundSum)} 원
+                        </span>
+                        <span className="mr-1">실판매금액: </span>{' '}
+                        <span className="mr-1">
+                          {addComma(listSumState.netSum)} 원
+                        </span>
+                      </p>
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+              <Col className="p-0 m-0" style={{ height: '80%' }}>
+                <Row className="h-100 w-100 m-0">
+                  <Col className="h-100">
+                    <Card
+                      ref={invoicePrint}
+                      style={{ width: '100%', height: '100%' }}
+                    >
+                      <Card.Body
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          overflowY: 'auto',
+                          position: 'absolute',
+                        }}
+                      >
+                        <Card.Title>영수증</Card.Title>
+                        <div className="card-text">
+                          {receipt._seq === '' ? (
+                            <p>거래를 선택해주세요.</p>
+                          ) : (
+                            <>
+                              <p>거래번호: {receipt._seq}</p>
+                              <p>거래시간: {receipt._regDate}</p>
+                              <p>거래방식: {receipt._paymentOption}</p>
+                              <InvoiceItem menu={receipt._menu} />
+                            </>
+                          )}
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row className="w-100">
+                  <Col className="justify-content-end d-flex mt-1 mb-4">
+                    {receipt._paymentOption === '환불' ? null : (
+                      <Button
+                        onClick={onClickRefund}
+                        size="sm"
+                        className="btn_color_purple mr-1"
+                      >
+                        주문 취소
+                      </Button>
+                    )}{' '}
+                    <Button
+                      size="sm"
+                      className="btn_color_purple"
+                      onClick={print}
+                    >
+                      영수증 출력
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
         ) : (
           <></>
         )
