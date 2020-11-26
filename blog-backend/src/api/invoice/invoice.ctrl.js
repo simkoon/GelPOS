@@ -20,6 +20,7 @@ export const refund = async (ctx) => {
     storeId,
     ctx.request.body._seq,
   );
+  prevInvoice.paymentOption += '(환불완료)';
   let seq = 0;
   const seqInvoice = await Invoice.findSeq(storeId);
   if (seqInvoice) {
@@ -37,6 +38,7 @@ export const refund = async (ctx) => {
 
   try {
     const result = await refundedInvoice.save();
+    const result2 = await prevInvoice.save();
     ctx.body = result;
   } catch (error) {
     ctx.body = error;

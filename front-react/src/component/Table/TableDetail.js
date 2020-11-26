@@ -49,6 +49,8 @@ export default memo(function TableDetail({ match, history }) {
   const paymentTable = (act) => {
     console.log('페이먼트테이블');
     socket.emit('paymentTable', { table, seq, act, getSum });
+    alert('결제가 완료되었습니다.');
+    history.push('/store/table');
   };
   return (
     <>
@@ -148,23 +150,49 @@ export default memo(function TableDetail({ match, history }) {
                     justifyContent: 'flex-end',
                   }}
                 >
-                  <Button
-                    variant="success"
-                    className="mr-1"
-                    onClick={() => {
-                      paymentTable('cashPay');
-                    }}
-                  >
-                    현금 결제
-                  </Button>
-                  <Button
-                    variant="warning"
-                    onClick={() => {
-                      paymentTable('kakao');
-                    }}
-                  >
-                    카카오페이 결제
-                  </Button>
+                  {getSum === 0 ? (
+                    <>
+                      <Button
+                        variant="success"
+                        className="mr-1"
+                        onClick={() => {
+                          paymentTable('cashPay');
+                        }}
+                        disabled
+                      >
+                        현금 결제
+                      </Button>
+                      <Button
+                        variant="warning"
+                        onClick={() => {
+                          paymentTable('kakao');
+                        }}
+                        disabled
+                      >
+                        카카오페이 결제
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        variant="success"
+                        className="mr-1"
+                        onClick={() => {
+                          paymentTable('cashPay');
+                        }}
+                      >
+                        현금 결제
+                      </Button>
+                      <Button
+                        variant="warning"
+                        onClick={() => {
+                          paymentTable('kakao');
+                        }}
+                      >
+                        카카오페이 결제
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </Col>

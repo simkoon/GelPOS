@@ -24,6 +24,7 @@ export default function TableItem({ table, index }) {
           height: '180px',
           width: '220px',
           overflow: 'auto',
+          borderRadius: '8px',
         }}
       >
         <Card.Body>

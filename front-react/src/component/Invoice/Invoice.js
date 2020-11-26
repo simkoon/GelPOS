@@ -62,13 +62,14 @@ function Invoice({ history }) {
     refundSum: 0,
     netSum: 0,
   });
-  const listSum = {
-    allSum: 0,
-    refundSum: 0,
-    netSum: 0,
-  };
+
   useEffect(() => {
     (async () => {
+      const listSum = {
+        allSum: 0,
+        refundSum: 0,
+        netSum: 0,
+      };
       try {
         const result = await getList({ date: startDate });
         setRowData(result.data);
@@ -134,8 +135,38 @@ function Invoice({ history }) {
 
   const onClickRefund = async () => {
     const refundResult = await refund(receipt);
-    console.log('1111111111111111111111');
-    console.log(refundResult);
+    alert('환불이 완료되었습니다.');
+    (async () => {
+      const listSum = {
+        allSum: 0,
+        refundSum: 0,
+        netSum: 0,
+      };
+      try {
+        const result = await getList({ date: startDate });
+        setRowData(result.data);
+        setLoading(() => true);
+        result.data.forEach((item) => {
+          if (item.paymentOption === '환불') {
+            listSum.refundSum += Number(item.payment);
+          } else {
+            listSum.allSum += Number(item.payment);
+          }
+        });
+        listSum.netSum = listSum.allSum - listSum.refundSum;
+        setlistSumState(() => listSum);
+      } catch (error) {
+        history.push('/');
+        alert('잘못된 접근입니다.');
+      }
+    })();
+    setReceipt(() => ({
+      _seq: '',
+      _menu: '',
+      _regDate: '',
+      _paymentOption: '',
+      _payment: '',
+    }));
   };
 
   useEffect(() => {
@@ -345,7 +376,9 @@ function Invoice({ history }) {
                 </Row>
                 <Row className="w-100">
                   <Col className="justify-content-end d-flex mt-1 mb-4">
-                    {receipt._paymentOption === '환불' ? null : (
+                    {receipt._paymentOption === '환불' ||
+                    receipt._paymentOption === '현금(환불완료)' ||
+                    receipt._paymentOption === '카카오페이(환불완료)' ? null : (
                       <Button
                         onClick={onClickRefund}
                         size="sm"
