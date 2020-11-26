@@ -376,9 +376,19 @@ function Invoice({ history }) {
                 </Row>
                 <Row className="w-100">
                   <Col className="justify-content-end d-flex mt-1 mb-4">
-                    {receipt._paymentOption === '환불' ||
+                    {receipt._paymentOption === '' ||
+                    receipt._paymentOption === '환불' ||
                     receipt._paymentOption === '현금(환불완료)' ||
-                    receipt._paymentOption === '카카오페이(환불완료)' ? null : (
+                    receipt._paymentOption === '카카오페이(환불완료)' ? (
+                      <Button
+                        onClick={onClickRefund}
+                        size="lg"
+                        className="btn_color_purple mr-1"
+                        disabled
+                      >
+                        주문 취소
+                      </Button>
+                    ) : (
                       <Button
                         onClick={onClickRefund}
                         size="lg"
@@ -387,13 +397,24 @@ function Invoice({ history }) {
                         주문 취소
                       </Button>
                     )}{' '}
-                    <Button
-                      size="lg"
-                      className="btn_color_purple"
-                      onClick={print}
-                    >
-                      영수증 출력
-                    </Button>
+                    {receipt._paymentOption === '' ? (
+                      <Button
+                        size="lg"
+                        className="btn_color_purple"
+                        onClick={print}
+                        disabled
+                      >
+                        영수증 출력
+                      </Button>
+                    ) : (
+                      <Button
+                        size="lg"
+                        className="btn_color_purple"
+                        onClick={print}
+                      >
+                        영수증 출력
+                      </Button>
+                    )}
                   </Col>
                 </Row>
               </Col>
