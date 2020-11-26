@@ -38,15 +38,13 @@ export const selectStore = async (ctx) => {
       return;
     }
     const { nowstore } = ctx.request.body;
-    console.log('리퀘스트 나우스토오');
-    console.log(nowstore);
+
     if (!validateStore(user, nowstore)) {
       ctx.status = 401;
       return;
     }
     ctx.state.user.nowstore = nowstore;
-    console.log('유저저');
-    console.log(ctx.state.user);
+
     ctx.body = ctx.state.user;
     token = user.generateToken(nowstore);
     ctx.cookies.set('access_token', token, {
@@ -102,14 +100,10 @@ export const register = async (ctx) => {
   if (result.error) {
     ctx.status = 400;
     ctx.body = result.error;
-    console.log(result);
     return;
   }
 
   const { name, regNumber, address } = ctx.request.body;
-  console.log(name, regNumber, address);
-  // const userObjectId = ctx.state.user._id;
-  //이거 수정해서 테스트해야함
   const userObjectId = ctx.state.user._id;
   const user = await User.findById(userObjectId);
   const newStore = user.store.create({
@@ -117,7 +111,6 @@ export const register = async (ctx) => {
     regNumber,
     address,
   });
-  console.log(newStore._id); // store의 아이디
   user.store.push(newStore);
 
   try {
@@ -180,67 +173,12 @@ export const register = async (ctx) => {
         },
         {
           name: '기본 테이블8',
-          startAt: Date(2020, 11, 11, 13, 20, 12),
-          nowMenu: [
-            {
-              name: '짬뽕',
-              price: '5000',
-              EA: 4,
-              priceSum: '20000',
-            },
-            {
-              name: '탕슉',
-              price: '15000',
-              EA: 1,
-              priceSum: '15000',
-            },
-          ],
+          startAt: '',
+          nowMenu: [],
           done: false,
         },
       ],
-      category: [
-        {
-          name: '면류',
-          menu: [
-            {
-              name: '짬뽕',
-              price: '5000',
-            },
-            {
-              name: '짜장면',
-              price: '4000',
-            },
-          ],
-        },
-        {
-          name: '식사류',
-          menu: [
-            {
-              name: '볶음밥',
-              price: '6000',
-            },
-            {
-              name: '짬뽕밥',
-              price: '3000',
-            },
-            {
-              name: '마파두부밥',
-              price: '9000',
-            },
-          ],
-        },
-        {
-          name: '요리류',
-          menu: [
-            { name: '탕수육', price: '12000' },
-            {
-              name: '난자완스',
-              price: '23000',
-            },
-            { name: '깐풍기', price: '21000' },
-          ],
-        },
-      ],
+      category: [],
     });
 
     const resultTable = await table.save();

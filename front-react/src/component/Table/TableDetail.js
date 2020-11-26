@@ -22,15 +22,12 @@ export default memo(function TableDetail({ match, history }) {
     setLoading(() => true);
   });
 
-  socket.on('getPayResult', function (result) {
-    console.log('getPayResutl왓다뵤');
-    console.log(result);
-  });
+
   useEffect(() => {
     socket.connect('/');
-    console.log('웹소켓 연결');
+   
     return () => {
-      console.log('웹소켓 꺼짐');
+   
       socket.close();
       socket.disconnect();
     };
@@ -47,7 +44,6 @@ export default memo(function TableDetail({ match, history }) {
   };
 
   const paymentTable = (act) => {
-    console.log('페이먼트테이블');
     socket.emit('paymentTable', { table, seq, act, getSum });
     alert('결제가 완료되었습니다.');
     history.push('/store/table');

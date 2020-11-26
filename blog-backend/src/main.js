@@ -172,16 +172,15 @@ app.io
 
       try {
         const result = await invoice.save();
-        console.log(result);
         tables.table[msg.seq].nowMenu = [];
         await tables.save();
-        socket.emit('getPayResult', result);
+        // socket.emit('getPayResult', result);
         app.io.to(decoded.nowstore).emit('getTables', tables);
         tables.table = tables.table[msg.seq];
         socket.emit('getOneTable', tables);
       } catch (error) {
         console.log(error);
-        socket.emit('getPayResult', error);
+        // socket.emit('getPayResult', error);
       }
     });
   });
@@ -218,85 +217,4 @@ const port = PORT || 4000;
 // import Table from './models/table';
 app.listen(port, () => {
   console.log('Listening to port %d', port);
-
-  // (async () => {
-  //   const invoice = new Table({
-  //     storeId: '5fb7778aaa45dca90a8ff159',
-  //     table: [
-  //       {
-  //         name: '홀 테이블1',
-  //         startAt: Date(2020, 11, 11, 13, 20, 12),
-  //         nowMenu: [
-  //           {
-  //             name: '짜장',
-  //             price: '3000',
-  //             EA: 3,
-  //             priceSum: '9000',
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         name: '홀 테이블2',
-  //         startAt: Date(2020, 11, 11, 13, 20, 12),
-  //         nowMenu: [
-  //           {
-  //             name: '짬뽕',
-  //             price: '5000',
-  //             EA: 4,
-  //             priceSum: '20000',
-  //           },
-  //           {
-  //             name: '탕슉',
-  //             price: '15000',
-  //             EA: 1,
-  //             priceSum: '15000',
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //     category: [
-  //       {
-  //         name: '면류',
-  //         menu: [
-  //           {
-  //             name: '짬뽕',
-  //             price: '5000',
-  //           },
-  //           {
-  //             name: '짜장',
-  //             price: '3000',
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         name: '볶음류',
-  //         menu: [
-  //           {
-  //             name: '계란볶음밥',
-  //             price: '7000',
-  //           },
-  //           {
-  //             name: '짜장',
-  //             price: '3000',
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         name: '사이드',
-  //         menu: [
-  //           {
-  //             name: '군만두',
-  //             price: '4000',
-  //           },
-  //           {
-  //             name: '튀김만두',
-  //             price: '5000',
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   });
-  //   const result = await invoice.save();
-  //   console.log(result);
-  // })();
 });
