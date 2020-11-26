@@ -15,8 +15,6 @@ export default memo(function TableDetail({ match, history }) {
   const [table, setTable] = useState([]);
   const [category, setCategory] = useState([]);
   socket.on('getOneTable', function (data) {
-    console.log('데이터수신1');
-    console.log(data);
     setTable(() => data.table[0]);
     setCategory(() => data.category);
     setLoading(() => true);
