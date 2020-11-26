@@ -22,12 +22,10 @@ export default memo(function TableDetail({ match, history }) {
     setLoading(() => true);
   });
 
-
   useEffect(() => {
     socket.connect('/');
-   
+
     return () => {
-   
       socket.close();
       socket.disconnect();
     };
@@ -72,9 +70,11 @@ export default memo(function TableDetail({ match, history }) {
                 flexDirection: 'column',
               }}
             >
-              {category ? (
+              {category[0] ? (
                 <TableMenuList modifyTable={modifyTable} category={category} />
-              ) : null}
+              ) : (
+                <h1>메뉴를 추가해주세요.</h1>
+              )}
             </Col>
             <Col
               md={5}
