@@ -21,10 +21,10 @@ const MenuContainer = styled(Row)`
 `;
 
 const TableContainer = styled(Row)`
-  @media all and (max-width: 1700px) {
+  @media all and (max-width: 1760px) {
     margin-left: 200px;
   }
-  @media all and (max-width: 1475px) {
+  @media all and (max-width: 1535px) {
     margin-left: 400px;
   }
   @media all and (max-width: 1115px) {

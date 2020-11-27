@@ -14,6 +14,12 @@ export const AddCon = styled.div`
     font-weight: bold;
   }
 
+  hr {
+    text-align: center;
+    width: 55%;
+    border: 1px solid rgba(85, 84, 126, 0.1);
+  }
+
   .AddConInput {
     border: none;
     border-bottom: 1px solid gray;
@@ -192,7 +198,8 @@ export const CategoryBtnBox = styled.div`
   overflow: hidden;
   .btnContainer {
     width: 120%;
-    padding: 25px 25px;
+    padding: 25px 10px;
+    padding-right: 70px;
     height: 100%;
     overflow-y: auto;
   }
@@ -212,7 +219,8 @@ export const MenuBtnBox = styled.div`
   overflow: hidden;
   .btnContainer {
     height: 100%;
-    padding: 25px 25px;
+    padding: 25px 10px;
+    padding-right: 70px;
     width: 120%;
     overflow-y: auto;
   }

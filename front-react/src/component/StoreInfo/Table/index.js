@@ -86,7 +86,7 @@ function Table({ offBtnClick }) {
           >
             테이블 이름: {table.name}
             <br />
-            생성날짜: {date}
+            <span style={{ color: "deepskyblue" }}>생성날짜: {date}</span>
           </TableBtn>
         );
       })
@@ -186,6 +186,9 @@ function Table({ offBtnClick }) {
         <Button className="offBtn" onClick={offBtnClick}>
           돌아가기
         </Button>
+        <h1>테이블</h1>
+        <br />
+        <br />
         <TableBtnBox>
           <TableBtnContainer>
             {Table}

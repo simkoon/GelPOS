@@ -58,7 +58,7 @@ function StoreInfoBtn({ onBtnClick, isPage }) {
             카테고리
           </Button>
           <Button
-            className="btn1_size_color mt-3"
+            className="btn1_size_color mt-5"
             value="TableAdd"
             onClick={onBtnClick}
           >

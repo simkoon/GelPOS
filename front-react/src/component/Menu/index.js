@@ -587,7 +587,8 @@ function Menu({ offBtnClick }) {
           <Button className="offBtn" onClick={offBtnClick}>
             돌아가기
           </Button>
-          <h2>카테고리 목록</h2>
+          <h2>카테고리</h2>
+          <hr />
           <CategoryBtnBox>
             <div className="btnContainer">
               <NewCategoryBtn onClick={onClickAddBtn} name="categoryAdd">
@@ -756,8 +757,9 @@ function Menu({ offBtnClick }) {
           {isPage === "categoryMenu" && (
             <MenuBtnContainer>
               <h2>
-                <span style={{ color: "red" }}>{categoryName}</span> 메뉴추가
+                <span style={{ color: "red" }}>{categoryName}</span> 메뉴
               </h2>
+              <hr />
               <MenuBtnBox>
                 <div className="btnContainer" style={{ margin: " 0px auto" }}>
                   <NewMenuBtn onClick={onClickAddBtn} name="menuAdd">

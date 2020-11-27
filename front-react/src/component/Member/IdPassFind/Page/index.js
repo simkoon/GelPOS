@@ -1,4 +1,5 @@
 import React from "react";
+import { Fade } from "react-bootstrap";
 import EmailCodeInput from "../../EmailCodeCheck/EmailCodeInput";
 import CodeSendButton from "../../EmailCodeCheck/CodeSendButton";
 import CodeInput from "../../EmailCodeCheck/CodeInput";
@@ -135,11 +136,11 @@ export const PwChangePage = ({
           placeholder="비밀번호 확인"
         />
       </p>
-      { errorText !== "" ?
+      {errorText !== "" ? (
         <span className="errorText on">{errorText}</span>
-      :
+      ) : (
         <span className="errorText">{errorText}</span>
-      }
+      )}
       <p>
         <button className="Ok_btn" onClick={onPwCheck}>
           확인

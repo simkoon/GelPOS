@@ -159,7 +159,7 @@ function IdPassFind() {
   };
 
   const codeSend = async (e) => {
-    dispatch({type: "ERRORSET"});
+    dispatch({ type: "ERRORSET" });
     e.preventDefault();
 
     if ([email].includes("")) {
@@ -208,7 +208,6 @@ function IdPassFind() {
   };
 
   const codeCheck = async (e) => {
-    
     e.preventDefault();
 
     console.log("emailCode", emailCode);
@@ -236,7 +235,7 @@ function IdPassFind() {
 
   // 비밀번호 변경에서 확인을 누를때 실행
   const onPwCheck = async () => {
-    dispatch({type: "ERRORSET"});
+    dispatch({ type: "ERRORSET" });
     if (!(password === passwordConfirm)) {
       dispatch({ type: "PWCONFIRM_ERROR" });
       return;
@@ -382,20 +381,19 @@ function IdPassFind() {
             </span>
           )}
           {/* 에러 텍스트 (비밀번호 변경 페이지가 아닐때만 보여준다)*/}
-          {!pwChange && !mainPage ? 
-          <p className="errorTextBox">
-          {(errorText !== "" ?
-
-          (errorTextColor ? (<span className="errorText white">{errorText}</span>) :(
-          <span className="errorText on">{errorText}</span>))
-          :
-          (<span className="errorText">{errorText}</span>)
-          
-          )}
-          </p>
-          :
-          null
-          }
+          {!pwChange && !mainPage ? (
+            <p className="errorTextBox">
+              {errorText !== "" ? (
+                errorTextColor ? (
+                  <span className="errorText white">{errorText}</span>
+                ) : (
+                  <span className="errorText on">{errorText}</span>
+                )
+              ) : (
+                <span className="errorText">{errorText}</span>
+              )}
+            </p>
+          ) : null}
           {/* 페이지에 다르게 돌아가기 바꿔주기 */}
           {mainPage || idReport ? (
             <p>
