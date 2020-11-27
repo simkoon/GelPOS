@@ -131,49 +131,41 @@ export const register = async (ctx) => {
       table: [
         {
           name: '기본 테이블1',
-          startAt: '',
           nowMenu: [],
           done: false,
         },
         {
           name: '기본 테이블2',
-          startAt: '',
           nowMenu: [],
           done: false,
         },
         {
           name: '기본 테이블3',
-          startAt: '',
           nowMenu: [],
           done: false,
         },
         {
           name: '기본 테이블4',
-          startAt: '',
           nowMenu: [],
           done: false,
         },
         {
           name: '기본 테이블5',
-          startAt: '',
           nowMenu: [],
           done: false,
         },
         {
           name: '기본 테이블6',
-          startAt: '',
           nowMenu: [],
           done: false,
         },
         {
           name: '기본 테이블7',
-          startAt: '',
           nowMenu: [],
           done: false,
         },
         {
           name: '기본 테이블8',
-          startAt: '',
           nowMenu: [],
           done: false,
         },
