@@ -13,8 +13,6 @@ import addComma from '../../utility/addComma';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-let listener = null;
-
 function Invoice({ history }) {
   const [loading, setLoading] = useState(false);
   const listener2 = useRef(null);
@@ -70,10 +68,12 @@ function Invoice({ history }) {
         refundSum: 0,
         netSum: 0,
       };
+
       try {
         const result = await getList({ date: startDate });
         setRowData(result.data);
         setLoading(() => true);
+
         result.data.forEach((item) => {
           if (item.paymentOption === '환불') {
             listSum.refundSum += Number(item.payment);
@@ -222,6 +222,22 @@ function Invoice({ history }) {
       return new Date(params.data.regDate).toLocaleTimeString();
     },
   };
+  const isFiltered = useRef(false);
+  const onRefreshCells = (params) => {
+    isFiltered.current = true;
+    console.log(params);
+    setlistSumState(() => ({
+      allSum: 0,
+      refundSum: 0,
+      netSum: 0,
+    }));
+    console.log('onRefreshCells -> start');
+    gridApi.refreshCells();
+    console.log('onRefreshCells -> end');
+    console.log(params);
+    isFiltered.current = false;
+    console.log(isFiltered);
+  };
 
   return (
     <>
@@ -278,6 +294,7 @@ function Invoice({ history }) {
                       }}
                     >
                       <AgGridReact
+                        onFilterChanged={onRefreshCells}
                         overlayNoRowsTemplate="<p>불러올 거래내역이 없습니다.</p>"
                         rowSelection="single"
                         rowData={rowData}
@@ -350,6 +367,30 @@ function Invoice({ history }) {
                           sortable={true}
                           filter={true}
                           resizable={true}
+                          valueGetter={(params) => {
+                            if (isFiltered.current) {
+                              console.log(isFiltered);
+                              const payment = params.data.payment;
+                              if (params.data.paymentOption === '환불') {
+                                setlistSumState((prev) => ({
+                                  ...prev,
+                                  refundSum: (prev.refundSum += Number(
+                                    payment
+                                  )),
+                                }));
+                              } else {
+                                setlistSumState((prev) => ({
+                                  ...prev,
+                                  allSum: (prev.allSum += Number(payment)),
+                                }));
+                              }
+                              setlistSumState((prev) => ({
+                                ...prev,
+                                netSum: prev.allSum - prev.refundSum,
+                              }));
+                            }
+                            return params.data.payment;
+                          }}
                           valueFormatter={function (params) {
                             return addComma(params.value);
                           }}
