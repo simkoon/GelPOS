@@ -109,7 +109,7 @@ export default memo(function TableDetail({ match, history }) {
                           <TableOrderList
                             key={menu._id}
                             menu={menu}
-                            menuSeq={index}
+                            menuSeq={index + 1}
                             modifyTable={modifyTable}
                           />
                         );

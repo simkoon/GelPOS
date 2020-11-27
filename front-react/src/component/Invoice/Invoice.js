@@ -188,6 +188,14 @@ function Invoice({ history }) {
       window.removeEventListener('resize', listener2.current);
     };
   });
+
+  function dataComparator(data1, data2) {
+    return data1[0].name < data2[0].name
+      ? -1
+      : data1[0].name > data2[0].name
+      ? 1
+      : 0;
+  }
   return (
     <>
       {loading ? (
@@ -248,6 +256,7 @@ function Invoice({ history }) {
                         rowData={rowData}
                         onGridReady={onGridReady}
                         onSelectionChanged={onButtonClick}
+                        animateRows={true}
                       >
                         <AgGridColumn
                           field="seq"
@@ -263,6 +272,7 @@ function Invoice({ history }) {
                           sortable={true}
                           filter={true}
                           resizable={true}
+                          comparator={dataComparator}
                           valueFormatter={function (params) {
                             const menu = params.value;
 
