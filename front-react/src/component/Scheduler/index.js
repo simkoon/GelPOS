@@ -17,19 +17,19 @@ const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
 const calendars = [
   {
     id: "1",
-    name: "일정",
+    name: "예약",
     color: "#ffffff",
-    bgColor: "#9e5fff",
-    dragBgColor: "#9e5fff",
-    borderColor: "#9e5fff",
+    bgColor: "#8D1506",
+    dragBgColor: "#00A86B",
+    borderColor: "#C21700",
   },
   {
     id: "2",
-    name: "예약",
+    name: "일정",
     color: "#ffffff",
-    bgColor: "#00a9ff",
-    dragBgColor: "#00a9ff",
-    borderColor: "#00a9ff",
+    bgColor: "#2B4C80",
+    dragBgColor: "#2B4C80",
+    borderColor: "#4070BD",
   },
 ];
 
@@ -128,21 +128,9 @@ function Scheduler() {
 
     const { schedule, changes } = e;
 
-    console.log("changes 값", changes);
-    console.log("changes.isAllDay", changes.isAllDay);
-
-    // title: scheduleData.title,
-    //   isAllDay: scheduleData.isAllDay,
-    //   start: scheduleData.start.toDate(),
-    //   end: scheduleData.end.toDate(),
-    //   category: scheduleData.isAllDay ? "allday" : "time",
-    //   calendarId: scheduleData.calendarId,
-    //   dueDateClass: "",
-    //   location: scheduleData.location,
-    //   raw: {
-    //     class: scheduleData.raw["class"],
-    //   },
-    //   state: scheduleData.state,
+    if (changes === null || changes === undefined) {
+      return;
+    }
 
     const updateSchedule = {
       id: schedule.id,
@@ -272,7 +260,7 @@ function Scheduler() {
         <div className="App">
           <div className="headerContainer">
             <button className="monthBtn" onClick={viewBtnClick} name="prev">
-              이전
+              &lt;
             </button>
 
             <h1>
@@ -280,8 +268,14 @@ function Scheduler() {
             </h1>
 
             <button className="monthBtn" onClick={viewBtnClick} name="next">
-              다음
+              &gt;
             </button>
+            <div className="calendarsBox">
+              <div className="reservation" /> <span>예약</span>
+              <div>
+                <div className="scheduleCalenders" /> <span>일정</span>
+              </div>
+            </div>
           </div>
           <TUICalendar
             ref={cal}

@@ -57,13 +57,14 @@ function StoreInfoBtn({ onBtnClick, isPage }) {
           >
             카테고리
           </Button>
-          {/* <Button
+          <Button
             className="btn1_size_color mt-3"
-            value="MenuUpDel"
+            value="TableAdd"
             onClick={onBtnClick}
           >
-            메뉴 수정 ● 삭제
+            테이블
           </Button>
+          {/*
           <Button
             className="btn2_size_color mt-5"
             value="CategoryAdd"

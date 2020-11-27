@@ -3,9 +3,9 @@ import { Button, Row } from "react-bootstrap";
 
 export const AddCon = styled.div`
   position: absolute;
+  top: 100px;
   width: 80%;
-  top: 0px;
-  padding-top: 50px;
+  height: 100%;
   margin-left: 90%;
   //margin-top: 150px;
   text-align: left;
@@ -65,6 +65,19 @@ export const AddCon = styled.div`
   .underSelectP {
     color: gray;
     font-weight: lighter;
+  }
+
+  .offBtn {
+    border-radius: 10px;
+    background-color: rgb(92, 110, 136);
+    border: none;
+
+    &:hover {
+      background-color: rgb(52, 70, 96);
+    }
+    &:focus {
+      background-color: rgb(52, 70, 96) !important;
+    }
   }
 `;
 

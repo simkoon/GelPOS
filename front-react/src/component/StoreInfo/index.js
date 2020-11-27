@@ -5,9 +5,22 @@ import StoreInfoBtn from "./comm/StoreInfoBtn";
 import { useSelector } from "react-redux";
 import { MainContainer } from "./CSS/indexCss";
 import Menu from "../Menu";
+import Table from "./Table";
 import styled from "styled-components";
 
 const MenuContainer = styled(Row)`
+  @media all and (max-width: 1700px) {
+    margin-left: 200px;
+  }
+  @media all and (max-width: 1475px) {
+    margin-left: 400px;
+  }
+  @media all and (max-width: 1115px) {
+    margin-left: 700px;
+  }
+`;
+
+const TableContainer = styled(Row)`
   @media all and (max-width: 1700px) {
     margin-left: 200px;
   }
@@ -85,6 +98,11 @@ function StoreInfo() {
             <MenuContainer>
               <Menu offBtnClick={offBtnClick} />
             </MenuContainer>
+          )}
+          {isPage === "TableAdd" && (
+            <TableContainer>
+              <Table offBtnClick={offBtnClick} />
+            </TableContainer>
           )}
         </MainContainer>
       </div>

@@ -584,7 +584,9 @@ function Menu({ offBtnClick }) {
       <AddConContainer>
         <Col md={12} xl={7}>
           {/* 카테고리 목록 */}
-          <Button onClick={offBtnClick}>가게정보</Button>
+          <Button className="offBtn" onClick={offBtnClick}>
+            돌아가기
+          </Button>
           <h2>카테고리 목록</h2>
           <CategoryBtnBox>
             <div className="btnContainer">
@@ -804,7 +806,12 @@ function Menu({ offBtnClick }) {
                       autoComplete="off"
                       onBlur={() => {
                         if (fakeMenuPrice !== "") {
-                          dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                          if (fakeMenuPrice.indexOf("원") === -1) {
+                            dispatch({
+                              type: "FAKEPRICE",
+                              value: fakeMenuPrice,
+                            });
+                          }
                         }
                       }}
                     />
@@ -860,7 +867,9 @@ function Menu({ offBtnClick }) {
                     autoComplete="off"
                     onBlur={() => {
                       if (fakeMenuPrice !== "") {
-                        dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                        if (fakeMenuPrice.indexOf("원") === -1) {
+                          dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                        }
                       }
                     }}
                   />
@@ -890,7 +899,7 @@ function Menu({ offBtnClick }) {
             </CategoryAddContainer>
           </Modal>
 
-          {/* 카테고리 삭제시 재차 확인 모달 */}
+          {/* 메뉴 삭제시 재차 확인 모달 */}
           <Modal
             size="md"
             show={modalMenuDel}
