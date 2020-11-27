@@ -1,5 +1,5 @@
 import { Container, Row, Col, Spinner, Table, Button } from 'react-bootstrap';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState } from 'react';
 import TableOrderList from './TableOrderList';
 import TableMenuList from './TableMenuList';
 import addComma from '../../utility/addComma';
@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 
 const socket = io();
 
-export default memo(function TableDetail({ match, history }) {
+export default function TableDetail({ match, history }) {
   const { seq } = match.params;
 
   let getSum = 0;
@@ -32,7 +32,7 @@ export default memo(function TableDetail({ match, history }) {
     if (seq) {
       socket.emit('getOneTable', { seq: seq });
     }
-  }, [seq]);
+  });
 
   const modifyTable = (act, item) => {
     socket.emit('modifyTable', { table, item, seq, act });
@@ -109,7 +109,7 @@ export default memo(function TableDetail({ match, history }) {
                           <TableOrderList
                             key={menu._id}
                             menu={menu}
-                            menuSeq={index}
+                            menuSeq={index + 1}
                             modifyTable={modifyTable}
                           />
                         );
@@ -227,4 +227,4 @@ export default memo(function TableDetail({ match, history }) {
       )}
     </>
   );
-});
+}

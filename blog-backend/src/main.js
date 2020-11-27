@@ -131,7 +131,6 @@ app.io
       try {
         await tables.save();
         app.io.to(decoded.nowstore).emit('getTables', tables);
-
         tables.table = tables.table[msg.seq];
         socket.emit('getOneTable', tables);
       } catch (error) {

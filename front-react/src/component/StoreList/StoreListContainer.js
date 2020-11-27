@@ -57,7 +57,7 @@ export default withRouter(function StoreListContainer({ history }) {
       console.log('localStorage is not working');
     }
 
-    history.push('/store/invoice');
+    history.push('/store/table');
   };
   return (
     <>

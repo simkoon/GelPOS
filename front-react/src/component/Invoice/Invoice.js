@@ -13,8 +13,6 @@ import addComma from '../../utility/addComma';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-let listener = null;
-
 function Invoice({ history }) {
   const [loading, setLoading] = useState(false);
   const listener2 = useRef(null);
@@ -70,10 +68,12 @@ function Invoice({ history }) {
         refundSum: 0,
         netSum: 0,
       };
+
       try {
         const result = await getList({ date: startDate });
         setRowData(result.data);
         setLoading(() => true);
+
         result.data.forEach((item) => {
           if (item.paymentOption === '환불') {
             listSum.refundSum += Number(item.payment);
@@ -188,6 +188,57 @@ function Invoice({ history }) {
       window.removeEventListener('resize', listener2.current);
     };
   });
+
+  const dataComparator = function (data1, data2) {
+    return data1[0].name < data2[0].name
+      ? -1
+      : data1[0].name > data2[0].name
+      ? 1
+      : 0;
+  };
+
+  const containsFilterParams = {
+    valueGetter: (params) => {
+      let sumMenu = '';
+      params.data.menu.forEach((item) => {
+        sumMenu += ' ' + item.name;
+      });
+      return sumMenu;
+    },
+    filterOptions: [
+      {
+        displayKey: 'containsMenu',
+        displayName: '메뉴를 포함하는',
+        test: (filterValue, cellValue) => {
+          return cellValue != null && cellValue.indexOf(filterValue) > -1;
+        },
+        hideFilterInput: false,
+      },
+    ],
+  };
+
+  const dateFilterParams = {
+    valueGetter: (params) => {
+      return new Date(params.data.regDate).toLocaleTimeString();
+    },
+  };
+  const isFiltered = useRef(false);
+  const onRefreshCells = (params) => {
+    isFiltered.current = true;
+    console.log(params);
+    setlistSumState(() => ({
+      allSum: 0,
+      refundSum: 0,
+      netSum: 0,
+    }));
+    console.log('onRefreshCells -> start');
+    gridApi.refreshCells();
+    console.log('onRefreshCells -> end');
+    console.log(params);
+    isFiltered.current = false;
+    console.log(isFiltered);
+  };
+
   return (
     <>
       {loading ? (
@@ -243,17 +294,19 @@ function Invoice({ history }) {
                       }}
                     >
                       <AgGridReact
+                        onFilterChanged={onRefreshCells}
                         overlayNoRowsTemplate="<p>불러올 거래내역이 없습니다.</p>"
                         rowSelection="single"
                         rowData={rowData}
                         onGridReady={onGridReady}
                         onSelectionChanged={onButtonClick}
+                        animateRows={true}
                       >
                         <AgGridColumn
                           field="seq"
                           headerName={'거래 번호'}
+                          filter="agNumberColumnFilter"
                           sortable={true}
-                          filter={true}
                           checkboxSelection={true}
                           resizable={true}
                         ></AgGridColumn>
@@ -263,6 +316,7 @@ function Invoice({ history }) {
                           sortable={true}
                           filter={true}
                           resizable={true}
+                          comparator={dataComparator}
                           valueFormatter={function (params) {
                             const menu = params.value;
 
@@ -287,6 +341,7 @@ function Invoice({ history }) {
                               return sumName;
                             }
                           }}
+                          filterParams={containsFilterParams}
                         ></AgGridColumn>
                         <AgGridColumn
                           field="regDate"
@@ -294,6 +349,7 @@ function Invoice({ history }) {
                           sortable={true}
                           filter={true}
                           resizable={true}
+                          filterParams={dateFilterParams}
                           valueFormatter={function (params) {
                             return new Date(params.value).toLocaleTimeString();
                           }}
@@ -311,6 +367,30 @@ function Invoice({ history }) {
                           sortable={true}
                           filter={true}
                           resizable={true}
+                          valueGetter={(params) => {
+                            if (isFiltered.current) {
+                              console.log(isFiltered);
+                              const payment = params.data.payment;
+                              if (params.data.paymentOption === '환불') {
+                                setlistSumState((prev) => ({
+                                  ...prev,
+                                  refundSum: (prev.refundSum += Number(
+                                    payment
+                                  )),
+                                }));
+                              } else {
+                                setlistSumState((prev) => ({
+                                  ...prev,
+                                  allSum: (prev.allSum += Number(payment)),
+                                }));
+                              }
+                              setlistSumState((prev) => ({
+                                ...prev,
+                                netSum: prev.allSum - prev.refundSum,
+                              }));
+                            }
+                            return params.data.payment;
+                          }}
                           valueFormatter={function (params) {
                             return addComma(params.value);
                           }}

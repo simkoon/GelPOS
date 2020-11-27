@@ -13,7 +13,10 @@ const childCategory = new Schema({
 const childTable = new Schema({
   name: String,
   tableNum: Number,
-  startAt: Date,
+  startAt: {
+    type: Date,
+    default: Date.now, // 현재 날짜를 기본 값으로 지정
+  },
   nowMenu: [{ name: String, price: String, EA: Number, priceSum: String }],
 });
 

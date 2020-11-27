@@ -584,8 +584,11 @@ function Menu({ offBtnClick }) {
       <AddConContainer>
         <Col md={12} xl={7}>
           {/* 카테고리 목록 */}
-          <Button onClick={offBtnClick}>가게정보</Button>
-          <h2>카테고리 목록</h2>
+          <Button className="offBtn" onClick={offBtnClick}>
+            돌아가기
+          </Button>
+          <h2>카테고리</h2>
+          <hr />
           <CategoryBtnBox>
             <div className="btnContainer">
               <NewCategoryBtn onClick={onClickAddBtn} name="categoryAdd">
@@ -754,8 +757,9 @@ function Menu({ offBtnClick }) {
           {isPage === "categoryMenu" && (
             <MenuBtnContainer>
               <h2>
-                <span style={{ color: "red" }}>{categoryName}</span> 메뉴추가
+                <span style={{ color: "red" }}>{categoryName}</span> 메뉴
               </h2>
+              <hr />
               <MenuBtnBox>
                 <div className="btnContainer" style={{ margin: " 0px auto" }}>
                   <NewMenuBtn onClick={onClickAddBtn} name="menuAdd">
@@ -804,7 +808,12 @@ function Menu({ offBtnClick }) {
                       autoComplete="off"
                       onBlur={() => {
                         if (fakeMenuPrice !== "") {
-                          dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                          if (fakeMenuPrice.indexOf("원") === -1) {
+                            dispatch({
+                              type: "FAKEPRICE",
+                              value: fakeMenuPrice,
+                            });
+                          }
                         }
                       }}
                     />
@@ -860,7 +869,9 @@ function Menu({ offBtnClick }) {
                     autoComplete="off"
                     onBlur={() => {
                       if (fakeMenuPrice !== "") {
-                        dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                        if (fakeMenuPrice.indexOf("원") === -1) {
+                          dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                        }
                       }
                     }}
                   />
@@ -890,7 +901,7 @@ function Menu({ offBtnClick }) {
             </CategoryAddContainer>
           </Modal>
 
-          {/* 카테고리 삭제시 재차 확인 모달 */}
+          {/* 메뉴 삭제시 재차 확인 모달 */}
           <Modal
             size="md"
             show={modalMenuDel}

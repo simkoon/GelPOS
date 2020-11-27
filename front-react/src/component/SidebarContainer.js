@@ -6,8 +6,22 @@ import Invoice from './Invoice/Invoice';
 import StoreInfo from './StoreInfo';
 import Table from './Table/TableContainer';
 import TableDetail from './Table/TableDetail';
-
-export default function SidebarContainer(params) {
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { check } from '../modules/user';
+export default function SidebarContainer({ history }) {
+  const dispatch = useDispatch();
+  const { user } = useSelector(({ user }) => ({
+    user: user.user,
+  }));
+  useEffect(() => {
+    dispatch(check());
+  }, [dispatch]);
+  useEffect(() => {
+    if (user === null || user === 'null') {
+      history.push('/');
+    }
+  });
   return (
     <>
       <Sidebar>

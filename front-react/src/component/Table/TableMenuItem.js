@@ -1,4 +1,5 @@
 import { Card } from 'react-bootstrap';
+import addComma from '../../utility/addComma';
 
 export default function TableMenuItem({ menu, index, modifyTable }) {
   return (
@@ -15,7 +16,7 @@ export default function TableMenuItem({ menu, index, modifyTable }) {
     >
       <Card.Body>
         <Card.Title className="text-center">{menu.name}</Card.Title>
-        <p>가격 : {menu.price}</p>
+        <p>가격 : {addComma(menu.price)} 원</p>
       </Card.Body>
     </Card>
   );

@@ -3,15 +3,21 @@ import { Button, Row } from "react-bootstrap";
 
 export const AddCon = styled.div`
   position: absolute;
+  top: 100px;
   width: 80%;
-  top: 0px;
-  padding-top: 50px;
+  height: 100%;
   margin-left: 90%;
   //margin-top: 150px;
   text-align: left;
   h2 {
     text-align: center;
     font-weight: bold;
+  }
+
+  hr {
+    text-align: center;
+    width: 55%;
+    border: 1px solid rgba(85, 84, 126, 0.1);
   }
 
   .AddConInput {
@@ -65,6 +71,19 @@ export const AddCon = styled.div`
   .underSelectP {
     color: gray;
     font-weight: lighter;
+  }
+
+  .offBtn {
+    border-radius: 10px;
+    background-color: rgb(92, 110, 136);
+    border: none;
+
+    &:hover {
+      background-color: rgb(52, 70, 96);
+    }
+    &:focus {
+      background-color: rgb(52, 70, 96) !important;
+    }
   }
 `;
 
@@ -179,7 +198,8 @@ export const CategoryBtnBox = styled.div`
   overflow: hidden;
   .btnContainer {
     width: 120%;
-    padding: 25px 25px;
+    padding: 25px 10px;
+    padding-right: 70px;
     height: 100%;
     overflow-y: auto;
   }
@@ -199,7 +219,8 @@ export const MenuBtnBox = styled.div`
   overflow: hidden;
   .btnContainer {
     height: 100%;
-    padding: 25px 25px;
+    padding: 25px 10px;
+    padding-right: 70px;
     width: 120%;
     overflow-y: auto;
   }

@@ -1,9 +1,9 @@
 import { Container, Col, Row, Spinner } from 'react-bootstrap';
 import TableItem from './TableItem';
 import io from 'socket.io-client';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState } from 'react';
 const socket = io();
-export default memo(function TableContainer() {
+export default function TableContainer({ history }) {
   const [loading, setLoading] = useState(false);
   const [tables, setTables] = useState([]);
 
@@ -12,19 +12,25 @@ export default memo(function TableContainer() {
     setLoading(() => true);
   });
   useEffect(() => {
-    socket.connect('/');
-    console.log('웹소켓 연결');
+    try {
+      socket.connect('/');
+      console.log('웹소켓 연결');
+    } catch (error) {
+      alert('잘못된 접근입니다.');
+      history.push('/');
+    }
+
     return () => {
       console.log('웹소켓 꺼짐');
       socket.close();
       socket.disconnect();
       // console.log(socket.disconnected);
     };
-  }, []);
+  });
 
   useEffect(() => {
     socket.emit('getTables');
-  }, []);
+  });
 
   return (
     <>
@@ -95,4 +101,4 @@ export default memo(function TableContainer() {
       )}
     </>
   );
-});
+}
