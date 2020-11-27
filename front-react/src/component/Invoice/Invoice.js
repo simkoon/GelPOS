@@ -73,7 +73,7 @@ function Invoice({ history }) {
         const result = await getList({ date: startDate });
         setRowData(result.data);
         setLoading(() => true);
-
+        console.log(result);
         result.data.forEach((item) => {
           if (item.paymentOption === '환불') {
             listSum.refundSum += Number(item.payment);

@@ -18,6 +18,8 @@ api.use('/invoice', invoice.routes());
 api.use('/UserList', userList.routes());
 api.use('/userList', userList.routes());
 api.use('/table', tables.routes());
+api.use('/userList', userList.routes());
+api.use('/table', tables.routes());
 
 // 라우터를 내보냅니다.
 export default api;
