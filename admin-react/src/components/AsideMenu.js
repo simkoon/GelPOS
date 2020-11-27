@@ -67,10 +67,11 @@ function AsideMenu({ location }) {
         <p>유저 리스트</p>
       </AsideBox>
       </Link>
+      <Link to="/adminstorelist">
       <AsideBox
         className="border border-secondary"
         selected={(() => {
-          if (location.pathname === "/storelist") {
+          if (location.pathname === "/adminstorelist") {
             return true;
           } else {
             return false;
@@ -79,6 +80,7 @@ function AsideMenu({ location }) {
       >
         <p>가게 리스트</p>
       </AsideBox>
+      </Link>
       <Link to="/awaitlist">
       <AsideBox
         className="border border-secondary"

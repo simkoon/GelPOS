@@ -2,18 +2,17 @@ import React, { useEffect } from 'react';
 import qs from 'qs';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import UserListTable from './UserListTable';
+import StoreListTable from './StoreListTable';
 import {listUserlists} from '../../modules/userlists';
 
-
-const UserListContainer = ({ location }) => {
+const StoreListContainer = ({ location }) => {
 
     const dispatch = useDispatch();
     const { userlists, error, loading } = useSelector(
       ({ userlists, loading }) => ({
         userlists: userlists.userlists,
         error: userlists.error,
-        loading: loading['userList/LIST_USERLISTS'],
+        loading: loading['storeList/LIST_USERLISTS'],
       }),
     );
 
@@ -25,7 +24,7 @@ const UserListContainer = ({ location }) => {
     }, [dispatch, location.search]);
   
     return (
-      <UserListTable
+      <StoreListTable
         loading={loading}
         error={error}
         user={userlists}
@@ -34,4 +33,4 @@ const UserListContainer = ({ location }) => {
   };
 
 
-  export default withRouter(UserListContainer);
+  export default withRouter(StoreListContainer);

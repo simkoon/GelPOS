@@ -13,7 +13,7 @@ const [
 
 export const listUserlists = createAction(
     LIST_USERLISTS,
-    ({page, userid, username, email}) => ({page, userid, username, email}),
+    ({page, userid}) => ({page, userid}),
 );
 
 const listUserlistsSaga = createRequestSaga(LIST_USERLISTS, userlistAPI.listUserlists);
@@ -25,13 +25,15 @@ export function* userlistsSaga() {
 const initialState = {
     userlists: null,
     error: null,
+    lastPage: 1
 };
 
 const userlists = handleActions(
     {
-        [LIST_USERLISTS_SUCCESS]: (state, {payload : userlists}) => ({
+        [LIST_USERLISTS_SUCCESS]: (state, {payload : userlists, meta: response}) => ({
             ...state,
-            userlists
+            userlists,
+            lastPage: parseInt(response.headers['last-page'], 10)
         }),
         [LIST_USERLISTS_FAILURE]: (state, {payload : error}) => ({
             ...state,

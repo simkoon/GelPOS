@@ -14,6 +14,6 @@ api.use('/auth', auth.routes());
 api.use('/storeList', storeList.routes());
 api.use('/menu', menus.routes());
 api.use('/invoice', invoice.routes());
-api.use('/userList', userList.routes());
+api.use('/UserList', userList.routes());
 // 라우터를 내보냅니다.
 export default api;

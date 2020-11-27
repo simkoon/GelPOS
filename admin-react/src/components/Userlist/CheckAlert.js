@@ -24,6 +24,7 @@ const AskModalBlock = styled.div`
     margin-bottom: 1rem;
   }
   p {
+    margin-left: 15px;
     margin-bottom: 3rem;
   }
   .buttons {
@@ -35,7 +36,12 @@ const AskModalBlock = styled.div`
   .owo {
       width: 100%;
       height: 40px;
-      margin: 1px;
+      margin: 2px;
+  }
+
+  .withdraw {
+    background-color: red;
+    color: white;
   }
 `;
 
@@ -57,7 +63,7 @@ const CheckAlert = ({
         <p>{description}</p>
         <div className="buttons">
           <button onClick={onCancel} className="owo">{cancelText}</button>
-          <button onClick={onConfirm} className="owo">{confirmText}</button>
+          <button onClick={onConfirm} className="owo withdraw">{confirmText}</button>
         </div>
       </AskModalBlock>
     </Fullscreen>
