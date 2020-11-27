@@ -189,13 +189,40 @@ function Invoice({ history }) {
     };
   });
 
-  function dataComparator(data1, data2) {
+  const dataComparator = function (data1, data2) {
     return data1[0].name < data2[0].name
       ? -1
       : data1[0].name > data2[0].name
       ? 1
       : 0;
-  }
+  };
+
+  const containsFilterParams = {
+    valueGetter: (params) => {
+      let sumMenu = '';
+      params.data.menu.forEach((item) => {
+        sumMenu += ' ' + item.name;
+      });
+      return sumMenu;
+    },
+    filterOptions: [
+      {
+        displayKey: 'containsMenu',
+        displayName: '메뉴를 포함하는',
+        test: (filterValue, cellValue) => {
+          return cellValue != null && cellValue.indexOf(filterValue) > -1;
+        },
+        hideFilterInput: false,
+      },
+    ],
+  };
+
+  const dateFilterParams = {
+    valueGetter: (params) => {
+      return new Date(params.data.regDate).toLocaleTimeString();
+    },
+  };
+
   return (
     <>
       {loading ? (
@@ -261,8 +288,8 @@ function Invoice({ history }) {
                         <AgGridColumn
                           field="seq"
                           headerName={'거래 번호'}
+                          filter="agNumberColumnFilter"
                           sortable={true}
-                          filter={true}
                           checkboxSelection={true}
                           resizable={true}
                         ></AgGridColumn>
@@ -297,6 +324,7 @@ function Invoice({ history }) {
                               return sumName;
                             }
                           }}
+                          filterParams={containsFilterParams}
                         ></AgGridColumn>
                         <AgGridColumn
                           field="regDate"
@@ -304,6 +332,7 @@ function Invoice({ history }) {
                           sortable={true}
                           filter={true}
                           resizable={true}
+                          filterParams={dateFilterParams}
                           valueFormatter={function (params) {
                             return new Date(params.value).toLocaleTimeString();
                           }}

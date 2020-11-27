@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 
 const socket = io();
 
-export default memo(function TableDetail({ match, history }) {
+export default function TableDetail({ match, history }) {
   const { seq } = match.params;
 
   let getSum = 0;
@@ -227,4 +227,4 @@ export default memo(function TableDetail({ match, history }) {
       )}
     </>
   );
-});
+}
