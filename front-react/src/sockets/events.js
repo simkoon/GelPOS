@@ -2,11 +2,10 @@ import { socket } from './index';
 export const socketEvents = ({ setValue }) => {
   socket.on('getTables', ({ table }) => {
     setValue((state) => {
-      return { ...state, tables: table, loading: true };
+      return { ...state, tables: table };
     });
   });
   socket.on('getOneTable', (data) => {
-    console.log(data);
     setValue((state) => {
       return {
         ...state,
@@ -14,7 +13,15 @@ export const socketEvents = ({ setValue }) => {
           table: data.table[0],
           category: data.category,
         },
+        loading: true,
       };
     });
+  });
+  socket.on('loadingState', () => {
+    console.log('loadingState실행!!!');
+    setValue((state) => ({
+      ...state,
+      loading: false,
+    }));
   });
 };

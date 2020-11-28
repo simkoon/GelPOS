@@ -4,16 +4,24 @@ import TableOrderList from './TableOrderList';
 import TableMenuList from './TableMenuList';
 import addComma from '../../utility/addComma';
 import SocketContext from '../context/socket/context';
-import { onModifyTable, getOneTable, onPaymentTable } from '../../sockets/emit';
+import {
+  onModifyTable,
+  getOneTable,
+  onPaymentTable,
+  onLoading,
+} from '../../sockets/emit';
 export default function TableDetail({ match, history }) {
   const { seq } = match.params;
-  const { oneTable } = useContext(SocketContext);
+  const { oneTable, loading } = useContext(SocketContext);
   let getSum = 0;
 
   useEffect(() => {
     if (seq) {
       getOneTable(seq);
     }
+    return () => {
+      onLoading();
+    };
   }, []);
 
   const modifyTable = (act, item) => {
@@ -27,7 +35,7 @@ export default function TableDetail({ match, history }) {
   };
   return (
     <>
-      {oneTable ? (
+      {oneTable && loading ? (
         <Container
           fluid
           className="d-flex h-100 w-100 flex-column p-0"

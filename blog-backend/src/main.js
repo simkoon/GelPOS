@@ -185,6 +185,10 @@ app.io
         // socket.emit('getPayResult', error);
       }
     });
+
+    socket.on('loadingState', function (msg) {
+      socket.emit('loadingState');
+    });
   });
 
 // 라우터 설정
