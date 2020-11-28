@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Button, Row, Col } from 'react-bootstrap';
 
 function StoreList({ user, onClick }) {
-  console.log(user);
   return (
     <div
       style={{ height: '100%', maxWidth: '1024px' }}

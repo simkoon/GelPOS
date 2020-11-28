@@ -1,33 +1,51 @@
 import { Container, Row, Col, Spinner, Table, Button } from 'react-bootstrap';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import TableOrderList from './TableOrderList';
 import TableMenuList from './TableMenuList';
 import addComma from '../../utility/addComma';
-import SocketContext from '../context/socket/context';
-import { onModifyTable, getOneTable, onPaymentTable } from '../../sockets/emit';
+import io from 'socket.io-client';
+
+const socket = io();
+
 export default function TableDetail({ match, history }) {
   const { seq } = match.params;
-  const { oneTable } = useContext(SocketContext);
+
   let getSum = 0;
+  const [loading, setLoading] = useState(false);
+  const [table, setTable] = useState([]);
+  const [category, setCategory] = useState([]);
+  socket.on('getOneTable', function (data) {
+    setTable(() => data.table[0]);
+    setCategory(() => data.category);
+    setLoading(() => true);
+  });
+
+  useEffect(() => {
+    socket.connect('/');
+    return () => {
+      socket.close();
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (seq) {
-      getOneTable(seq);
+      socket.emit('getOneTable', { seq: seq });
     }
-  }, []);
+  });
 
   const modifyTable = (act, item) => {
-    onModifyTable(oneTable.table, item, seq, act);
+    socket.emit('modifyTable', { table, item, seq, act });
   };
 
   const paymentTable = (act) => {
-    onPaymentTable(oneTable.table, seq, act, getSum);
+    socket.emit('paymentTable', { table, seq, act, getSum });
     alert('결제가 완료되었습니다.');
-    history.push('../');
+    history.push('/store/table');
   };
   return (
     <>
-      {oneTable ? (
+      {loading ? (
         <Container
           fluid
           className="d-flex h-100 w-100 flex-column p-0"
@@ -49,11 +67,8 @@ export default function TableDetail({ match, history }) {
                 flexDirection: 'column',
               }}
             >
-              {oneTable.category[0] ? (
-                <TableMenuList
-                  modifyTable={modifyTable}
-                  category={oneTable.category}
-                />
+              {category[0] ? (
+                <TableMenuList modifyTable={modifyTable} category={category} />
               ) : (
                 <h1>메뉴를 추가해주세요.</h1>
               )}
@@ -86,9 +101,9 @@ export default function TableDetail({ match, history }) {
                       <th>금액</th>
                     </tr>
                   </thead>
-                  {oneTable.table ? (
+                  {table ? (
                     <tbody>
-                      {oneTable.table.nowMenu.map((menu, index) => {
+                      {table.nowMenu.map((menu, index) => {
                         getSum += Number(menu.priceSum);
                         return (
                           <TableOrderList

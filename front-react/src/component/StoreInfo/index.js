@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Row } from "react-bootstrap";
-import StInfomation from "./Main/StInformation";
-import StoreInfoBtn from "./comm/StoreInfoBtn";
-import { useSelector } from "react-redux";
-import { MainContainer } from "./CSS/indexCss";
-import Menu from "../Menu";
-import Table from "./Table";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import { Row } from 'react-bootstrap';
+import StInfomation from './Main/StInformation';
+import StoreInfoBtn from './comm/StoreInfoBtn';
+import { useSelector } from 'react-redux';
+import { MainContainer } from './CSS/indexCss';
+import Menu from '../Menu';
+import Table from './Table';
+import styled from 'styled-components';
 
 const MenuContainer = styled(Row)`
   @media all and (max-width: 1700px) {
@@ -39,16 +39,16 @@ function StoreInfo() {
 
   // 뽑아오는 가게정보 state에 저장해주기
   const [info, setInfo] = useState({
-    name: "",
-    regNumber: "",
-    address: "",
-    expiredDate: "",
+    name: '',
+    regNumber: '',
+    address: '',
+    expiredDate: '',
   });
   // 애니메이션 주는데 사용
-  const [Animation, setAnimation] = useState("");
+  const [Animation, setAnimation] = useState('');
 
   // 무슨 버튼을 눌렀는지 확인
-  const [isPage, setIsPage] = useState("");
+  const [isPage, setIsPage] = useState('');
 
   useEffect(() => {
     // 가게 정보 뽑아오기
@@ -71,20 +71,20 @@ function StoreInfo() {
   // 버튼 클릭 할때마다 반응 주기
   const onBtnClick = (e) => {
     console.log(e.target.value);
-    setAnimation("true");
+    setAnimation('true');
     setIsPage(e.target.value);
   };
 
   const offBtnClick = (e) => {
-    setAnimation("false");
-    setIsPage("");
+    setAnimation('false');
+    setIsPage('');
   };
 
   return (
     <>
-      <div style={{ height: "100%" }}>
+      <div style={{ height: '100%' }}>
         <MainContainer Animation={Animation}>
-          <Row style={{ width: "100%" }}>
+          <Row style={{ width: '100%' }}>
             <StInfomation
               Animation={Animation}
               storeName={info.name}
@@ -94,12 +94,12 @@ function StoreInfo() {
             />
             <StoreInfoBtn onBtnClick={onBtnClick} Animation={Animation} />
           </Row>
-          {isPage === "MenuAdd" && (
+          {isPage === 'MenuAdd' && (
             <MenuContainer>
               <Menu offBtnClick={offBtnClick} />
             </MenuContainer>
           )}
-          {isPage === "TableAdd" && (
+          {isPage === 'TableAdd' && (
             <TableContainer>
               <Table offBtnClick={offBtnClick} />
             </TableContainer>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useReducer } from "react";
-import { Button, Modal } from "react-bootstrap";
+import React, { useState, useEffect, useReducer } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import {
   AddCon,
   TableBtnBox,
@@ -7,27 +7,27 @@ import {
   TableBtn,
   NewTableBtn,
   TextInput,
-} from "./TableCss";
-import * as tableAPI from "../../../lib/api/table";
-import { useSelector } from "react-redux";
+} from './TableCss';
+import * as tableAPI from '../../../lib/api/table';
+import { useSelector } from 'react-redux';
 
 function reducer(state, action) {
   // 값 다 지워주기
   switch (action.type) {
-    case "RESET":
+    case 'RESET':
       return {
         ...state,
-        tableName: "",
-        errorText: "",
-        isTablename: "",
-        isTableId: "",
+        tableName: '',
+        errorText: '',
+        isTablename: '',
+        isTableId: '',
       };
-    case "ADD_ERROR":
+    case 'ADD_ERROR':
       return {
         ...state,
-        errorText: "이름을 입력해 주세요.",
+        errorText: '이름을 입력해 주세요.',
       };
-    case "TABLECLICK":
+    case 'TABLECLICK':
       return {
         ...state,
         isTablename: action.name,
@@ -42,10 +42,10 @@ function reducer(state, action) {
 
 function Table({ offBtnClick }) {
   const [state, dispatch] = useReducer(reducer, {
-    tableName: "",
-    errorText: "",
-    isTablename: "",
-    isTableId: "",
+    tableName: '',
+    errorText: '',
+    isTablename: '',
+    isTableId: '',
   });
 
   const { tableName, errorText, isTablename, isTableId } = state;
@@ -71,12 +71,12 @@ function Table({ offBtnClick }) {
 
   // 테이블 리스트 가져오기
   const tableList = async () => {
-    console.log("dddddddd");
+    console.log('dddddddd');
     const result = await tableAPI.tableList(storeid);
 
     setTable(
       result.data.map((table) => {
-        const date = table.startAt.substring(0, 10);
+        const date = table.startAt ? table.startAt.substring(0, 10) : '';
         return (
           <TableBtn
             onClick={() => onClickTableBtn(table.name, table._id)}
@@ -86,7 +86,7 @@ function Table({ offBtnClick }) {
           >
             테이블 이름: {table.name}
             <br />
-            <span style={{ color: "deepskyblue" }}>생성날짜: {date}</span>
+            <span style={{ color: 'deepskyblue' }}>생성날짜: {date}</span>
           </TableBtn>
         );
       })
@@ -136,47 +136,47 @@ function Table({ offBtnClick }) {
   // 테이블 버튼 클릭시
   const onClickTableBtn = (name, id) => {
     setModalTable(true);
-    dispatch({ type: "TABLECLICK", name, id });
+    dispatch({ type: 'TABLECLICK', name, id });
   };
 
   // 버튼 클릭시
   const onClickBtn = async (e) => {
     // 테이블 추가 버튼 누를 때
-    if (e.target.name === "tableAddBtn") {
-      if (tableName === "") {
-        dispatch({ type: "ADD_ERROR" });
+    if (e.target.name === 'tableAddBtn') {
+      if (tableName === '') {
+        dispatch({ type: 'ADD_ERROR' });
       }
       await tableAdd();
       setModalTableAdd(false);
       tableList();
-      dispatch({ type: "RESET" });
+      dispatch({ type: 'RESET' });
     }
 
     // 테이블 삭제 버튼 누를 때
-    if (e.target.name === "tableDelBtn") {
+    if (e.target.name === 'tableDelBtn') {
       setModalTable(false);
       setModalTableDel(true);
     }
 
     // 테이블 삭제 확인 버튼을 누를 때
-    if (e.target.name === "tableDeleteOkBtn") {
+    if (e.target.name === 'tableDeleteOkBtn') {
       await tableDel();
       tableList();
       setModalTable(false);
       setModalTableDel(false);
-      dispatch({ type: "RESET" });
+      dispatch({ type: 'RESET' });
     }
 
     // 테이블 수정 버튼을 누를 때
-    if (e.target.name === "tableUpdateBtn") {
-      if (tableName === "") {
-        dispatch({ type: "ADD_ERROR" });
+    if (e.target.name === 'tableUpdateBtn') {
+      if (tableName === '') {
+        dispatch({ type: 'ADD_ERROR' });
         return;
       }
       await tableUpdate();
       tableList();
       setModalTable(false);
-      dispatch({ type: "RESET" });
+      dispatch({ type: 'RESET' });
     }
   };
 
@@ -203,7 +203,7 @@ function Table({ offBtnClick }) {
           show={modaltableAdd}
           onHide={() => {
             setModalTableAdd(false);
-            dispatch({ type: "RESET" });
+            dispatch({ type: 'RESET' });
           }}
         >
           <Modal.Header>
@@ -220,8 +220,8 @@ function Table({ offBtnClick }) {
               maxLength="8"
             />
             <p className="underSelectP">* 1자 이상 8자 이하로 입력해 주세요.</p>
-            {errorText !== "" && (
-              <div error={errorText} style={{ color: "red" }}>
+            {errorText !== '' && (
+              <div error={errorText} style={{ color: 'red' }}>
                 {errorText}
               </div>
             )}
@@ -238,7 +238,7 @@ function Table({ offBtnClick }) {
               className="categoryBackBtn"
               onClick={() => {
                 setModalTableAdd(false);
-                dispatch({ type: "RESET" });
+                dispatch({ type: 'RESET' });
               }}
             >
               취소
@@ -251,12 +251,12 @@ function Table({ offBtnClick }) {
           show={modalTable}
           onHide={() => {
             setModalTable(false);
-            dispatch({ type: "RESET" });
+            dispatch({ type: 'RESET' });
           }}
         >
           <Modal.Header>
             <h2>
-              <span style={{ color: "blue" }}>{isTablename}</span> 테이블{" "}
+              <span style={{ color: 'blue' }}>{isTablename}</span> 테이블{' '}
             </h2>
           </Modal.Header>
           <Modal.Body>
@@ -270,8 +270,8 @@ function Table({ offBtnClick }) {
               maxLength="8"
             />
             <p className="underSelectP">* 1자 이상 8자 이하로 입력해 주세요.</p>
-            {errorText !== "" && (
-              <div error={errorText} style={{ color: "red" }}>
+            {errorText !== '' && (
+              <div error={errorText} style={{ color: 'red' }}>
                 {errorText}
               </div>
             )}
@@ -295,7 +295,7 @@ function Table({ offBtnClick }) {
               className="categoryBackBtn"
               onClick={() => {
                 setModalTable(false);
-                dispatch({ type: "RESET" });
+                dispatch({ type: 'RESET' });
               }}
             >
               취소
@@ -312,11 +312,11 @@ function Table({ offBtnClick }) {
           <Modal.Header>
             <h2>
               테이블
-              <span style={{ color: "red" }}>삭제</span>
+              <span style={{ color: 'red' }}>삭제</span>
             </h2>
           </Modal.Header>
           <Modal.Body>
-            정말 <span style={{ color: "blue" }}>{isTablename}</span> 테이블을
+            정말 <span style={{ color: 'blue' }}>{isTablename}</span> 테이블을
             삭제 하시겠습니까?
           </Modal.Body>
           <Modal.Footer>

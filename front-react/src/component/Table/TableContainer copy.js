@@ -1,21 +1,40 @@
 import { Container, Col, Row, Spinner } from 'react-bootstrap';
 import TableItem from './TableItem';
-
-import { useEffect, useContext } from 'react';
-import SocketContext from '../context/socket/context';
-import { getTables } from '../../sockets/emit';
-
+import io from 'socket.io-client';
+import { useEffect, useState } from 'react';
+const socket = io();
 export default function TableContainer({ history }) {
-  const { tables } = useContext(SocketContext);
+  const [loading, setLoading] = useState(false);
+  const [tables, setTables] = useState([]);
+
+  socket.on('getTables', function (data) {
+    setTables(() => data.table);
+    setLoading(() => true);
+  });
+  useEffect(() => {
+    try {
+      socket.connect('/');
+      console.log('웹소켓 연결');
+    } catch (error) {
+      alert('잘못된 접근입니다.');
+      history.push('/');
+    }
+
+    return () => {
+      console.log('웹소켓 꺼짐');
+      socket.close();
+      socket.disconnect();
+      // console.log(socket.disconnected);
+    };
+  });
 
   useEffect(() => {
-    getTables();
-    return () => {};
-  }, []);
+    socket.emit('getTables');
+  });
 
   return (
     <>
-      {tables.length !== 0 ? (
+      {loading ? (
         <Container
           fluid
           className="d-flex h-100 w-100 p-2 flex-column"

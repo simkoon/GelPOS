@@ -75,6 +75,7 @@ app.io
       try {
         const tables = await Table.findByStoreId(decoded.nowstore);
         // app.io.to().emit('getTables');
+
         socket.emit('getTables', tables);
       } catch (e) {
         console.log('getTables err');
@@ -87,7 +88,7 @@ app.io
       const tables = await Table.findByStoreId(decoded.nowstore);
 
       tables.table = tables.table[tableSeq];
-
+      console.log(tables);
       socket.emit('getOneTable', tables);
     });
 
@@ -176,6 +177,8 @@ app.io
         // socket.emit('getPayResult', result);
         app.io.to(decoded.nowstore).emit('getTables', tables);
         tables.table = tables.table[msg.seq];
+        console.log(tables);
+        console.log('tablse~~~~~~~~~~~~');
         socket.emit('getOneTable', tables);
       } catch (error) {
         console.log(error);
