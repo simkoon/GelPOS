@@ -18,7 +18,6 @@ export const socketEvents = ({ setValue }) => {
     });
   });
   socket.on('loadingState', () => {
-    console.log('loadingState실행!!!');
     setValue((state) => ({
       ...state,
       loading: false,

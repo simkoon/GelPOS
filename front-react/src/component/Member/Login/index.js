@@ -1,17 +1,17 @@
-import React, { useReducer, useEffect } from "react";
-import { Link, withRouter } from "react-router-dom";
-import * as authAPI from "../../../lib/api/auth";
-import { useSelector, useDispatch } from "react-redux";
-import { check } from "../../../modules/user";
+import React, { useReducer, useEffect } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import * as authAPI from '../../../lib/api/auth';
+import { useSelector, useDispatch } from 'react-redux';
+import { check } from '../../../modules/user';
 
-import "./CSS/Login.scss";
+import './CSS/Login.scss';
 
 function reducer(state, action) {
   switch (action.type) {
-    case "LOGIN_ERROR":
+    case 'LOGIN_ERROR':
       return {
         ...state,
-        errortext: "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.",
+        errortext: '가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.',
       };
   }
   return {
@@ -22,16 +22,16 @@ function reducer(state, action) {
 
 function Login({ history }) {
   // redux에서 user를 가져옴
-  console.log("로그인시작");
+
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
   const ReduxDispatch = useDispatch();
 
   const [state, dispatch] = useReducer(reducer, {
-    userid: "",
-    password: "",
-    errortext: "0",
+    userid: '',
+    password: '',
+    errortext: '0',
   });
 
   const { userid, password, errortext } = state;
@@ -46,16 +46,14 @@ function Login({ history }) {
       };
 
       const result = await authAPI.login(formData);
-      console.log(result);
+
       try {
-        console.log("여기는 로그인");
-        console.log(JSON.stringify(user));
-        localStorage.setItem("user", JSON.stringify(result.data));
+        localStorage.setItem('user', JSON.stringify(result.data));
         ReduxDispatch(check());
       } catch (e) {
-        console.log("localStorage is not working");
+        console.log('localStorage is not working');
       }
-      history.push("/storelist");
+      history.push('/storelist');
     } catch (e) {
       console.log(e);
       const resulterror = e.response.status;
@@ -63,7 +61,7 @@ function Login({ history }) {
 
       switch (resulterror) {
         case 401:
-          return dispatch({ type: "LOGIN_ERROR" });
+          return dispatch({ type: 'LOGIN_ERROR' });
       }
     }
   };
@@ -77,16 +75,12 @@ function Login({ history }) {
       ReduxDispatch(check());
     }
     if (user) {
-      console.log(user);
       try {
-        console.log("여기는 로그인");
-        console.log(JSON.stringify(user));
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
       } catch (e) {
-        console.log("localStorage is not working");
+        console.log('localStorage is not working');
       }
-      history.push("/storeList");
-      console.log("로그인 인덱스에 유저");
+      history.push('/storeList');
 
       return;
     }
@@ -132,7 +126,7 @@ function Login({ history }) {
           <p>
             <button className="login_btn">Login</button>
           </p>
-          {errortext !== "0" ? (
+          {errortext !== '0' ? (
             <p className="errortext on">{errortext}</p>
           ) : (
             <p className="errortext">{errortext}</p>

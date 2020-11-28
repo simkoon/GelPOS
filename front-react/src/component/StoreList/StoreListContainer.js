@@ -47,9 +47,7 @@ export default withRouter(function StoreListContainer({ history }) {
   });
 
   const onSelect = async (nowstore) => {
-    console.log(nowstore);
     const result = await selectStore(nowstore);
-    console.log(result);
     dispatch(check());
     try {
       localStorage.setItem('user', JSON.stringify(result.data));
