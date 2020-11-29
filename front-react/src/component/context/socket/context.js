@@ -1,7 +1,8 @@
-import  { createContext } from 'react';
+import { createContext } from 'react';
 
 const SocketContext = createContext({
-  queueLength: 0,
-  positionInLine: 0,
+  tables: false,
+  oneTable: false,
+  loading: false,
 });
 export default SocketContext;

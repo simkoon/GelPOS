@@ -15,7 +15,7 @@ export default function TableContainer({ history }) {
 
   return (
     <>
-      {tables.length !== 0 ? (
+      {tables ? (
         <Container
           fluid
           className="d-flex h-100 w-100 p-2 flex-column"

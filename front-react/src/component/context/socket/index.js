@@ -4,7 +4,7 @@ import { initSockets } from '../../../sockets';
 import { disconnect, connect } from '../../../sockets/emit';
 const SocketProvider = (props) => {
   const [value, setValue] = useState({
-    tables: [],
+    tables: false,
     oneTable: false,
     loading: false,
   });
