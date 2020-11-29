@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import SocketContext from './context';
-import { initSockets, socket } from '../../../sockets';
+import { initSockets } from '../../../sockets';
 import { disconnect, connect, getTables } from '../../../sockets/emit';
 const SocketProvider = (props) => {
   const [value, setValue] = useState({
@@ -11,8 +11,7 @@ const SocketProvider = (props) => {
 
   useEffect(() => {
     disconnect();
-    socket.connect('/');
-    console.log(socket);
+    connect();
     getTables();
     initSockets({ setValue });
     return () => {
