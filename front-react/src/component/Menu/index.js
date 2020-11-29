@@ -610,13 +610,22 @@ function Menu({ offBtnClick }) {
                 <span style={{ color: "red" }}>{categoryName}</span> 카테고리
               </h2>
               <form onClick={onClickAddBtn}>
-                <Button className="categoryAddBtn" name="categoryMenuBtn">
+                <Button
+                  variant="outline-primary"
+                  className="categoryAddBtn"
+                  name="categoryMenuBtn"
+                >
                   메뉴
                 </Button>
-                <Button className="categoryUpdateBtn" name="categoryUpdateBtn">
+                <Button
+                  variant="outline-primary"
+                  className="categoryUpdateBtn"
+                  name="categoryUpdateBtn"
+                >
                   수정
                 </Button>
                 <Button
+                  variant="outline-primary"
                   className="categoryBackBtn"
                   onClick={() => setModalCategoryDel(true)}
                 >
@@ -645,6 +654,7 @@ function Menu({ offBtnClick }) {
               </Modal.Body>
               <Modal.Footer>
                 <Button
+                  variant="outline-danger"
                   className="categoryBackBtn"
                   name="categoryDeleteBtn"
                   onClick={onClickAddBtn}
@@ -652,6 +662,7 @@ function Menu({ offBtnClick }) {
                   삭제
                 </Button>
                 <Button
+                  variant="outline-dark"
                   className="categoryBackBtn"
                   onClick={() => setModalCategoryDel(false)}
                 >
@@ -687,10 +698,15 @@ function Menu({ offBtnClick }) {
                     )}
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button className="categoryAddBtn" name="categoryAddBtn">
+                    <Button
+                      variant="outline-primary"
+                      className="categoryAddBtn"
+                      name="categoryAddBtn"
+                    >
                       추가
                     </Button>
                     <Button
+                      variant="outline-dark"
                       className="categoryBackBtn"
                       onClick={CategoryAddClose}
                     >
@@ -738,10 +754,15 @@ function Menu({ offBtnClick }) {
                     )}
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button className="categoryAddBtn" name="categoryUpBtn">
+                    <Button
+                      variant="outline-success"
+                      className="categoryAddBtn"
+                      name="categoryUpBtn"
+                    >
                       수정
                     </Button>
                     <Button
+                      variant="outline-dark"
                       className="categoryBackBtn"
                       onClick={CategoryUpdateClose}
                     >
@@ -823,10 +844,18 @@ function Menu({ offBtnClick }) {
                     )}
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button className="categoryAddBtn" name="menuAddBtn">
+                    <Button
+                      variant="outline-primary"
+                      className="categoryAddBtn"
+                      name="menuAddBtn"
+                    >
                       추가
                     </Button>
-                    <Button className="categoryBackBtn" onClick={menuAddClose}>
+                    <Button
+                      variant="outline-dark"
+                      className="categoryBackBtn"
+                      onClick={menuAddClose}
+                    >
                       취소
                     </Button>
                   </Modal.Footer>
@@ -881,10 +910,15 @@ function Menu({ offBtnClick }) {
                   )}
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button className="categoryAddBtn" name="menuUpdateBtn">
+                  <Button
+                    variant="outline-success"
+                    className="categoryAddBtn"
+                    name="menuUpdateBtn"
+                  >
                     수정
                   </Button>
                   <Button
+                    variant="outline-danger"
                     className="categoryBackBtn"
                     onClick={() => {
                       setModalMenuDel(true);
@@ -893,7 +927,11 @@ function Menu({ offBtnClick }) {
                   >
                     삭제
                   </Button>
-                  <Button className="categoryBackBtn" onClick={menuAddClose}>
+                  <Button
+                    variant="outline-dark"
+                    className="categoryBackBtn"
+                    onClick={menuAddClose}
+                  >
                     취소
                   </Button>
                 </Modal.Footer>
@@ -920,6 +958,7 @@ function Menu({ offBtnClick }) {
               </Modal.Body>
               <Modal.Footer>
                 <Button
+                  variant="outline-danger"
                   className="categoryBackBtn"
                   name="menuDeleteBtn"
                   onClick={onClickAddBtn}
@@ -927,6 +966,7 @@ function Menu({ offBtnClick }) {
                   삭제
                 </Button>
                 <Button
+                  variant="outline-dark"
                   className="categoryBackBtn"
                   onClick={() => {
                     setModalMenuDel(false);

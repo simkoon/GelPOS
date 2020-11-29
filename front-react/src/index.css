@@ -17,3 +17,8 @@ code {
 a:hover { 
   text-decoration:none !important;
 }
+
+
+button:hover, button:focus{
+	outline: none !important;
+}

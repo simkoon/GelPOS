@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from "styled-components";
-import { Button, Row } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 export const AddCon = styled.div`
   position: absolute;

@@ -245,50 +245,23 @@ export const CategoryAddContainer = styled.div`
 
   .categoryAddBtn {
     margin-right: 30px;
-    background-color: skyblue;
     width: 20%;
     margin-top: 1.5rem;
     padding: 10px;
-    color: white;
-    border: none;
-    &:hover {
-      background-color: deepskyblue;
-    }
-    &:focus {
-      background-color: deepskyblue !important;
-    }
   }
 
   .categoryUpdateBtn {
     margin-right: 30px;
-    background-color: rgb(130, 170, 154);
     width: 20%;
     margin-top: 1.5rem;
     padding: 10px;
-    color: white;
-    border: none;
-    &:hover {
-      background-color: rgb(78, 102, 92);
-    }
-    &:focus {
-      background-color: rgb(78, 102, 92) !important;
-    }
   }
 
   .categoryBackBtn {
     margin-right: 30px;
-    background-color: rgb(200, 100, 100);
     width: 20%;
     margin-top: 1.5rem;
     padding: 10px;
-    color: white;
-    border: none;
-    &:hover {
-      background-color: rgb(136, 0, 0);
-    }
-    &:focus {
-      background-color: rgb(136, 0, 0) !important;
-    }
   }
 `;
 
