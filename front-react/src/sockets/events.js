@@ -1,7 +1,6 @@
 import { socket } from './index';
 export const socketEvents = ({ setValue }) => {
   socket.on('getTables', ({ table }) => {
-    console.log(table);
     setValue((state) => {
       return { ...state, tables: table };
     });

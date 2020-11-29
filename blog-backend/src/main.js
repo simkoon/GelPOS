@@ -41,7 +41,7 @@ app.io = socketIO(app.server, {});
 app.io
   .use((socket, next) => {
     let error = null;
-
+    console.log('미들오ㅔ어들어옴');
     try {
       let ctx = app.createContext(socket.request, new http.OutgoingMessage());
       socket.cookies = ctx.cookies;
@@ -58,11 +58,15 @@ app.io
     return next(error);
   })
   .on('connection', function (socket) {
+    console.log('커넥션들어온ㅁㄷ');
     const token = socket.cookies.get('access_token');
-    if (!token) return; // 토큰이 없음
+    if (!token) {
+      console.log('토크없음');
+      return;
+    } // 토큰이 없음
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+    console.log('들어는오나', decoded.nowstore);
     // 가게 고유번호로 룸을 만들고 그안에서 해결
     if (app.io.sockets.adapter.rooms.has(decoded.nowstore)) {
       socket.join(decoded.nowstore);
@@ -72,6 +76,7 @@ app.io
     }
 
     socket.on('getTables', async function (msg) {
+
       try {
         const tables = await Table.findByStoreId(decoded.nowstore);
         // app.io.to().emit('getTables');

@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 const SocketContext = createContext({
-  tables: false,
+  tables: [],
   oneTable: false,
   loading: false,
 });

@@ -1,5 +1,6 @@
 import { socket } from './index';
 export const getTables = () => {
+  console.log('에밋에서 겟테이블 함수 실행!!!!');
   socket.emit('getTables');
 };
 export const getOneTable = (seq) => {
@@ -18,6 +19,9 @@ export const disconnect = () => {
 };
 export const connect = () => {
   socket.connect('/');
+  console.log('커넥션실행됨');
+  console.log(socket);
+  getTables();
 };
 export const onLoading = () => {
   socket.emit('loadingState');
