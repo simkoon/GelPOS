@@ -12,11 +12,16 @@ const StoreListContainer = ({ location }) => {
       ({ userlists, loading }) => ({
         userlists: userlists.userlists,
         error: userlists.error,
-        loading: loading['storeList/LIST_USERLISTS'],
+        loading: loading['adminstoreList/LIST_USERLISTS'],
       }),
     );
 
+    console.log('userlists');
+    console.log(userlists);
+
     useEffect(() => {
+      console.log('컨테이너유즈이펙트유저리스트');
+      console.log(userlists);
       const { userid } = qs.parse(location.search, {
         ignoreQueryPrefix: true,
       });
@@ -31,6 +36,5 @@ const StoreListContainer = ({ location }) => {
       />
     );
   };
-
 
   export default withRouter(StoreListContainer);

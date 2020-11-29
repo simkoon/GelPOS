@@ -22,7 +22,7 @@ const Aside = styled.div`
 
 const AsideBox = styled.div`
   display: flex;
-  height: 25%;
+  height: 50%;
   border-left: none !important;
   flex-direction: column;
   justify-content: space-around;
@@ -36,7 +36,7 @@ const AsideBox = styled.div`
   p {
     text-align: center;
     color: white;
-    font-size: 18px;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 0;
   }
@@ -81,7 +81,7 @@ function AsideMenu({ location }) {
         <p>가게 리스트</p>
       </AsideBox>
       </Link>
-      <Link to="/awaitlist">
+      {/* <Link to="/awaitlist">
       <AsideBox
         className="border border-secondary"
         selected={(() => {
@@ -106,7 +106,7 @@ function AsideMenu({ location }) {
         })()}
       >
         <p>문의 내역</p>
-      </AsideBox>
+      </AsideBox> */}
     </Aside>
   );
 }

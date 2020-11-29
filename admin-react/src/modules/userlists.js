@@ -9,7 +9,7 @@ const [
     LIST_USERLISTS,
     LIST_USERLISTS_SUCCESS,
     LIST_USERLISTS_FAILURE
-] = createRequestActionTypes('userList/LIST_USERLISTS');
+] = createRequestActionTypes('userList/LIST_USERLISTS', 'adminstoreList/LIST_USERLISTS');
 
 export const listUserlists = createAction(
     LIST_USERLISTS,
@@ -33,7 +33,6 @@ const userlists = handleActions(
         [LIST_USERLISTS_SUCCESS]: (state, {payload : userlists, meta: response}) => ({
             ...state,
             userlists,
-            lastPage: parseInt(response.headers['last-page'], 10)
         }),
         [LIST_USERLISTS_FAILURE]: (state, {payload : error}) => ({
             ...state,

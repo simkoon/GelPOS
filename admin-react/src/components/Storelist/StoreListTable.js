@@ -1,7 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import "bootstrap/dist/css/bootstrap.css";
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import 'bootstrap/dist/css/bootstrap.css';
+import { Container, Row, Col } from 'react-bootstrap';
+import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 const ULT = styled.div`
   width: 100%;
@@ -23,63 +27,105 @@ const ULT = styled.div`
   }
 
   .test {
-      margin-top: 125px;
+    margin-top: 125px;
   }
 `;
 
-const TableItem = ({users, index, store}) => {
-    return (
-        <tr>
-            <th scope="row">{index}</th>
-            <td>{store.name}</td>
-            <td>{users.userid}</td>
-            <td>{users.username}</td>
-            <td>{users.email}</td>
-            <td>{store.address}</td>
-            <td>{store.publishedDate.toString().replace("T"," ").substring(0, 16)}</td>
-          </tr>
-    )
-}
+function StoreListTable({ user }) {
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
+  const [storeData, setStoreData] = useState([]);
 
-function StoreListTable({ user, loading}) {
-  let count = 0;
+  function onGridReady(params) {
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
+    params.api.sizeColumnsToFit();
+  }
+
+  function setRowData() {
+    const resultArray = [];
+    if (user) {
+      user.forEach((users) => {
+        users.store.forEach((store) => {
+          const eachStore = {
+            userid: users.userid,
+            username: users.username,
+            useremail: users.email,
+
+            storename: store.name,
+            storeadd: store.address,
+            storepubdate: store.publishedDate.substring(0, 10),
+          };
+          resultArray.push(eachStore);
+        });
+      });
+      setStoreData(() => {
+        return resultArray;
+      });
+    }
+  }
+
+  useEffect(() => {
+    console.log('되나요?');
+    setRowData();
+  }, [user]);
+
   return (
-    <ULT>    
-        <Container fluid>
-          <Row>
-            <Col md={{ span:8, offset: 2}} className="test">
-              <h2>가게 리스트</h2>
-              <table className="table">
-                <thead className="thead-dark">
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col">가게명</th>
-                    <th scope="col">점주 아이디</th>
-                    <th scope="col">점주 이름</th>
-                    <th scope="col">이메일</th>
-                    <th scope="col">가게주소</th>
-                    <th scope="col">등록일자</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  { !loading && user && (
-                    <>
-                    {user.reverse().map((users) => 
-                        {                       
-                        return (users.store.map((store, index) => {
-                            count++;
-                        return (<TableItem users={users} key={index} index={count} store={store} />)
-                        }))                   
-                        }
-                    )} 
-                    </>        
-                  )}       
-                </tbody>
-              </table>
-            </Col>
-          </Row>
-        </Container>
-      
+    <ULT>
+      <Container fluid>
+        <Row>
+          <Col md={{ span: 10, offset: 1 }} className="test">
+            <h2>가게 리스트</h2>
+            <div
+              className="ag-theme-alpine"
+              style={{
+                height: 600,
+                width: '100%',
+              }}
+            >
+              <AgGridReact
+                overlayNoRowsTemplate="<p>가게 정보가 없습니다</p>"
+                rowData={storeData}
+                paginationAutoPageSize={true}
+                pagination={true}
+                rowSelection="single"
+                onGridReady={onGridReady}
+              >
+                <AgGridColumn
+                  field="storename"
+                  headerName={'가게명'}
+                  resizable={true}
+                />
+                <AgGridColumn
+                  field="username"
+                  headerName={'점주명'}
+                  resizable={true}
+                />
+                <AgGridColumn
+                  field="userid"
+                  headerName={'점주 아이디'}
+                  resizable={true}
+                />
+                <AgGridColumn
+                  field="useremail"
+                  headerName={'점주 이메일'}
+                  resizable={true}
+                />
+                <AgGridColumn
+                  field="storeadd"
+                  headerName={'가게 주소'}
+                  resizable={true}
+                />
+                <AgGridColumn
+                  field="storepubdate"
+                  headerName={'등록날짜'}
+                  resizable={true}
+                />
+              </AgGridReact>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </ULT>
   );
 }
