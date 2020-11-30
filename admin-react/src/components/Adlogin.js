@@ -48,7 +48,7 @@ function Adlogin() {
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1">PW</span>
                     </div>
-                    <input type="text" name="password" class="form-control" placeholder=""
+                    <input type="password" name="password" class="form-control" placeholder=""
                     aria-label="Input Password" aria-describedby="basic-addon1" required></input>
                 </div>
                 <Link to="/UserList"><button type="button" className="btn btn-secondary btn-lg btn-block">로그인</button></Link>
