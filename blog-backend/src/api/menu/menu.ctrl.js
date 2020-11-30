@@ -11,7 +11,6 @@ export const addCategory = async (ctx) => {
   const result = schema.validate(ctx.request.body);
 
   if (result.error) {
-    //console.log(result);
     ctx.status = 400;
     ctx.body = result.error;
     return;
@@ -44,16 +43,12 @@ export const categoryDel = async (ctx) => {
 
   // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
   function isCategory(element) {
-    console.log('element', element);
     if (element.id === categoryid) {
       return element;
     }
   }
 
-  console.log('categoryid', categoryid);
-
   const findCategory = table.category.find(isCategory);
-  console.log('table.category', findCategory);
 
   try {
     findCategory.remove();
@@ -70,13 +65,10 @@ export const categoryDel = async (ctx) => {
 export const categoryUpdate = async (ctx) => {
   const { storeid, categoryid, updatename } = ctx.request.body;
 
-  console.log('updatename', updatename);
-
   const table = await Tables.findByStoreId(storeid);
 
   // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
   function isCategory(element) {
-    //console.log('element', element);
     if (element.id === categoryid) {
       return element;
     }
@@ -102,7 +94,6 @@ export const menuAdd = async (ctx) => {
 
   // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
   function isCategory(element) {
-    // console.log('element', element);
     if (element.id === categoryid) {
       return element;
     }
@@ -114,8 +105,6 @@ export const menuAdd = async (ctx) => {
     name: menuName,
     price: menuPrice,
   };
-
-  console.log('table!!!!!!!!!', findCategory.menu);
 
   findCategory.menu.push(newMenu);
   try {
@@ -151,22 +140,16 @@ export const menuDel = async (ctx) => {
     }
   }
 
-  console.log('categoryid', categoryid);
-
   const findCategory = table.category.find(isCategory);
-  console.log('table.category', findCategory);
 
   // 객체중 가져온 메뉴 아이디와 일치한 객체 찾아주기
   function isMenu(element) {
-    console.log('element', element);
     if (element.id === menuid) {
       return element;
     }
   }
 
   const findMenu = findCategory.menu.find(isMenu);
-
-  console.log('findMenu', findMenu);
 
   try {
     findMenu.remove();
@@ -193,7 +176,6 @@ export const menuUpdate = async (ctx) => {
 
   // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
   function isCategory(element) {
-    //console.log('element', element);
     if (element.id === categoryid) {
       return element;
     }
@@ -203,7 +185,6 @@ export const menuUpdate = async (ctx) => {
 
   // 객체중 가져온 메뉴 아이디와 일치한 객체 찾아주기
   function isMenu(element) {
-    console.log('element', element);
     if (element.id === menuid) {
       return element;
     }

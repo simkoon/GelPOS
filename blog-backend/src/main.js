@@ -41,7 +41,7 @@ app.io = socketIO(app.server, {});
 app.io
   .use((socket, next) => {
     let error = null;
-    console.log('미들오ㅔ어들어옴');
+
     try {
       let ctx = app.createContext(socket.request, new http.OutgoingMessage());
       socket.cookies = ctx.cookies;
@@ -58,7 +58,6 @@ app.io
     return next(error);
   })
   .on('connection', function (socket) {
-    console.log('커넥션들어온ㅁㄷ');
     const token = socket.cookies.get('access_token');
     if (!token) {
       console.log('토크없음');
@@ -66,7 +65,7 @@ app.io
     } // 토큰이 없음
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('들어는오나', decoded.nowstore);
+
     // 가게 고유번호로 룸을 만들고 그안에서 해결
     if (app.io.sockets.adapter.rooms.has(decoded.nowstore)) {
       socket.join(decoded.nowstore);
@@ -76,7 +75,6 @@ app.io
     }
 
     socket.on('getTables', async function (msg) {
-
       try {
         const tables = await Table.findByStoreId(decoded.nowstore);
         // app.io.to().emit('getTables');
@@ -93,14 +91,13 @@ app.io
       const tables = await Table.findByStoreId(decoded.nowstore);
 
       tables.table = tables.table[tableSeq];
-      console.log(tables);
+
       socket.emit('getOneTable', tables);
     });
 
     socket.on('modifyTable', async function (msg) {
-      // console.log('modify소켓 실행!!!!!!!!!');
       const tables = await Table.findByStoreId(decoded.nowstore);
-      // console.log(msg);
+
       const menuItem = msg.item;
       // findIndex로도 로직설계가능 익스플로러 x
       const nowMenu = tables.table[msg.seq].nowMenu;
@@ -145,8 +142,6 @@ app.io
     });
 
     socket.on('paymentTable', async function (msg) {
-      // console.log('paymentTable ~~~~~~~~~~~~~~~');
-      // console.log(msg);
       if (msg.act === 'cashPay') {
         msg.act = '현금';
       }
@@ -182,8 +177,7 @@ app.io
         // socket.emit('getPayResult', result);
         app.io.to(decoded.nowstore).emit('getTables', tables);
         tables.table = tables.table[msg.seq];
-        console.log(tables);
-        console.log('tablse~~~~~~~~~~~~');
+
         socket.emit('getOneTable', tables);
       } catch (error) {
         console.log(error);

@@ -62,7 +62,7 @@ export const findCode = async (ctx) => {
 
   try {
     const existsEmail = await User.findByEmail(email);
-    console.log(existsEmail);
+
     if (!existsEmail) {
       ctx.body = {
         emailoverlap: true,
@@ -109,7 +109,6 @@ export const findCode = async (ctx) => {
 
 export const register = async (ctx) => {
   // Request Body 검증하기
-  console.log('body', ctx.request.body);
   const schema = Joi.object().keys({
     userid: Joi.string().alphanum().min(3).max(20).required(),
     password: Joi.string().required(),
@@ -118,7 +117,6 @@ export const register = async (ctx) => {
   });
   const result = schema.validate(ctx.request.body);
   if (result.error) {
-    //console.log(result);
     ctx.status = 400;
     ctx.body = result.error;
     return;
@@ -218,7 +216,7 @@ export const logout = async (ctx) => {
 
 export const pwChange = async (ctx) => {
   // Request Body 검증하기
-  console.log('body', ctx.request.body);
+
   const schema = Joi.object().keys({
     password: Joi.string().required(),
     email: Joi.string().email().required(),
@@ -226,7 +224,6 @@ export const pwChange = async (ctx) => {
   const result = schema.validate(ctx.request.body);
 
   if (result.error) {
-    console.log(result);
     ctx.status = 400;
     ctx.body = result.error;
     return;

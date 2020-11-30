@@ -115,8 +115,6 @@ export const list = async (ctx) => {
   // 값이 주어지지 않았다면 1 을 기본으로 사용합니다.
   const page = parseInt(ctx.query.page || '1', 10);
 
-  console.log(ctx);
-
   if (page < 1) {
     ctx.status = 400;
     return;

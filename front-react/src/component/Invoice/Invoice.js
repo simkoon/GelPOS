@@ -73,7 +73,7 @@ function Invoice({ history }) {
         const result = await getList({ date: startDate });
         setRowData(result.data);
         setLoading(() => true);
-        console.log(result);
+
         result.data.forEach((item) => {
           if (item.paymentOption === '환불') {
             listSum.refundSum += Number(item.payment);
@@ -225,18 +225,16 @@ function Invoice({ history }) {
   const isFiltered = useRef(false);
   const onRefreshCells = (params) => {
     isFiltered.current = true;
-    console.log(params);
+
     setlistSumState(() => ({
       allSum: 0,
       refundSum: 0,
       netSum: 0,
     }));
-    console.log('onRefreshCells -> start');
+
     gridApi.refreshCells();
-    console.log('onRefreshCells -> end');
-    console.log(params);
+
     isFiltered.current = false;
-    console.log(isFiltered);
   };
 
   return (
@@ -369,7 +367,6 @@ function Invoice({ history }) {
                           resizable={true}
                           valueGetter={(params) => {
                             if (isFiltered.current) {
-                              console.log(isFiltered);
                               const payment = params.data.payment;
                               if (params.data.paymentOption === '환불') {
                                 setlistSumState((prev) => ({

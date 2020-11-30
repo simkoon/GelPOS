@@ -15,8 +15,6 @@ const validateStore = (user, nowstore) => {
   let result = false;
 
   user.store.forEach((store) => {
-    console.log(store._id);
-    console.log(nowstore);
     if (store._id == nowstore) {
       result = true;
     }

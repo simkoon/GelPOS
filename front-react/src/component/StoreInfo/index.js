@@ -64,13 +64,10 @@ function StoreInfo() {
       address: [store[0].address],
       expiredDate: [store[0].expiredDate.substring(0, 10)],
     });
-
-    console.log(info);
   }, []);
 
   // 버튼 클릭 할때마다 반응 주기
   const onBtnClick = (e) => {
-    console.log(e.target.value);
     setAnimation('true');
     setIsPage(e.target.value);
   };

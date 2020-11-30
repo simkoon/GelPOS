@@ -17,7 +17,6 @@ function StoreAdd({ onChange, onSubmit, inputs }) {
           backgroundColor: 'white',
           borderRadius: '20px 20px',
         }}
-    
       >
         <h2
           className="text-center mb-5"
@@ -100,8 +99,11 @@ function StoreAdd({ onChange, onSubmit, inputs }) {
               이전으로
             </Button>
           </Link>
-          <Button className="ml-auto btn_color_purple" variant="primary"
-              onClick={onSubmit}>
+          <Button
+            className="ml-auto btn_color_purple"
+            variant="primary"
+            onClick={onSubmit}
+          >
             Submit
           </Button>
         </Form.Row>

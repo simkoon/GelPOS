@@ -22,7 +22,7 @@ export default withRouter(function StoreAddContainer({ history }) {
   const { storename, regnumber, address } = inputs;
   const onChange = (e) => {
     const { value, name } = e.target;
-    console.log(value, name);
+
     setInputs(() => ({
       ...inputs, // 기존의 input 객체를 복사한 뒤
       [name]: value, // name 키를 가진 값을 value 로 설정
@@ -38,7 +38,7 @@ export default withRouter(function StoreAddContainer({ history }) {
     };
     try {
       const result = await add(formData);
-      console.log(result);
+
       history.push('/');
     } catch (error) {
       console.error(error);
@@ -47,7 +47,6 @@ export default withRouter(function StoreAddContainer({ history }) {
 
   useEffect(() => {
     if (user === null || user === 'null') {
-      console.log('여기들옴 컨테이너 히스토리 푸시시');
       history.push('/');
     }
   }, [history, user]);

@@ -24,14 +24,12 @@ export const addTable = async (ctx) => {
   const result = schema.validate(ctx.request.body);
 
   if (result.error) {
-    //console.log(result);
     ctx.status = 400;
     ctx.body = result.error;
     return;
   }
 
   const { storeid, tablename } = ctx.request.body;
-  console.log('tablename', tablename);
 
   const store = await Tables.findByStoreId(storeid);
 
@@ -58,16 +56,12 @@ export const tableDel = async (ctx) => {
 
   // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
   function isTable(element) {
-    console.log('element', element);
     if (element.id === tableid) {
       return element;
     }
   }
 
-  console.log('categoryid', tableid);
-
   const findTable = store.table.find(isTable);
-  console.log('table.category', findTable);
 
   try {
     findTable.remove();
@@ -82,14 +76,12 @@ export const tableDel = async (ctx) => {
 
 // 테이블 수정
 export const tableUpdate = async (ctx) => {
-  console.log('여기는 들어왕');
   const { storeid, tableid, newtablename } = ctx.request.body;
 
   const store = await Tables.findByStoreId(storeid);
 
   // 객체중 가져온 카테고리 아이디와 일치한 객체 찾아주기
   function istable(element) {
-    //console.log('element', element);
     if (element.id === tableid) {
       return element;
     }

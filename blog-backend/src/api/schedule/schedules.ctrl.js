@@ -52,7 +52,6 @@ export const getScheduleById = async (ctx, next) => {
   }
 */
 export const write = async (ctx) => {
-  console.log('schedule 서버로 받아오는 생성 데이터', ctx.request.body);
   const schema = Joi.object().keys({
     // 객체가 다음 필드를 가지고 있음을 검증
     title: Joi.string().required(), // required() 가 있으면 필수 항목
@@ -71,7 +70,7 @@ export const write = async (ctx) => {
 
   // 검증 후, 검증 실패시 에러처리
   const result = schema.validate(ctx.request.body);
-  console.log(result);
+
   if (result.error) {
     ctx.status = 400; // Bad Request
     ctx.body = result.error;
@@ -130,13 +129,10 @@ const removeHtmlAndShorten = (body) => {
   GET /api/posts?userid=&tag=&page=
 */
 export const list = async (ctx) => {
-  console.log(ctx.params);
   const { storeid } = ctx.params;
-  console.log('list서버에서 받아오는 아이디 값', storeid);
 
   try {
     const schedules = await Schedule.findByStoreid(storeid);
-    console.log('데이터에서 나오는 schedule 값', schedules);
 
     ctx.body = schedules;
   } catch (e) {
@@ -157,13 +153,12 @@ export const read = async (ctx) => {
 */
 export const remove = async (ctx) => {
   const { id } = ctx.params;
-  console.log('del id', id);
 
   const storeObjectId = ctx.state.user.nowstore;
 
   try {
     const returnSchedule = await Schedule.findByStoreid(storeObjectId);
-    console.log('삭제할값!!!!!!', returnSchedule.Schedulelist.id(id));
+
     returnSchedule.Schedulelist.id(id).remove();
 
     ctx.status = 204; // No Content (성공은 했지만 응답할 데이터는 없음)
@@ -183,15 +178,12 @@ export const remove = async (ctx) => {
 */
 
 export const update = async (ctx) => {
-  console.log('넘어오는 값', ctx.request.body);
   const { id } = ctx.request.body;
-
-  console.log('update id', id);
 
   const storeObjectId = ctx.state.user.nowstore;
 
   const returnSchedule = await Schedule.findByStoreid(storeObjectId);
-  console.log('삭제할값!!!!!!', returnSchedule.Schedulelist.id(id));
+
   returnSchedule.Schedulelist.id(id).remove();
 
   const {
@@ -206,8 +198,6 @@ export const update = async (ctx) => {
     raw,
     calendarId,
   } = ctx.request.body;
-
-  console.log('삭제 완료!!!!!!!!!!!!!!!');
 
   const schedule = await Schedule.findByStoreid(storeObjectId);
 
@@ -228,13 +218,10 @@ export const update = async (ctx) => {
     });
     newSchedule.id = newSchedule._id;
 
-    console.log('저장 완료!!!!!!!!!!!!!!!');
-
     schedule.Schedulelist.push(newSchedule);
 
     ctx.status = 204;
     await schedule.save();
-    console.log('완전 완료!!!!!!!!!!!!!!!');
   } catch (e) {
     ctx.throw(500, e);
   }

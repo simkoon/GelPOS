@@ -1,8 +1,8 @@
-import React, { useReducer, useState, useCallback, useEffect } from "react";
-import { Row, Col, Button, Modal } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import * as menuAPI from "../../lib/api/menu";
-import { useSelector } from "react-redux";
+import React, { useReducer, useState, useCallback, useEffect } from 'react';
+import { Row, Col, Button, Modal } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import * as menuAPI from '../../lib/api/menu';
+import { useSelector } from 'react-redux';
 import {
   AddConContainer,
   AddCon,
@@ -15,165 +15,165 @@ import {
   MenuBtnContainer,
   CategoryAddContainer,
   ErrorText,
-} from "./CSS/AddMenuCss";
-import addComma from "../../utility/addComma";
+} from './CSS/AddMenuCss';
+import addComma from '../../utility/addComma';
 
 function reducer(state, action) {
   switch (action.type) {
     // 다른 카테고리를 고를때마다 기존 메뉴값 초기화
-    case "RESET_CATEGORY_VALUE":
+    case 'RESET_CATEGORY_VALUE':
       return {
         ...state,
-        menuName: "",
-        menuPrice: "",
-        isMenuPage: "",
+        menuName: '',
+        menuPrice: '',
+        isMenuPage: '',
       };
 
     // 카테고리 추가 버튼
-    case "CATEGORY_ADD_OPEN":
+    case 'CATEGORY_ADD_OPEN':
       return {
         ...state,
-        isPage: "categoryAdd",
-        categoryName: "",
-        isMenuPage: "",
-        errorText: "",
+        isPage: 'categoryAdd',
+        categoryName: '',
+        isMenuPage: '',
+        errorText: '',
       };
 
     // 카테고리 선택시
-    case "CATEGORY_OPEN":
+    case 'CATEGORY_OPEN':
       return {
         ...state,
-        isPage: "categoryChoose",
+        isPage: 'categoryChoose',
         categoryName: action.name,
         categoryId: action.id,
       };
 
     // 카테고리 수정페이지에서 취소를 눌었을 때 화면 유지
-    case "CATEGORY_UPDATE_OUT":
+    case 'CATEGORY_UPDATE_OUT':
       return {
         ...state,
-        isPage: "categoryChoose",
+        isPage: 'categoryChoose',
       };
 
     // 카테고리 Add 버튼을 눌렀을 때
-    case "CATEGORY_ADD":
+    case 'CATEGORY_ADD':
       return {
         ...state,
-        isPage: "categoryChoose",
+        isPage: 'categoryChoose',
       };
 
     // 카테고리 생성 인풋에 아무것도 안쓰고  에러
-    case "CATEGORY_ERROR":
+    case 'CATEGORY_ERROR':
       return {
         ...state,
-        errorText: "값을 입력해 주세요.",
+        errorText: '값을 입력해 주세요.',
       };
 
     // 카테고리에서 메뉴 버튼을 눌렀을때
-    case "CATEGORY_MENU_OPEN":
+    case 'CATEGORY_MENU_OPEN':
       return {
         ...state,
-        isPage: "categoryMenu",
-        isMenuPage: "",
+        isPage: 'categoryMenu',
+        isMenuPage: '',
       };
 
     // 카테고리 메인으로
-    case "CATEGORY_MAIN":
+    case 'CATEGORY_MAIN':
       return {
         ...state,
-        isPage: "main",
-        isMenuPage: "",
-        categoryName: "",
-        categoryId: "",
+        isPage: 'main',
+        isMenuPage: '',
+        categoryName: '',
+        categoryId: '',
       };
 
     // 카테고리 수정 페이지로 이동
-    case "CATEGORY_UPDATE_OPEN":
+    case 'CATEGORY_UPDATE_OPEN':
       return {
         ...state,
-        isPage: "categoryUpdate",
-        errorText: "",
+        isPage: 'categoryUpdate',
+        errorText: '',
       };
 
     // 메뉴 추가 페이지로 이동
-    case "MENU_ADD_OPEN":
+    case 'MENU_ADD_OPEN':
       return {
         ...state,
-        isPage: "categoryMenu",
-        isMenuPage: "menuAdd",
-        menuName: "",
-        menuPrice: "",
-        fakeMenuPrice: "",
-        menuId: "",
-        errorText: "",
+        isPage: 'categoryMenu',
+        isMenuPage: 'menuAdd',
+        menuName: '',
+        menuPrice: '',
+        fakeMenuPrice: '',
+        menuId: '',
+        errorText: '',
       };
 
     // 메뉴 추가 에러
-    case "MENU_ADD_ERROR":
+    case 'MENU_ADD_ERROR':
       return {
         ...state,
-        isPage: "categoryMenu",
-        isMenuPage: "menuAdd",
-        errorText: "메뉴 이름과 메뉴 가격을 입력해 주세요.",
+        isPage: 'categoryMenu',
+        isMenuPage: 'menuAdd',
+        errorText: '메뉴 이름과 메뉴 가격을 입력해 주세요.',
       };
 
     // 메뉴 추가 완료
-    case "MENU_ADD":
+    case 'MENU_ADD':
       return {
         ...state,
-        isPage: "categoryMenu",
-        isMenuPage: "",
-        menuName: "",
-        menuPrice: "",
-        fakeMenuPrice: "",
-        errorText: "",
+        isPage: 'categoryMenu',
+        isMenuPage: '',
+        menuName: '',
+        menuPrice: '',
+        fakeMenuPrice: '',
+        errorText: '',
       };
 
     // 메뉴 페이지에서 메뉴 버튼을 클릭 했을 때
-    case "MENU_OPEN":
+    case 'MENU_OPEN':
       return {
         ...state,
-        isPage: "categoryMenu",
-        isMenuPage: "menu",
+        isPage: 'categoryMenu',
+        isMenuPage: 'menu',
         menuName: action.name,
         menuPrice: action.price,
-        fakeMenuPrice: "",
+        fakeMenuPrice: '',
         menuId: action.id,
-        errorText: "",
+        errorText: '',
       };
 
     // 메뉴 메인으로
-    case "MENU_MAIN":
+    case 'MENU_MAIN':
       return {
         ...state,
-        isPage: "categoryMenu",
-        isMenuPage: "",
-        menuName: "",
-        menuPrice: "",
-        fakeMenuPrice: "",
-        menuId: "",
-        newMenuName: "",
-        newMenuPrice: "",
-        errorText: "",
+        isPage: 'categoryMenu',
+        isMenuPage: '',
+        menuName: '',
+        menuPrice: '',
+        fakeMenuPrice: '',
+        menuId: '',
+        newMenuName: '',
+        newMenuPrice: '',
+        errorText: '',
       };
 
     // 메뉴값 초기화
-    case "RESET_MEUE_VALUE":
+    case 'RESET_MEUE_VALUE':
       return {
         ...state,
-        isPage: "categoryMenu",
-        isMenuPage: "",
-        menuName: "",
-        menuPrice: "",
-        fakeMenuPrice: "",
-        menuId: "",
-        newMenuName: "",
-        newMenuPrice: "",
-        errorText: "",
+        isPage: 'categoryMenu',
+        isMenuPage: '',
+        menuName: '',
+        menuPrice: '',
+        fakeMenuPrice: '',
+        menuId: '',
+        newMenuName: '',
+        newMenuPrice: '',
+        errorText: '',
       };
 
     // 가격 입력시
-    case "PRICECHANGE":
+    case 'PRICECHANGE':
       return {
         ...state,
         [action.name]: action.value,
@@ -181,11 +181,10 @@ function reducer(state, action) {
       };
 
     // 가격 입력시 원 추가
-    case "FAKEPRICE":
-      console.log("wwwwwwwwwwww");
+    case 'FAKEPRICE':
       return {
         ...state,
-        fakeMenuPrice: action.value + "원",
+        fakeMenuPrice: action.value + '원',
       };
   }
   return {
@@ -196,18 +195,18 @@ function reducer(state, action) {
 
 function Menu({ offBtnClick }) {
   const [state, dispatch] = useReducer(reducer, {
-    menuName: "",
-    menuPrice: "",
-    menuId: "",
-    categoryName: "",
-    categoryId: "",
-    isPage: "main",
-    isMenuPage: "",
-    newCategoryName: "",
-    newMenuName: "",
-    newMenuPrice: "",
-    errorText: "",
-    fakeMenuPrice: "",
+    menuName: '',
+    menuPrice: '',
+    menuId: '',
+    categoryName: '',
+    categoryId: '',
+    isPage: 'main',
+    isMenuPage: '',
+    newCategoryName: '',
+    newMenuName: '',
+    newMenuPrice: '',
+    errorText: '',
+    fakeMenuPrice: '',
   });
 
   const {
@@ -287,10 +286,10 @@ function Menu({ offBtnClick }) {
   // 가격 입력했을 때 인풋 체인지
   const onPriceChange = (e) => {
     const inputValue = e.target.value;
-    const intStr = e.target.value.replace(/[^0-9]/g, "");
+    const intStr = e.target.value.replace(/[^0-9]/g, '');
 
     dispatch({
-      type: "PRICECHANGE",
+      type: 'PRICECHANGE',
       value: intStr,
       name: e.target.name,
       fakeValue: e.target.value,
@@ -299,9 +298,6 @@ function Menu({ offBtnClick }) {
 
   // 메뉴값 받아와 뿌려주기
   async function menuList(name, value) {
-    console.log("onCategoryBtn으로 넘어오는 name값", name);
-    console.log("onCategoryBtn으로 넘어오는 value값", value);
-
     // 카테고리 가져오기
     const result = await menuAPI.categoryList(storeid);
 
@@ -326,46 +322,33 @@ function Menu({ offBtnClick }) {
 
   // 카테고리 버튼을 누렀을때 메뉴값 받아오기
   const onCategoryBtn = async (e) => {
-    console.log("onCategoryBtn으로 넘어오는 name값", e.target.name);
-    console.log("onCategoryBtn으로 넘어오는 value값", e.target.value);
-
     // 다른 카테고리 버튼을 누를 때마다 기존 값 초기화 해주기
-    dispatch({ type: "RESET_CATEGORY_VALUE" });
+    dispatch({ type: 'RESET_CATEGORY_VALUE' });
 
     // 카테고리 가져오기
     menuList(e.target.name, e.target.value);
 
     dispatch({
-      type: "CATEGORY_OPEN",
+      type: 'CATEGORY_OPEN',
       id: e.target.value,
       name: e.target.name,
     });
   };
 
   const onMenuBtn = async (e) => {
-    console.log("onMenuBtn으로 넘어오는 name값", e.target.name);
-    console.log("onMenuBtn으로 넘어오는 value값", e.target.value);
-    console.log("onMenuBtn으로 넘어오는 id값", e.target.id);
-
     // 다른 메뉴 버튼을 누를 때마다 기존 값 초기화 해주기
-    dispatch({ type: "RESET_MEUE_VALUE" });
+    dispatch({ type: 'RESET_MEUE_VALUE' });
 
     // 모달 켜주기
     setModalMenu(true);
 
     dispatch({
-      type: "MENU_OPEN",
+      type: 'MENU_OPEN',
       id: e.target.id,
       name: e.target.name,
       price: e.target.value,
     });
   };
-
-  // 메뉴 목록에서 메뉴를 선택할 때마다 값이 메뉴 이름과 가격이 저절로 입력
-  // useEffect(() => {
-  //   console.log("value");
-  //   dispatch({ type: "MENUVALUE", name: value.label, price: value.price });
-  // }, [value]);
 
   // 카테고리 추가 실행
   const categorySub = async () => {
@@ -376,15 +359,11 @@ function Menu({ offBtnClick }) {
 
     const result = await menuAPI.categoryAdd(formData);
 
-    console.log("result", result);
-
     categoryList();
   };
 
   // 카테고리 삭제 실행
   const categoryDel = async () => {
-    console.log("categoryId", categoryId);
-
     const formData = {
       storeid: storeid,
       categoryid: categoryId,
@@ -392,8 +371,6 @@ function Menu({ offBtnClick }) {
 
     const result = await menuAPI.categoryDel(formData);
     categoryList();
-
-    console.log("result", result);
   };
 
   // 카테고리 수정 실행
@@ -406,8 +383,6 @@ function Menu({ offBtnClick }) {
 
     const result = await menuAPI.categoryUpdate(formData);
     categoryList();
-
-    console.log("result", result);
   };
 
   // 메뉴 추가
@@ -426,8 +401,6 @@ function Menu({ offBtnClick }) {
 
   // 메뉴 삭제 실행
   const menuDel = async () => {
-    console.log("menuId", menuId);
-
     const formData = {
       storeid: storeid,
       categoryid: categoryId,
@@ -436,15 +409,13 @@ function Menu({ offBtnClick }) {
 
     const result = await menuAPI.menuDel(formData);
     menuList(categoryName, categoryId);
-
-    // console.log("result", result);
   };
 
   // 메뉴 수정 실행
   const menuUpdate = async () => {
     let formData;
 
-    if (newMenuName === "") {
+    if (newMenuName === '') {
       formData = {
         storeid: storeid,
         categoryid: categoryId,
@@ -452,7 +423,7 @@ function Menu({ offBtnClick }) {
         updatename: menuName,
         updateprice: newMenuPrice,
       };
-    } else if (newMenuPrice === "") {
+    } else if (newMenuPrice === '') {
       formData = {
         storeid: storeid,
         categoryid: categoryId,
@@ -472,8 +443,6 @@ function Menu({ offBtnClick }) {
 
     const result = await menuAPI.menuUpdate(formData);
     menuList(categoryName, categoryId);
-
-    console.log("result", result);
   };
 
   // 버튼 클릭시 실행되는 함수
@@ -482,101 +451,101 @@ function Menu({ offBtnClick }) {
 
     switch (targetName) {
       // 카테고리 추가 버튼을 누를때
-      case "categoryAdd": {
-        dispatch({ type: "CATEGORY_ADD_OPEN" });
+      case 'categoryAdd': {
+        dispatch({ type: 'CATEGORY_ADD_OPEN' });
         return;
       }
 
       // 카테고리에서 메뉴 버튼을 누를때
-      case "categoryMenuBtn": {
-        dispatch({ type: "CATEGORY_MENU_OPEN" });
+      case 'categoryMenuBtn': {
+        dispatch({ type: 'CATEGORY_MENU_OPEN' });
         return;
       }
 
       // 카테고리 추가해주기
-      case "categoryAddBtn": {
-        if (categoryName === "") {
-          dispatch({ type: "CATEGORY_ERROR" });
+      case 'categoryAddBtn': {
+        if (categoryName === '') {
+          dispatch({ type: 'CATEGORY_ERROR' });
           return;
         }
         categorySub();
-        dispatch({ type: "CATEGORY_MAIN" });
+        dispatch({ type: 'CATEGORY_MAIN' });
         return;
       }
 
       // 카테고리 삭제를 눌렀을 때
-      case "categoryDeleteBtn": {
+      case 'categoryDeleteBtn': {
         categoryDel();
-        dispatch({ type: "CATEGORY_MAIN" });
+        dispatch({ type: 'CATEGORY_MAIN' });
         setModalCategoryDel(false);
         return;
       }
 
       // 카테고리 수정을 눌렀을 때
-      case "categoryUpdateBtn": {
-        dispatch({ type: "CATEGORY_UPDATE_OPEN" });
+      case 'categoryUpdateBtn': {
+        dispatch({ type: 'CATEGORY_UPDATE_OPEN' });
         return;
       }
 
       // 카테고리 수정에서 수정 버튼을 눌렀을 때
-      case "categoryUpBtn": {
-        if (newCategoryName === "") {
-          dispatch({ type: "CATEGORY_ERROR" });
+      case 'categoryUpBtn': {
+        if (newCategoryName === '') {
+          dispatch({ type: 'CATEGORY_ERROR' });
           return;
         }
         categoryUpdate();
-        dispatch({ type: "CATEGORY_MAIN" });
+        dispatch({ type: 'CATEGORY_MAIN' });
         return;
       }
 
       // 메뉴 추가 화면으로 이동
-      case "menuAdd": {
-        dispatch({ type: "MENU_ADD_OPEN" });
+      case 'menuAdd': {
+        dispatch({ type: 'MENU_ADD_OPEN' });
         return;
       }
 
       // 메뉴 추가 버튼 클릭시
-      case "menuAddBtn": {
-        if (menuName === "" || menuPrice === "") {
-          dispatch({ type: "MENU_ADD_ERROR" });
+      case 'menuAddBtn': {
+        if (menuName === '' || menuPrice === '') {
+          dispatch({ type: 'MENU_ADD_ERROR' });
           return;
         }
         menuAdd();
-        dispatch({ type: "MENU_ADD" });
+        dispatch({ type: 'MENU_ADD' });
         return;
       }
 
       // 메뉴 삭제 버튼을 눌렀을때
-      case "menuDeleteBtn": {
+      case 'menuDeleteBtn': {
         menuDel();
-        dispatch({ type: "MENU_MAIN" });
+        dispatch({ type: 'MENU_MAIN' });
         setModalMenuDel(false);
         return;
       }
 
       // 메뉴 수정 버튼 클릭시
-      case "menuUpdateBtn": {
-        if (newMenuName === "" && newMenuPrice === "") {
-          dispatch({ type: "CATEGORY_ERROR" });
+      case 'menuUpdateBtn': {
+        if (newMenuName === '' && newMenuPrice === '') {
+          dispatch({ type: 'CATEGORY_ERROR' });
           return;
         }
         menuUpdate();
-        dispatch({ type: "MENU_MAIN" });
+        dispatch({ type: 'MENU_MAIN' });
         return;
       }
     }
   };
 
   // 카테고리 모달 추가페이지에서 취소 했을때 닫을 때
-  const CategoryAddClose = () => dispatch({ type: "CATEGORY_MAIN" });
+  const CategoryAddClose = () => dispatch({ type: 'CATEGORY_MAIN' });
 
   // 카테고리 모달 수정페이지에서 취소 했을때 닫을 때
-  const CategoryUpdateClose = () => dispatch({ type: "CATEGORY_UPDATE_OUT" });
+  const CategoryUpdateClose = () => dispatch({ type: 'CATEGORY_UPDATE_OUT' });
 
   // 메뉴 모달 추가페이지에서 취소 했을때 닫을 때
   const menuAddClose = () => {
     setModalMenu(false);
-    dispatch({ type: "CATEGORY_MENU_OPEN" });
+    dispatch({ type: 'CATEGORY_MENU_OPEN' });
   };
 
   return (
@@ -604,10 +573,10 @@ function Menu({ offBtnClick }) {
 
         {/* 카테고리 설정 선택 */}
         <Col>
-          {isPage === "categoryChoose" && (
+          {isPage === 'categoryChoose' && (
             <CategoryAddContainer>
               <h2>
-                <span style={{ color: "red" }}>{categoryName}</span> 카테고리
+                <span style={{ color: 'red' }}>{categoryName}</span> 카테고리
               </h2>
               <form onClick={onClickAddBtn}>
                 <Button
@@ -645,11 +614,11 @@ function Menu({ offBtnClick }) {
               <Modal.Header>
                 <h2>
                   카테고리
-                  <span style={{ color: "red" }}>삭제</span>
+                  <span style={{ color: 'red' }}>삭제</span>
                 </h2>
               </Modal.Header>
               <Modal.Body>
-                정말 <span style={{ color: "red" }}>{categoryName}</span>{" "}
+                정말 <span style={{ color: 'red' }}>{categoryName}</span>{' '}
                 카테고리를 삭제 하시겠습니까?
               </Modal.Body>
               <Modal.Footer>
@@ -673,8 +642,8 @@ function Menu({ offBtnClick }) {
           </Modal>
 
           {/* 카테고리 만드는 화면 */}
-          {isPage === "categoryAdd" && (
-            <Modal show={isPage === "categoryAdd"} onHide={CategoryAddClose}>
+          {isPage === 'categoryAdd' && (
+            <Modal show={isPage === 'categoryAdd'} onHide={CategoryAddClose}>
               <CategoryAddContainer>
                 <form onClick={onClickAddBtn}>
                   <Modal.Header>
@@ -693,7 +662,7 @@ function Menu({ offBtnClick }) {
                     <p className="underSelectP">
                       * 1자 이상 7자 이하로 입력해 주세요.
                     </p>
-                    {errorText !== "" && (
+                    {errorText !== '' && (
                       <ErrorText error={errorText}>{errorText}</ErrorText>
                     )}
                   </Modal.Body>
@@ -719,9 +688,9 @@ function Menu({ offBtnClick }) {
           )}
 
           {/* 카테코리 업데이트 화면 */}
-          {isPage === "categoryUpdate" && (
+          {isPage === 'categoryUpdate' && (
             <Modal
-              show={isPage === "categoryUpdate"}
+              show={isPage === 'categoryUpdate'}
               onHide={CategoryUpdateClose}
             >
               <CategoryAddContainer>
@@ -729,10 +698,10 @@ function Menu({ offBtnClick }) {
                   <Modal.Header>
                     <Modal.Title>
                       <h2>
-                        {" "}
-                        <span style={{ color: "red" }}>
+                        {' '}
+                        <span style={{ color: 'red' }}>
                           {categoryName}
-                        </span>{" "}
+                        </span>{' '}
                         카테고리 수정
                       </h2>
                     </Modal.Title>
@@ -749,7 +718,7 @@ function Menu({ offBtnClick }) {
                     <p className="underSelectP">
                       * 1자 이상 7자 이하로 입력해 주세요.
                     </p>
-                    {errorText !== "" && (
+                    {errorText !== '' && (
                       <ErrorText error={errorText}>{errorText}</ErrorText>
                     )}
                   </Modal.Body>
@@ -775,14 +744,14 @@ function Menu({ offBtnClick }) {
           )}
 
           {/* 메뉴 나타나는 화면 */}
-          {isPage === "categoryMenu" && (
+          {isPage === 'categoryMenu' && (
             <MenuBtnContainer>
               <h2>
-                <span style={{ color: "red" }}>{categoryName}</span> 메뉴
+                <span style={{ color: 'red' }}>{categoryName}</span> 메뉴
               </h2>
               <hr />
               <MenuBtnBox>
-                <div className="btnContainer" style={{ margin: " 0px auto" }}>
+                <div className="btnContainer" style={{ margin: ' 0px auto' }}>
                   <NewMenuBtn onClick={onClickAddBtn} name="menuAdd">
                     +
                   </NewMenuBtn>
@@ -796,13 +765,13 @@ function Menu({ offBtnClick }) {
           )}
 
           {/* 메뉴 추가 화면 */}
-          {isMenuPage === "menuAdd" && (
-            <Modal show={isMenuPage === "menuAdd"} onHide={menuAddClose}>
+          {isMenuPage === 'menuAdd' && (
+            <Modal show={isMenuPage === 'menuAdd'} onHide={menuAddClose}>
               <CategoryAddContainer>
                 <form onClick={onClickAddBtn}>
                   <Modal.Header>
                     <Modal.Title>
-                      <span style={{ color: "red" }}>{categoryName}</span> 메뉴
+                      <span style={{ color: 'red' }}>{categoryName}</span> 메뉴
                       추가
                     </Modal.Title>
                   </Modal.Header>
@@ -828,10 +797,10 @@ function Menu({ offBtnClick }) {
                       maxLength="10"
                       autoComplete="off"
                       onBlur={() => {
-                        if (fakeMenuPrice !== "") {
-                          if (fakeMenuPrice.indexOf("원") === -1) {
+                        if (fakeMenuPrice !== '') {
+                          if (fakeMenuPrice.indexOf('원') === -1) {
                             dispatch({
-                              type: "FAKEPRICE",
+                              type: 'FAKEPRICE',
                               value: fakeMenuPrice,
                             });
                           }
@@ -839,7 +808,7 @@ function Menu({ offBtnClick }) {
                       }}
                     />
                     <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
-                    {errorText !== "" && (
+                    {errorText !== '' && (
                       <ErrorText error={errorText}>{errorText}</ErrorText>
                     )}
                   </Modal.Body>
@@ -871,7 +840,7 @@ function Menu({ offBtnClick }) {
                 <Modal.Header>
                   <Modal.Title>
                     <h2>
-                      <span style={{ color: "blue" }}>{menuName}</span>메뉴
+                      <span style={{ color: 'blue' }}>{menuName}</span>메뉴
                     </h2>
                   </Modal.Title>
                 </Modal.Header>
@@ -891,21 +860,21 @@ function Menu({ offBtnClick }) {
                   <input
                     onChange={onPriceChange}
                     type="text"
-                    placeholder={addComma(menuPrice) + "원"}
+                    placeholder={addComma(menuPrice) + '원'}
                     name="newMenuPrice"
                     value={fakeMenuPrice}
                     maxLength="10"
                     autoComplete="off"
                     onBlur={() => {
-                      if (fakeMenuPrice !== "") {
-                        if (fakeMenuPrice.indexOf("원") === -1) {
-                          dispatch({ type: "FAKEPRICE", value: fakeMenuPrice });
+                      if (fakeMenuPrice !== '') {
+                        if (fakeMenuPrice.indexOf('원') === -1) {
+                          dispatch({ type: 'FAKEPRICE', value: fakeMenuPrice });
                         }
                       }
                     }}
                   />
                   <p className="underSelectP">* 숫자로만 입력해 주세요.</p>
-                  {errorText !== "" && (
+                  {errorText !== '' && (
                     <ErrorText error={errorText}>{errorText}</ErrorText>
                   )}
                 </Modal.Body>
@@ -949,11 +918,11 @@ function Menu({ offBtnClick }) {
               <Modal.Header>
                 <h2>
                   메뉴
-                  <span style={{ color: "red" }}>삭제</span>
+                  <span style={{ color: 'red' }}>삭제</span>
                 </h2>
               </Modal.Header>
               <Modal.Body>
-                정말 <span style={{ color: "blue" }}>{menuName}</span> 메뉴를
+                정말 <span style={{ color: 'blue' }}>{menuName}</span> 메뉴를
                 삭제 하시겠습니까?
               </Modal.Body>
               <Modal.Footer>

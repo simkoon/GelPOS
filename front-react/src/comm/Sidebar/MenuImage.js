@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
 //background-image : url(${selImg});
 const MenuBtnBox = styled.div`
   text-decoration: none;
@@ -7,8 +7,6 @@ const MenuBtnBox = styled.div`
 
 const imgStyles = css`
   ${(selImg) => {
-    console.log(selImg);
-
     return css`
       background-image: url(${selImg});
     `;

@@ -234,7 +234,7 @@ function Register({ history }) {
     try {
       const result = await authAPI.code(formData);
 
-      console.log(result);
+    
 
       if (result.data.emailoverlap) {
         return dispatch({ type: "EMAILERROR_OVERRLAP" });
@@ -250,7 +250,7 @@ function Register({ history }) {
 
       dispatch({ type: "NOERROR" });
 
-      console.log(result);
+
       return;
     } catch (e) {
       console.log(e);
