@@ -127,6 +127,7 @@ app.io
         tables.table[msg.seq].nowMenu = nowMenu.filter((e) => {
           if (e.name === menuItem.name) {
             e.EA = e.EA - 1;
+            e.priceSum = e.EA * e.price;
           }
           return e.EA > 0;
         });
