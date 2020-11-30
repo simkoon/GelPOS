@@ -401,18 +401,18 @@ function Invoice({ history }) {
                           fontSize: '16px',
                         }}
                       >
-                        <span className="mr-1">판매금액 : </span>
-                        <span className="mr-2">
+                        <h4 className="mr-1">판매금액 : </h4>
+                        <h4 className="mr-2">
                           {addComma(listSumState.allSum)} 원
-                        </span>
-                        <span className="mr-1">환불액 : </span>{' '}
-                        <span className="mr-2">
+                        </h4>
+                        <h4 className="mr-1">환불액 : </h4>{' '}
+                        <h4 className="mr-2">
                           {addComma(listSumState.refundSum)} 원
-                        </span>
-                        <span className="mr-1">실판매금액: </span>{' '}
-                        <span className="mr-1">
+                        </h4>
+                        <h4 className="mr-1">실판매금액: </h4>{' '}
+                        <h4 className="mr-1">
                           {addComma(listSumState.netSum)} 원
-                        </span>
+                        </h4>
                       </p>
                     </div>
                   </Col>

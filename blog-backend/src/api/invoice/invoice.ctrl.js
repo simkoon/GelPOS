@@ -9,7 +9,6 @@ export const read = async (ctx) => {
 
   const regDate = new Date(ctx.request.body.date);
   const invoiceList = await Invoice.findAllByStoreId(storeId, regDate);
-  console.log(invoiceList);
   ctx.body = invoiceList;
 };
 
@@ -26,7 +25,7 @@ export const refund = async (ctx) => {
   if (seqInvoice) {
     seq = seqInvoice.seq + 1;
   }
-  console.log(seqInvoice);
+ 
   const refundedInvoice = new Invoice({
     storeId: storeId,
     seq,

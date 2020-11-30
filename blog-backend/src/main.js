@@ -153,7 +153,7 @@ app.io
         socket.emit('getPayResult', { err: 'empty' });
         return;
       }
-      let seq = 0;
+      let seq = 1;
       const seqInvoice = await Invoice.findSeq(decoded.nowstore);
       if (seqInvoice) {
         seq = seqInvoice.seq + 1;

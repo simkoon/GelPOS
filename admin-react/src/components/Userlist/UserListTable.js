@@ -76,7 +76,7 @@ function UserListTable({ user, loading }) {
     const onRemove = async () => {
       try {
         await removeUser(userid);
-        window.location.href = "http://localhost:9090/UserList";
+        window.location.href = "http://localhost:3001/UserList";
       } catch (e) {
         console.log(e);
       }

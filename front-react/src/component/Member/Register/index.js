@@ -287,7 +287,7 @@ function Register({ history }) {
           <hr className="regist_hr" />
           {RegiSuccess ? (
             <div>
-              <h2 className="mt-5 mb-5">회원가입에 성공하셨습니다.</h2>
+              <p className="mt-5 mb-5" >회원가입에 성공하셨습니다.</p>
               <button className="regist_btn mt-5" onClick={onOkCleck}>
                 {" "}
                 돌아가기{" "}

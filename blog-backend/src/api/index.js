@@ -1,5 +1,4 @@
 import Router from 'koa-router';
-import posts from './posts';
 import schedule from './schedule';
 import auth from './auth';
 import storeList from './storeList';
