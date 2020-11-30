@@ -20,7 +20,7 @@ const calendars = [
     name: "예약",
     color: "#ffffff",
     bgColor: "#8D1506",
-    dragBgColor: "#00A86B",
+    dragBgColor: "#8D1506",
     borderColor: "#C21700",
   },
   {

@@ -216,9 +216,11 @@ function IdPassFind() {
       if (code === emailCode) {
         if (idFindPage) {
           dispatch({ type: "ID_OK_CODE" });
+          return;
         }
         if (passChangePage) {
           dispatch({ type: "PW_OK_CODE" });
+          return;
         }
       } else {
         console.log("실패");
@@ -376,9 +378,7 @@ function IdPassFind() {
 
           {/* 아이디 보여주기 페이지 */}
           {idReport && (
-            <span className="errorText">
-              회원님의 아이디는 [ {userid} ] 입니다.
-            </span>
+            <p className="pt-5">회원님의 아이디는 [ {userid} ] 입니다.</p>
           )}
           {/* 에러 텍스트 (비밀번호 변경 페이지가 아닐때만 보여준다)*/}
           {!pwChange && !mainPage ? (
