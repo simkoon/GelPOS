@@ -19,17 +19,19 @@ const ULT = styled.div`
     font-weight: bold;
   }
 
-  .table tbody tr td button {
-    font-weight: bold;
-    font-size: 12px;
-  }
-
   .table tbody tr td {
     vertical-align: middle !important;
   }
 
   .test {
     margin-top: 125px;
+  }
+
+  .oribos {
+    width: 160px;
+    height: 40px;
+    margin-top: 20px;
+    margin-left: 300px;
   }
 `;
 
@@ -77,7 +79,7 @@ function UserListTable({ user, loading }) {
 
     return (
       <>
-        <button className="btn btn-light" onClick={onRemoveClick}>
+        <button className="btn btn-light oribos" onClick={onRemoveClick}>
           탈퇴
         </button>
         <AskRemove visible={modal} onConfirm={onConfirm} onCancel={onCancel} />
