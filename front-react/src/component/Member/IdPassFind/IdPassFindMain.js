@@ -1,18 +1,18 @@
-import React, { useReducer, useState } from 'react';
-import { Link } from 'react-router-dom';
-import './CSS/IdPassFind.scss';
-import * as authAPI from '../../../lib/api/auth';
+import React, { useReducer, useState } from "react";
+import { Link } from "react-router-dom";
+import "./CSS/IdPassFind.scss";
+import * as authAPI from "../../../lib/api/auth";
 import {
   IdFindPageTitle,
   PassChangePageTitle,
   CodeCheckPageInput,
   PwChangePage,
   PwChangePageTitle,
-} from './Page';
+} from "./Page";
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'IDFINDPAGE':
+    case "IDFINDPAGE":
       return {
         ...state,
         mainPage: false,
@@ -21,7 +21,7 @@ function reducer(state, action) {
         idFindPage: true,
       };
 
-    case 'PASSCHANGEPAGE':
+    case "PASSCHANGEPAGE":
       return {
         ...state,
         mainPage: false,
@@ -31,81 +31,81 @@ function reducer(state, action) {
         idReport: false,
       };
 
-    case 'EMAILERROR':
+    case "EMAILERROR":
       return {
         ...state,
-        errorText: '이메일을 입력해 주세요.',
+        errorText: "이메일을 입력해 주세요.",
       };
 
-    case 'EMAILERROR_NOOVERRLAP':
+    case "EMAILERROR_NOOVERRLAP":
       return {
         ...state,
-        email: '',
-        errorText: '존재하지 않는 이메일 입니다.',
+        email: "",
+        errorText: "존재하지 않는 이메일 입니다.",
       };
-    case 'CODE_NO':
+    case "CODE_NO":
       return {
         ...state,
         errorTextColor: false,
-        errorText: '코드가 일치하지 않습니다.',
+        errorText: "코드가 일치하지 않습니다.",
       };
-    case 'CODESEND':
+    case "CODESEND":
       return {
         ...state,
         codesendOk: true,
         errorTextColor: true,
-        errorText: '코드전송을 성공 하였습니다.',
+        errorText: "코드전송을 성공 하였습니다.",
       };
-    case 'BACK':
+    case "BACK":
       return {
         mainPage: true,
         idFindPage: false,
         passChangePage: false,
         codeCheckPage: false,
         codesendOk: false,
-        email: '',
-        errorText: '',
-        code: '',
+        email: "",
+        errorText: "",
+        code: "",
         codeconfirm: false,
       };
-    case 'ID_OK_CODE':
+    case "ID_OK_CODE":
       return {
         ...state,
         idReport: true,
         idFindPage: false,
         codeCheckPage: false,
-        errorText: '',
+        errorText: "",
       };
-    case 'PW_OK_CODE':
+    case "PW_OK_CODE":
       return {
         ...state,
         pwChange: true,
         passChangePage: false,
         codeCheckPage: false,
-        errorText: '',
+        errorText: "",
       };
-    case 'PWCONFIRM_ERROR':
+    case "PWCONFIRM_ERROR":
       return {
         ...state,
-        errorText: '비밀번호가 일치하지 않습니다.',
+        errorText: "비밀번호가 일치하지 않습니다.",
       };
-    case 'PASSWORD_REG_ERROR':
+    case "PASSWORD_REG_ERROR":
       return {
         ...state,
         errorText:
-          '비밀번호는 대문자와 특수문자를 포함한 8~16글자 이어야 합니다.',
+          "비밀번호는 대문자와 특수문자를 포함한 8~16글자 이어야 합니다.",
       };
-    case 'PWCHANGE_OK':
+    case "PWCHANGE_OK":
       return {
         ...state,
         pwChangeOk: true,
         pwChange: false,
-        errorText: '비밀번호 변경이 완료 되었습니다.',
+        errorText: "비밀번호 변경이 완료 되었습니다.",
       };
-    case 'ERRORSET':
+    case "ERRORSET":
       return {
         ...state,
-        errorText: '',
+        errorText: "",
       };
   }
   return {
@@ -121,13 +121,13 @@ function IdPassFind() {
     passChangePage: false,
     codeCheckPage: false,
     codesendOk: false,
-    email: '',
-    errorText: '',
-    code: '',
+    email: "",
+    errorText: "",
+    code: "",
     idReport: false,
     pwChange: false,
-    password: '',
-    passwordConfirm: '',
+    password: "",
+    passwordConfirm: "",
     pwChangeOk: false,
     errorTextColor: false,
   });
@@ -149,9 +149,9 @@ function IdPassFind() {
     errorTextColor,
   } = state;
 
-  const [userid, setUserid] = useState('');
+  const [userid, setUserid] = useState("");
 
-  const [emailCode, setEmailCode] = useState('');
+  const [emailCode, setEmailCode] = useState("");
 
   //input값 체인지
   const onChange = (e) => {
@@ -159,11 +159,11 @@ function IdPassFind() {
   };
 
   const codeSend = async (e) => {
-    dispatch({ type: 'ERRORSET' });
+    dispatch({ type: "ERRORSET" });
     e.preventDefault();
 
-    if ([email].includes('')) {
-      dispatch({ type: 'EMAILERROR' });
+    if ([email].includes("")) {
+      dispatch({ type: "EMAILERROR" });
       return;
     }
 
@@ -183,16 +183,16 @@ function IdPassFind() {
 
       // 있는 아이디인지 체크
       if (result.data.emailoverlap) {
-        return dispatch({ type: 'EMAILERROR_NOOVERRLAP' });
+        return dispatch({ type: "EMAILERROR_NOOVERRLAP" });
       }
 
       const servercode = result.data.code;
 
-      setUserid(result.data.id + '****');
+      setUserid(result.data.id);
 
       setEmailCode(servercode);
 
-      dispatch({ type: 'CODESEND' });
+      dispatch({ type: "CODESEND" });
 
       return;
     } catch (e) {
@@ -203,21 +203,21 @@ function IdPassFind() {
   const codeCheck = async (e) => {
     e.preventDefault();
 
-    console.log('emailCode', emailCode);
+    console.log("emailCode", emailCode);
 
-    if (code !== '') {
+    if (code !== "") {
       if (code === emailCode) {
         if (idFindPage) {
-          dispatch({ type: 'ID_OK_CODE' });
+          dispatch({ type: "ID_OK_CODE" });
           return;
         }
         if (passChangePage) {
-          dispatch({ type: 'PW_OK_CODE' });
+          dispatch({ type: "PW_OK_CODE" });
           return;
         }
       } else {
-        console.log('실패');
-        dispatch({ type: 'CODE_NO' });
+        console.log("실패");
+        dispatch({ type: "CODE_NO" });
         return;
       }
     }
@@ -225,14 +225,14 @@ function IdPassFind() {
 
   // 돌아가기 누를떄 실행
   const onBack = () => {
-    dispatch({ type: 'BACK' });
+    dispatch({ type: "BACK" });
   };
 
   // 비밀번호 변경에서 확인을 누를때 실행
   const onPwCheck = async () => {
-    dispatch({ type: 'ERRORSET' });
+    dispatch({ type: "ERRORSET" });
     if (!(password === passwordConfirm)) {
-      dispatch({ type: 'PWCONFIRM_ERROR' });
+      dispatch({ type: "PWCONFIRM_ERROR" });
       return;
     }
 
@@ -243,7 +243,7 @@ function IdPassFind() {
       !passwordRegExp.test(password) ||
       !passwordRegExp.test(passwordConfirm)
     ) {
-      dispatch({ type: 'PASSWORD_REG_ERROR' });
+      dispatch({ type: "PASSWORD_REG_ERROR" });
       return;
     }
 
@@ -256,12 +256,12 @@ function IdPassFind() {
       const result = await authAPI.pwChange(passEmail);
 
       if (result) {
-        dispatch({ type: 'PWCHANGE_OK' });
+        dispatch({ type: "PWCHANGE_OK" });
         return;
       }
 
       if (!result) {
-        dispatch({ type: 'PWCHANGE_ERROR' });
+        dispatch({ type: "PWCHANGE_ERROR" });
         return;
       }
       // if (result.data.emailoverlap) {
@@ -330,13 +330,13 @@ function IdPassFind() {
             <p>
               <button
                 className="idpassfind_btn"
-                onClick={() => dispatch({ type: 'IDFINDPAGE' })}
+                onClick={() => dispatch({ type: "IDFINDPAGE" })}
               >
                 아이디찾기
               </button>
               <button
                 className="idpassfind_btn"
-                onClick={() => dispatch({ type: 'PASSCHANGEPAGE' })}
+                onClick={() => dispatch({ type: "PASSCHANGEPAGE" })}
               >
                 비밀번호 변경
               </button>
@@ -370,12 +370,14 @@ function IdPassFind() {
 
           {/* 아이디 보여주기 페이지 */}
           {idReport && (
-            <p className="pt-5">회원님의 아이디는 [ {userid} ] 입니다.</p>
+            <p className="pt-5" style={{ color: "white" }}>
+              회원님의 아이디는 [ {userid} ] 입니다.
+            </p>
           )}
           {/* 에러 텍스트 (비밀번호 변경 페이지가 아닐때만 보여준다)*/}
           {!pwChange && !mainPage ? (
             <p className="errorTextBox">
-              {errorText !== '' ? (
+              {errorText !== "" ? (
                 errorTextColor ? (
                   <span className="errorText white">{errorText}</span>
                 ) : (

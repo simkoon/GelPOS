@@ -96,7 +96,7 @@ export const findCode = async (ctx) => {
               <p> 인증 코드란에 위 코드를 알맞게 입력해 주세요.</p>`,
     });
 
-    const userid = existsEmail.userid.substring(0, 3);
+    const userid = existsEmail.userid;
 
     ctx.body = {
       code: code,

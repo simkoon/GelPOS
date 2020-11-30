@@ -1,0 +1,30 @@
+input{
+    border: 1px solid rgb(204, 197, 197);
+    border-radius: 5px;
+}
+
+// 환불
+.refund {
+    background-color:  #FFD1D1!important;
+}
+
+.refund:hover {
+    background-color:  #FFB5B5!important;
+}
+
+.refund.ag-row-selected {
+    background-color: #FF8383!important;
+}
+
+// 환불 완료
+.refundSuccess{
+    background-color: #FFECDE!important;
+}
+
+.refundSuccess:hover{
+    background-color: #FFD7BA!important;
+}
+
+.refundSuccess.ag-row-selected{
+    background-color: #FFC59B!important;
+}

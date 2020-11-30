@@ -77,6 +77,9 @@ export const TableBtnBox = styled.div`
   //background-color: black;
   width: 100vh;
   height: 80vh;
+  @media all and (max-width: 1115px) {
+    width: 70vh;
+  }
 `;
 
 export const TableBtnContainer = styled.div`
@@ -93,6 +96,7 @@ export const TableBtn = styled(Button)`
   height: 200px;
   background-color: rgb(242, 242, 251);
   border-radius: 10px 10px;
+
   & + & {
     margin-top: 20px;
     margin-left: 20px;

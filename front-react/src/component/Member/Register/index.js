@@ -234,8 +234,6 @@ function Register({ history }) {
     try {
       const result = await authAPI.code(formData);
 
-    
-
       if (result.data.emailoverlap) {
         return dispatch({ type: "EMAILERROR_OVERRLAP" });
       }
@@ -249,7 +247,6 @@ function Register({ history }) {
       dispatch({ type: "CODESEND" });
 
       dispatch({ type: "NOERROR" });
-
 
       return;
     } catch (e) {
@@ -287,7 +284,10 @@ function Register({ history }) {
           <hr className="regist_hr" />
           {RegiSuccess ? (
             <div>
-              <p className="mt-5 mb-5" >회원가입에 성공하셨습니다.</p>
+              <h2 style={{ color: "white" }}>축하합니다 !!</h2>
+              <p style={{ color: "white" }} className="mt-5 mb-5">
+                회원가입에 성공하셨습니다.
+              </p>
               <button className="regist_btn mt-5" onClick={onOkCleck}>
                 {" "}
                 돌아가기{" "}

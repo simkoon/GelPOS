@@ -1,49 +1,50 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Row, Col, Card, Button, Container, Spinner } from 'react-bootstrap';
-import DatePicker, { registerLocale } from 'react-datepicker';
-import ko from 'date-fns/locale/ko';
-import 'react-datepicker/dist/react-datepicker.css';
-import { useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import { getList, refund } from '../../lib/api/invoice';
-import InvoiceItem from './InvoiceItem';
-import addComma from '../../utility/addComma';
+import React, { useState, useEffect, useRef } from "react";
+import { Row, Col, Card, Button, Container, Spinner } from "react-bootstrap";
+import DatePicker, { registerLocale } from "react-datepicker";
+import ko from "date-fns/locale/ko";
+import "react-datepicker/dist/react-datepicker.css";
+import { useSelector } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { getList, refund } from "../../lib/api/invoice";
+import InvoiceItem from "./InvoiceItem";
+import addComma from "../../utility/addComma";
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import "./Invoice.scss";
 
 function Invoice({ history }) {
   const [loading, setLoading] = useState(false);
   const listener2 = useRef(null);
   const [receipt, setReceipt] = useState({
-    _seq: '',
-    _menu: '',
-    _regDate: '',
-    _paymentOption: '',
-    _payment: '',
+    _seq: "",
+    _menu: "",
+    _regDate: "",
+    _paymentOption: "",
+    _payment: "",
   });
 
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
 
-  const storename = useRef('');
+  const storename = useRef("");
   useEffect(() => {
-    if (user === null || !user || user === '' || user === 'null') {
-      storename.current = '';
-      history.push('/');
+    if (user === null || !user || user === "" || user === "null") {
+      storename.current = "";
+      history.push("/");
     }
   }, [history, user, storename]);
 
   useEffect(() => {
     return () => {
-      storename.current = '';
+      storename.current = "";
     };
   }, []);
 
   const [startDate, setStartDate] = useState(new Date());
-  registerLocale('ko', ko);
+  registerLocale("ko", ko);
 
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
@@ -71,11 +72,12 @@ function Invoice({ history }) {
 
       try {
         const result = await getList({ date: startDate });
+
         setRowData(result.data);
         setLoading(() => true);
 
         result.data.forEach((item) => {
-          if (item.paymentOption === '환불') {
+          if (item.paymentOption === "환불") {
             listSum.refundSum += Number(item.payment);
           } else {
             listSum.allSum += Number(item.payment);
@@ -84,8 +86,8 @@ function Invoice({ history }) {
         listSum.netSum = listSum.allSum - listSum.refundSum;
         setlistSumState(() => listSum);
       } catch (error) {
-        history.push('/');
-        alert('잘못된 접근입니다.');
+        history.push("/");
+        alert("잘못된 접근입니다.");
       }
     })();
   }, [history, startDate]);
@@ -94,46 +96,46 @@ function Invoice({ history }) {
     const selectedNodes = gridApi.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
     selectedData.forEach((node) => {
-      const thisDate = new Date(node['regDate']);
+      const thisDate = new Date(node["regDate"]);
       const getDate =
         thisDate.getFullYear() +
-        '/' +
+        "/" +
         thisDate.getMonth() +
-        '/' +
+        "/" +
         thisDate.getDate() +
-        ' ' +
+        " " +
         thisDate.getHours() +
-        ':' +
+        ":" +
         thisDate.getMinutes() +
-        ':' +
+        ":" +
         thisDate.getSeconds();
       setReceipt(() => ({
-        _seq: node['seq'],
-        _menu: node['menu'],
+        _seq: node["seq"],
+        _menu: node["menu"],
         _regDate: getDate,
-        _paymentOption: node['paymentOption'],
-        _payment: node['payment'],
+        _paymentOption: node["paymentOption"],
+        _payment: node["payment"],
       }));
     });
   };
   const invoicePrint = useRef(null);
   const print = () => {
-    const html = document.querySelector('html');
+    const html = document.querySelector("html");
     const printContents = invoicePrint.current;
-    const printDiv = document.createElement('DIV');
-    printDiv.className = 'h-100';
+    const printDiv = document.createElement("DIV");
+    printDiv.className = "h-100";
 
     html.appendChild(printDiv);
     printDiv.appendChild(printContents.cloneNode(true));
-    document.body.style.display = 'none';
+    document.body.style.display = "none";
     window.print();
-    document.body.style.display = 'block';
-    printDiv.style.display = 'none';
+    document.body.style.display = "block";
+    printDiv.style.display = "none";
   };
 
   const onClickRefund = async () => {
     const refundResult = await refund(receipt);
-    alert('환불이 완료되었습니다.');
+    alert("환불이 완료되었습니다.");
     (async () => {
       const listSum = {
         allSum: 0,
@@ -145,7 +147,7 @@ function Invoice({ history }) {
         setRowData(result.data);
         setLoading(() => true);
         result.data.forEach((item) => {
-          if (item.paymentOption === '환불') {
+          if (item.paymentOption === "환불") {
             listSum.refundSum += Number(item.payment);
           } else {
             listSum.allSum += Number(item.payment);
@@ -154,27 +156,27 @@ function Invoice({ history }) {
         listSum.netSum = listSum.allSum - listSum.refundSum;
         setlistSumState(() => listSum);
       } catch (error) {
-        history.push('/');
-        alert('잘못된 접근입니다.');
+        history.push("/");
+        alert("잘못된 접근입니다.");
       }
     })();
     setReceipt(() => ({
-      _seq: '',
-      _menu: '',
-      _regDate: '',
-      _paymentOption: '',
-      _payment: '',
+      _seq: "",
+      _menu: "",
+      _regDate: "",
+      _paymentOption: "",
+      _payment: "",
     }));
   };
 
   useEffect(() => {
-    storename.current = '';
+    storename.current = "";
     listener2.current = () => {
       if (gridApi) {
         gridApi.sizeColumnsToFit();
       }
     };
-    window.addEventListener('resize', listener2.current);
+    window.addEventListener("resize", listener2.current);
     if (user) {
       user.store.forEach((i) => {
         if (i._id === user.nowstore) {
@@ -184,8 +186,8 @@ function Invoice({ history }) {
       });
     }
     return () => {
-      storename.current = '';
-      window.removeEventListener('resize', listener2.current);
+      storename.current = "";
+      window.removeEventListener("resize", listener2.current);
     };
   });
 
@@ -199,16 +201,16 @@ function Invoice({ history }) {
 
   const containsFilterParams = {
     valueGetter: (params) => {
-      let sumMenu = '';
+      let sumMenu = "";
       params.data.menu.forEach((item) => {
-        sumMenu += ' ' + item.name;
+        sumMenu += " " + item.name;
       });
       return sumMenu;
     },
     filterOptions: [
       {
-        displayKey: 'containsMenu',
-        displayName: '메뉴를 포함하는',
+        displayKey: "containsMenu",
+        displayName: "메뉴를 포함하는",
         test: (filterValue, cellValue) => {
           return cellValue != null && cellValue.indexOf(filterValue) > -1;
         },
@@ -245,10 +247,10 @@ function Invoice({ history }) {
             fluid
             className="d-flex h-100 w-100 flex-column w-100  justify-content-center "
             style={{
-              height: '100%',
+              height: "100%",
               padding: 0,
               margin: 0,
-              backgroundColor: 'rgb(249,250,252)',
+              backgroundColor: "rgb(249,250,252)",
             }}
           >
             <Row className="p-4 m-1 pt-0 h-100 " style={{ flex: 1 }}>
@@ -257,7 +259,7 @@ function Invoice({ history }) {
                 className="justify-content-end flex-column d-flex"
               >
                 <h5>
-                  {storename.current ? storename.current : '잘못된 접근입니다.'}
+                  {storename.current ? storename.current : "잘못된 접근입니다."}
                 </h5>
                 <h3>§ 거래 내역</h3>
               </Col>
@@ -267,7 +269,7 @@ function Invoice({ history }) {
                 lg={{ span: 8 }}
                 className="text-center"
                 style={{
-                  height: '80%',
+                  height: "80%",
                 }}
               >
                 <Row>
@@ -287,8 +289,8 @@ function Invoice({ history }) {
                       className="ag-theme-alpine"
                       style={{
                         height: 400,
-                        width: '100%',
-                        textAlign: 'left',
+                        width: "100%",
+                        textAlign: "left",
                       }}
                     >
                       <AgGridReact
@@ -299,10 +301,20 @@ function Invoice({ history }) {
                         onGridReady={onGridReady}
                         onSelectionChanged={onButtonClick}
                         animateRows={true}
+                        getRowClass={(params) => {
+                          if (params.data.paymentOption === "환불") {
+                            return "refund";
+                          }
+                          if (
+                            params.data.paymentOption.indexOf("환불완료") !== -1
+                          ) {
+                            return "refundSuccess";
+                          }
+                        }}
                       >
                         <AgGridColumn
                           field="seq"
-                          headerName={'거래 번호'}
+                          headerName={"거래 번호"}
                           filter="agNumberColumnFilter"
                           sortable={true}
                           checkboxSelection={true}
@@ -310,7 +322,7 @@ function Invoice({ history }) {
                         ></AgGridColumn>
                         <AgGridColumn
                           field="menu"
-                          headerName={'메뉴'}
+                          headerName={"메뉴"}
                           sortable={true}
                           filter={true}
                           resizable={true}
@@ -321,19 +333,19 @@ function Invoice({ history }) {
                             if (menu.length > 2) {
                               return (
                                 menu[0].name +
-                                ', ' +
+                                ", " +
                                 menu[1].name +
-                                '외 ' +
+                                "외 " +
                                 (params.value.length - 2) +
-                                '가지'
+                                "가지"
                               );
                             } else {
-                              let sumName = '';
+                              let sumName = "";
                               for (const i of menu) {
                                 if (i === menu[menu.length - 1]) {
                                   sumName += i.name;
                                 } else {
-                                  sumName += i.name + ', ';
+                                  sumName += i.name + ", ";
                                 }
                               }
                               return sumName;
@@ -343,7 +355,7 @@ function Invoice({ history }) {
                         ></AgGridColumn>
                         <AgGridColumn
                           field="regDate"
-                          headerName={'거래 시간'}
+                          headerName={"거래 시간"}
                           sortable={true}
                           filter={true}
                           resizable={true}
@@ -354,21 +366,21 @@ function Invoice({ history }) {
                         ></AgGridColumn>
                         <AgGridColumn
                           field="paymentOption"
-                          headerName={'거래 방식'}
+                          headerName={"거래 방식"}
                           sortable={true}
                           filter={true}
                           resizable={true}
                         ></AgGridColumn>
                         <AgGridColumn
                           field="payment"
-                          headerName={'금액'}
+                          headerName={"금액"}
                           sortable={true}
                           filter={true}
                           resizable={true}
                           valueGetter={(params) => {
                             if (isFiltered.current) {
                               const payment = params.data.payment;
-                              if (params.data.paymentOption === '환불') {
+                              if (params.data.paymentOption === "환불") {
                                 setlistSumState((prev) => ({
                                   ...prev,
                                   refundSum: (prev.refundSum += Number(
@@ -396,46 +408,56 @@ function Invoice({ history }) {
                       <p
                         className="mb-3"
                         style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          fontSize: '16px',
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          fontSize: "16px",
                         }}
                       >
                         <h4 className="mr-1">판매금액 : </h4>
-                        <h4 className="mr-2">
+                        <h5 className="mr-4 mt-1 ml-1">
                           {addComma(listSumState.allSum)} 원
-                        </h4>
-                        <h4 className="mr-1">환불액 : </h4>{' '}
-                        <h4 className="mr-2">
+                        </h5>
+                        <h4 className="mr-1" style={{ color: "#8c464d" }}>
+                          환불액 :{" "}
+                        </h4>{" "}
+                        <h5
+                          className="mr-4 mt-1 ml-1"
+                          style={{ color: "#8c464d" }}
+                        >
                           {addComma(listSumState.refundSum)} 원
-                        </h4>
-                        <h4 className="mr-1">실판매금액: </h4>{' '}
-                        <h4 className="mr-1">
+                        </h5>
+                        <h4 className="mr-1" style={{ color: "#000046" }}>
+                          실판매금액:{" "}
+                        </h4>{" "}
+                        <h5
+                          className="mr-1 mt-1 ml-1"
+                          style={{ color: "#000046" }}
+                        >
                           {addComma(listSumState.netSum)} 원
-                        </h4>
+                        </h5>
                       </p>
                     </div>
                   </Col>
                 </Row>
               </Col>
-              <Col className="p-0 m-0" style={{ height: '80%' }}>
+              <Col className="p-0 m-0" style={{ height: "80%" }}>
                 <Row className="h-100 w-100 m-0">
                   <Col className="h-100">
                     <Card
                       ref={invoicePrint}
-                      style={{ width: '100%', height: '100%' }}
+                      style={{ width: "100%", height: "100%" }}
                     >
                       <Card.Body
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          overflowY: 'auto',
-                          position: 'absolute',
+                          width: "100%",
+                          height: "100%",
+                          overflowY: "auto",
+                          position: "absolute",
                         }}
                       >
                         <Card.Title>영수증</Card.Title>
                         <div className="card-text">
-                          {receipt._seq === '' ? (
+                          {receipt._seq === "" ? (
                             <p>거래를 선택해주세요.</p>
                           ) : (
                             <>
@@ -452,10 +474,10 @@ function Invoice({ history }) {
                 </Row>
                 <Row className="w-100">
                   <Col className="justify-content-end d-flex mt-1 mb-4">
-                    {receipt._paymentOption === '' ||
-                    receipt._paymentOption === '환불' ||
-                    receipt._paymentOption === '현금(환불완료)' ||
-                    receipt._paymentOption === '카카오페이(환불완료)' ? (
+                    {receipt._paymentOption === "" ||
+                    receipt._paymentOption === "환불" ||
+                    receipt._paymentOption === "현금(환불완료)" ||
+                    receipt._paymentOption === "카카오페이(환불완료)" ? (
                       <Button
                         onClick={onClickRefund}
                         size="lg"
@@ -472,8 +494,8 @@ function Invoice({ history }) {
                       >
                         주문 취소
                       </Button>
-                    )}{' '}
-                    {receipt._paymentOption === '' ? (
+                    )}{" "}
+                    {receipt._paymentOption === "" ? (
                       <Button
                         size="lg"
                         className="btn_color_purple"
@@ -504,11 +526,11 @@ function Invoice({ history }) {
           fluid
           className="d-flex h-100 flex-column w-100  justify-content-center "
           style={{
-            overflow: 'hidden',
-            height: '100%',
+            overflow: "hidden",
+            height: "100%",
             padding: 0,
             margin: 0,
-            backgroundColor: 'rgb(249,250,252)',
+            backgroundColor: "rgb(249,250,252)",
           }}
         >
           <Row className="text-center">
@@ -517,13 +539,13 @@ function Invoice({ history }) {
                 animation="border"
                 role="status"
                 style={{
-                  verticalAlign: 'center',
+                  verticalAlign: "center",
                 }}
               >
                 <span className="sr-only">Loading...</span>
               </Spinner>
-              <h1 className={'d-inline-block text-center m-0 ml-2'}>
-                {' '}
+              <h1 className={"d-inline-block text-center m-0 ml-2"}>
+                {" "}
                 로딩중입니다...
               </h1>
             </Col>
