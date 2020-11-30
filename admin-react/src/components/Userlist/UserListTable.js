@@ -30,8 +30,13 @@ const ULT = styled.div`
   .oribos {
     width: 160px;
     height: 40px;
-    margin-top: 20px;
-    margin-left: 300px;
+  }
+
+  .oribosCon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
   }
 `;
 
@@ -138,7 +143,7 @@ function UserListTable({ user, loading }) {
                 />
               </AgGridReact>
             </div>
-            <RemoveButton />
+            <div className="oribosCon"><RemoveButton /></div>
           </Col>
         </Row>
       </Container>
