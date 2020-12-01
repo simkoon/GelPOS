@@ -100,7 +100,7 @@ function Invoice({ history }) {
       const getDate =
         thisDate.getFullYear() +
         "/" +
-        thisDate.getMonth() +
+        (thisDate.getMonth() + 1) +
         "/" +
         thisDate.getDate() +
         " " +
