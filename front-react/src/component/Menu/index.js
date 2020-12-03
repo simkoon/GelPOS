@@ -531,6 +531,7 @@ function Menu({ offBtnClick }) {
         }
         menuUpdate();
         dispatch({ type: 'MENU_MAIN' });
+        setModalMenu(false); 
         return;
       }
     }
